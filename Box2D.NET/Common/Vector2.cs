@@ -124,4 +124,61 @@ public struct Vector2(float x, float y)
     /// </summary>
     /// <returns>The skew vector.</returns>
     public readonly Vector2 Skew() => new(-Y, X);
+
+    /// <summary>
+    /// Computes the dot product of two vectors.
+    /// </summary>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
+    /// <returns>The dot product of the two vectors.</returns>
+    public static float Dot(in Vector2 a, in Vector2 b) => a.X * b.X + a.Y * b.Y;
+
+    /// <summary>
+    /// Computes the cross product of two vectors. In 2D, this produces a scalar.
+    /// </summary>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
+    /// <returns>The scalar cross product of the two vectors.</returns>
+    public static float Cross(in Vector2 a, in Vector2 b) => a.X * b.Y - a.Y * b.X;
+
+    /// <summary>
+    /// Computes the cross product of a vector and a scalar. In 2D, this produces a vector.
+    /// </summary>
+    /// <param name="a">The vector.</param>
+    /// <param name="s">The scalar.</param>
+    /// <returns>The resulting vector.</returns>
+    public static Vector2 Cross(in Vector2 a, float s) => new(s * a.Y, -s * a.X);
+
+    /// <summary>
+    /// Computes the cross product of a scalar and a vector. In 2D, this produces a vector.
+    /// </summary>
+    /// <param name="s">The scalar.</param>
+    /// <param name="a">The vector.</param>
+    /// <returns>The resulting vector.</returns>
+    public static Vector2 Cross(float s, in Vector2 a) => new(-s * a.Y, s * a.X);
+
+    /// <summary>
+    /// Computes the distance between two points represented by vectors.
+    /// </summary>
+    /// <param name="a">The first point.</param>
+    /// <param name="b">The second point.</param>
+    /// <returns>The distance between the two points.</returns>
+    public static float Distance(in Vector2 a, in Vector2 b)
+    {
+        Vector2 c = new(a.X - b.X, a.Y - b.Y);
+        return c.Length();
+    }
+
+    /// <summary>
+    /// Computes the squared distance between two points represented by vectors.
+    /// This is faster than computing the distance and avoids a square root operation.
+    /// </summary>
+    /// <param name="a">The first point.</param>
+    /// <param name="b">The second point.</param>
+    /// <returns>The squared distance between the two points.</returns>
+    public static float DistanceSquared(in Vector2 a, in Vector2 b)
+    {
+        Vector2 c = new(a.X - b.X, a.Y - b.Y);
+        return Dot(c, c);
+    }
 }

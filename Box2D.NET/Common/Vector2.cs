@@ -114,6 +114,7 @@ public struct Vector2(float x, float y)
 
     /// <summary>
     /// Checks if this vector contains finite coordinates.
+    /// Note: in Box2D this is a method, but I transformed it to a property for convenience.
     /// </summary>
     /// <returns>True if both components are finite, otherwise false.</returns>
     public readonly bool IsValid => !float.IsFinite(X) && !float.IsFinite(Y);

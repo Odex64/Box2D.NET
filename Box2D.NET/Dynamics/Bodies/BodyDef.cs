@@ -78,12 +78,14 @@ public struct BodyDef
     public bool AllowSleep;
 
     /// <summary>
-    /// Is this body initially awake or sleeping?
+    /// Is this body initially awake or sleeping
+    /// Note: in Box2D this is called "awake".
     /// </summary>
     public bool IsAwake;
 
     /// <summary>
     /// Should this body be prevented from rotating? Useful for characters.
+    /// Note: in Box2D this is called "fixedRotation".
     /// </summary>
     public bool IsFixedRotation;
 
@@ -92,16 +94,19 @@ public struct BodyDef
     /// other moving bodies? Note that all bodies are prevented from tunneling through
     /// kinematic and static bodies. This setting is only considered on dynamic bodies.
     /// <para>Warning: Use this flag sparingly since it increases processing time.</para>
+    /// Note: in Box2D this is called "bullet"
     /// </summary>
     public bool IsBullet;
 
     /// <summary>
-    /// Does this body start out enabled?
+    /// Does this body start out enabled.
+    /// Note: in Box2D this is called "enabled".
     /// </summary>
     public bool IsEnabled;
 
     /// <summary>
     /// Use this to store application-specific body data.
+    /// Note: in Box2D this is a b2BodyUserData type, which is a wrapper of a pointer.
     /// </summary>
     public object? UserData;
 

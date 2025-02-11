@@ -177,30 +177,16 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
 
-    /// <summary>
-    /// Checks whether this matrix is equal to another matrix.
-    /// </summary>
-    /// <param name="other">The matrix to compare with.</param>
-    /// <returns>True if the matrices are equal, otherwise false.</returns>
+    /// <inheritdoc />
     public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
 
-    /// <summary>
-    /// Determines whether this instance and a specified object are equal.
-    /// </summary>
-    /// <param name="obj">The object to compare with.</param>
-    /// <returns>True if the specified object is a Matrix3x3 and equal to this instance.</returns>
+    /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
 
-    /// <summary>
-    /// Returns the hash code for this matrix.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
 
-    /// <summary>
-    /// Returns a string representation of this matrix.
-    /// </summary>
-    /// <returns>A string that represents the matrix.</returns>
+    /// <inheritdoc />
     public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
 
     /// <summary>

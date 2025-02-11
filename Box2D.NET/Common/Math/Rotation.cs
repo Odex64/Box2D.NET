@@ -75,30 +75,16 @@ public struct Rotation : IEquatable<Rotation>
     /// <returns>The y-axis as a 2D vector.</returns>
     public readonly Vector2 GetYAxis() => new(-Sine, Cosine);
 
-    /// <summary>
-    /// Determines whether this instance is equal to another Rotation instance.
-    /// </summary>
-    /// <param name="other">The other Rotation instance to compare.</param>
-    /// <returns>True if both instances are equal; otherwise, false.</returns>
+    /// <inheritdoc />
     public readonly bool Equals(Rotation other) => Cosine == other.Cosine && Sine == other.Sine;
 
-    /// <summary>
-    /// Determines whether this instance is equal to another object.
-    /// </summary>
-    /// <param name="obj">The object to compare.</param>
-    /// <returns>True if the object is a Rotation and equal; otherwise, false.</returns>
+    /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Rotation other && Equals(other);
 
-    /// <summary>
-    /// Returns the hash code for this instance.
-    /// </summary>
-    /// <returns>A hash code for this instance.</returns>
+    /// <inheritdoc />
     public override readonly int GetHashCode() => HashCode.Combine(Sine, Cosine);
 
-    /// <summary>
-    /// Returns a string representation of this rotation.
-    /// </summary>
-    /// <returns>A string representing this rotation.</returns>
+    /// <inheritdoc />
     public override readonly string ToString() => $"(Sin: {Sine}, Cos: {Cosine})";
 
     /// <summary>

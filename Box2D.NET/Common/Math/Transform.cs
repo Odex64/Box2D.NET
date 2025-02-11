@@ -58,30 +58,16 @@ public struct Transform : IEquatable<Transform>
         Rotation.Set(angle);
     }
 
-    /// <summary>
-    /// Checks whether this transform is equal to another transform.
-    /// </summary>
-    /// <param name="other">The transform to compare with.</param>
-    /// <returns>True if the transforms are equal, otherwise false.</returns>
+    /// <inheritdoc />
     public readonly bool Equals(Transform other) => Position.Equals(other.Position) && Rotation.Equals(other.Rotation);
 
-    /// <summary>
-    /// Determines whether this instance and a specified object are equal.
-    /// </summary>
-    /// <param name="obj">The object to compare with.</param>
-    /// <returns>True if the specified object is a Transform and equal to this instance.</returns>
+    /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Transform other && Equals(other);
 
-    /// <summary>
-    /// Returns the hash code for this transform.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override readonly int GetHashCode() => HashCode.Combine(Position, Rotation);
 
-    /// <summary>
-    /// Returns a string representation of this transform.
-    /// </summary>
-    /// <returns>A string that represents the transform.</returns>
+    /// <inheritdoc />
     public override readonly string ToString() => $"(Position: {Position}, Rotation: {Rotation})";
 
     /// <summary>

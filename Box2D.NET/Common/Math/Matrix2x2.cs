@@ -168,30 +168,16 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         return new Matrix2x2(c1, c2);
     }
 
-    /// <summary>
-    /// Checks whether this matrix is equal to another matrix.
-    /// </summary>
-    /// <param name="other">The matrix to compare with.</param>
-    /// <returns>True if the matrices are equal, otherwise false.</returns>
+    /// <inheritdoc />
     public readonly bool Equals(Matrix2x2 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey);
 
-    /// <summary>
-    /// Determines whether this instance and a specified object are equal.
-    /// </summary>
-    /// <param name="obj">The object to compare with.</param>
-    /// <returns>True if the specified object is a Matrix2x2 and equal to this instance.</returns>
+    /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
 
-    /// <summary>
-    /// Returns the hash code for this matrix.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey);
 
-    /// <summary>
-    /// Returns a string representation of this matrix.
-    /// </summary>
-    /// <returns>A string that represents the matrix.</returns>
+    /// <inheritdoc />
     public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
 
     /// <summary>

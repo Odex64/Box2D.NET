@@ -115,11 +115,7 @@ public struct Sweep : IEquatable<Sweep>
         A -= d;
     }
 
-    /// <summary>
-    /// Checks whether this sweep is equal to another sweep.
-    /// </summary>
-    /// <param name="other">The sweep to compare with.</param>
-    /// <returns>True if the sweeps are equal, otherwise false.</returns>
+    /// <inheritdoc />
     public readonly bool Equals(Sweep other) =>
         LocalCenter.Equals(other.LocalCenter) &&
         C0.Equals(other.C0) &&
@@ -128,23 +124,13 @@ public struct Sweep : IEquatable<Sweep>
         A.Equals(other.A) &&
         Alpha0.Equals(other.Alpha0);
 
-    /// <summary>
-    /// Determines whether this instance and a specified object are equal.
-    /// </summary>
-    /// <param name="obj">The object to compare with.</param>
-    /// <returns>True if the specified object is a Sweep and equal to this instance.</returns>
+    /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Sweep other && Equals(other);
 
-    /// <summary>
-    /// Returns the hash code for this sweep.
-    /// </summary>
-    /// <returns>A hash code for the current object.</returns>
+    /// <inheritdoc />
     public override readonly int GetHashCode() => HashCode.Combine(LocalCenter, C0, C, A0, A, Alpha0);
 
-    /// <summary>
-    /// Returns a string representation of this sweep.
-    /// </summary>
-    /// <returns>A string that represents the sweep.</returns>
+    /// <inheritdoc />
     public override readonly string ToString() => $"(LocalCenter: {LocalCenter}, C0: {C0}, C: {C}, A0: {A0}, A: {A}, Alpha0: {Alpha0})";
 
     /// <summary>

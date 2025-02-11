@@ -1,10 +1,12 @@
-namespace Box2D.NET.Common;
+using System;
+
+namespace Box2D.NET.Common.Math;
 
 /// <summary>
 /// Represents a 3x3 matrix with three column vectors (ex, ey, ez).
 /// Stored in column-major order.
 /// </summary>
-public struct Matrix3x3
+public struct Matrix3x3 : IEquatable<Matrix3x3>
 {
     /// <summary>
     /// The first column vector of the matrix.
@@ -60,7 +62,7 @@ public struct Matrix3x3
     /// </summary>
     /// <param name="b">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public Vector3 Solve33(Vector3 b)
+    public readonly Vector3 Solve33(Vector3 b)
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
@@ -101,8 +103,8 @@ public struct Matrix3x3
     /// Gets the inverse of this matrix as a 2x2 matrix.
     /// Returns the zero matrix if singular.
     /// </summary>
-    /// <param name="M">The output inverse matrix.</param>
-    public void GetInverse22(out Matrix3x3 M)
+    /// <param name="matrix">The output inverse matrix.</param>
+    public void GetInverse22(out Matrix3x3 matrix)
     {
         float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
         float det = a * d - b * c;
@@ -111,7 +113,7 @@ public struct Matrix3x3
             det = 1f / det;
         }
 
-        M = new Matrix3x3
+        matrix = new Matrix3x3
         {
             Ex = new Vector3(det * d, -det * c, 0f),
             Ey = new Vector3(-det * b, det * a, 0f),
@@ -123,8 +125,8 @@ public struct Matrix3x3
     /// Gets the symmetric inverse of this matrix as a 3x3 matrix.
     /// Returns the zero matrix if singular.
     /// </summary>
-    /// <param name="M">The output symmetric inverse matrix.</param>
-    public void GetSymInverse33(out Matrix3x3 M)
+    /// <param name="matrix">The output symmetric inverse matrix.</param>
+    public void GetSymInverse33(out Matrix3x3 matrix)
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
@@ -136,7 +138,7 @@ public struct Matrix3x3
         float a22 = Ey.Y, a23 = Ez.Y;
         float a33 = Ez.Z;
 
-        M = new Matrix3x3
+        matrix = new Matrix3x3
         {
             Ex = new Vector3(
                 det * (a22 * a33 - a23 * a23),
@@ -159,19 +161,61 @@ public struct Matrix3x3
     /// <summary>
     /// Multiplies a 3x3 matrix by a 3D vector.
     /// </summary>
-    /// <param name="A">The matrix.</param>
-    /// <param name="v">The vector.</param>
+    /// <param name="matrix">The matrix.</param>
+    /// <param name="vector">The vector.</param>
     /// <returns>The resulting 3D vector after multiplication.</returns>
-    public static Vector3 Multiply(in Matrix3x3 A, in Vector3 v) => v.X * A.Ex + v.Y * A.Ey + v.Z * A.Ez;
+    public static Vector3 Multiply(in Matrix3x3 matrix, in Vector3 vector) => vector.X * matrix.Ex + vector.Y * matrix.Ey + vector.Z * matrix.Ez;
 
     /// <summary>
     /// Multiplies the upper-left 2x2 portion of a 3x3 matrix by a 2D vector.
     /// </summary>
-    /// <param name="A">The 3x3 matrix.</param>
-    /// <param name="v">The 2D vector.</param>
+    /// <param name="matrix">The 3x3 matrix.</param>
+    /// <param name="vector">The 2D vector.</param>
     /// <returns>The resulting 2D vector after multiplication.</returns>
-    public static Vector2 Multiply22(in Matrix3x3 A, in Vector2 v) => new(
-        A.Ex.X * v.X + A.Ey.X * v.Y,
-        A.Ex.Y * v.X + A.Ey.Y * v.Y
+    public static Vector2 Multiply22(in Matrix3x3 matrix, in Vector2 vector) => new(
+        matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
+        matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
+
+    /// <summary>
+    /// Checks whether this matrix is equal to another matrix.
+    /// </summary>
+    /// <param name="other">The matrix to compare with.</param>
+    /// <returns>True if the matrices are equal, otherwise false.</returns>
+    public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
+
+    /// <summary>
+    /// Determines whether this instance and a specified object are equal.
+    /// </summary>
+    /// <param name="obj">The object to compare with.</param>
+    /// <returns>True if the specified object is a Matrix3x3 and equal to this instance.</returns>
+    public override readonly bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
+
+    /// <summary>
+    /// Returns the hash code for this matrix.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
+
+    /// <summary>
+    /// Returns a string representation of this matrix.
+    /// </summary>
+    /// <returns>A string that represents the matrix.</returns>
+    public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
+
+    /// <summary>
+    /// Checks if two matrices are equal.
+    /// </summary>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
+    /// <returns>True if both matrices are equal, otherwise false.</returns>
+    public static bool operator ==(in Matrix3x3 left, in Matrix3x3 right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two matrices are not equal.
+    /// </summary>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
+    /// <returns>True if the matrices are not equal, otherwise false.</returns>
+    public static bool operator !=(in Matrix3x3 left, in Matrix3x3 right) => !left.Equals(right);
 }

@@ -1,4 +1,6 @@
-namespace Box2D.NET.Common;
+using System;
+
+namespace Box2D.NET.Common.Math;
 
 /// <summary>
 /// A 3D column vector with X, Y, and Z components.
@@ -9,7 +11,7 @@ namespace Box2D.NET.Common;
 /// <param name="x">The X-coordinate.</param>
 /// <param name="y">The Y-coordinate.</param>
 /// <param name="z">The Z-coordinate.</param>
-public struct Vector3(float x, float y, float z)
+public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
 {
     /// <summary>
     /// The X-coordinate of the vector.
@@ -49,6 +51,28 @@ public struct Vector3(float x, float y, float z)
         Z = z;
     }
 
+    /// <inheritdoc />
+    public override readonly bool Equals(object? obj) => obj is Vector3 other && Equals(other);
+
+    /// <inheritdoc />
+    public readonly bool Equals(Vector3 other) => X == other.X && Y == other.Y && Z == other.Z;
+
+    /// <inheritdoc />
+    public override readonly int GetHashCode() => HashCode.Combine(X, Y, Z);
+
+    /// <inheritdoc />
+    public override readonly string ToString() => $"({X}, {Y}, {Z})";
+
+    /// <summary>
+    /// Checks if two vectors are equal.
+    /// </summary>
+    public static bool operator ==(in Vector3 left, in Vector3 right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two vectors are not equal.
+    /// </summary>
+    public static bool operator !=(in Vector3 left, in Vector3 right) => !left.Equals(right);
+
     /// <summary>
     /// Negates this vector.
     /// </summary>
@@ -72,6 +96,14 @@ public struct Vector3(float x, float y, float z)
     public static Vector3 operator -(in Vector3 a, in Vector3 b) => new(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
 
     /// <summary>
+    /// Multiplies two vectors component-wise.
+    /// </summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new vector where each component is the product of the corresponding components of the input vectors.</returns>
+    public static Vector3 operator *(in Vector3 left, in Vector3 right) => new(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+
+    /// <summary>
     /// Multiplies a vector by a scalar.
     /// </summary>
     /// <param name="v">The vector.</param>
@@ -88,10 +120,46 @@ public struct Vector3(float x, float y, float z)
     public static Vector3 operator *(float scalar, in Vector3 v) => new(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
+    /// Divides a vector by another vector component-wise.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Thrown if any component of the divisor vector is zero.</exception>
+    public static Vector3 operator /(in Vector3 left, in Vector3 right)
+    {
+        if (right.X == 0 || right.Y == 0 || right.Z == 0)
+            throw new DivideByZeroException("Cannot divide by a vector with zero components.");
+
+        return new Vector3(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
+    }
+
+    /// <summary>
+    /// Divides a vector by a scalar.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Thrown if scalar is zero.</exception>
+    public static Vector3 operator /(in Vector3 vector, float scalar)
+    {
+        if (scalar == 0)
+            throw new DivideByZeroException("Cannot divide by zero.");
+
+        return new Vector3(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
+    }
+
+    /// <summary>
+    /// Divides a scalar by a vector component-wise.
+    /// </summary>
+    /// <exception cref="DivideByZeroException">Thrown if any component of the vector is zero.</exception>
+    public static Vector3 operator /(float scalar, in Vector3 vector)
+    {
+        if (vector.X == 0 || vector.Y == 0 || vector.Z == 0)
+            throw new DivideByZeroException("Cannot divide by a vector with zero components.");
+
+        return new Vector3(scalar / vector.X, scalar / vector.Y, scalar / vector.Z);
+    }
+
+    /// <summary>
     /// Checks if this vector contains finite coordinates.
     /// </summary>
     /// <returns>True if both components are finite, otherwise false.</returns>
-    public readonly bool IsValid => !float.IsFinite(X) && !float.IsFinite(Y) && !float.IsFinite(Z);
+    public readonly bool IsValid => float.IsFinite(X) && float.IsFinite(Y) && float.IsFinite(Z);
 
     /// <summary>
     /// Calculates the dot product of two vectors.

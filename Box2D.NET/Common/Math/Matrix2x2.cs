@@ -1,9 +1,11 @@
-namespace Box2D.NET.Common;
+using System;
+
+namespace Box2D.NET.Common.Math;
 
 /// <summary>
 /// Represents a 2x2 matrix with two column vectors (ex and ey).
 /// </summary>
-public struct Matrix2x2
+public struct Matrix2x2 : IEquatable<Matrix2x2>
 {
     /// <summary>
     /// The first column vector of the matrix.
@@ -125,44 +127,86 @@ public struct Matrix2x2
     /// Multiplies a matrix by a vector. If the matrix is a rotation matrix,
     /// this transforms the vector from one frame to another.
     /// </summary>
-    /// <param name="A">The matrix.</param>
-    /// <param name="v">The vector.</param>
+    /// <param name="matrix">The matrix.</param>
+    /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 Multiply(in Matrix2x2 A, in Vector2 v) => new(
-        A.Ex.X * v.X + A.Ey.X * v.Y,
-        A.Ex.Y * v.X + A.Ey.Y * v.Y
+    public static Vector2 Multiply(in Matrix2x2 matrix, in Vector2 vector) => new(
+        matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
+        matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
 
     /// <summary>
     /// Multiplies the transpose of a matrix by a vector. If the matrix is a rotation matrix,
     /// this transforms the vector from one frame to another (inverse transform).
     /// </summary>
-    /// <param name="A">The matrix.</param>
-    /// <param name="v">The vector.</param>
+    /// <param name="matrix">The matrix.</param>
+    /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 MultiplyTranspose(in Matrix2x2 A, in Vector2 v) => new(
-        Vector2.Dot(v, A.Ex),
-        Vector2.Dot(v, A.Ey)
+    public static Vector2 MultiplyTranspose(in Matrix2x2 matrix, in Vector2 vector) => new(
+        Vector2.Dot(vector, matrix.Ex),
+        Vector2.Dot(vector, matrix.Ey)
     );
 
     /// <summary>
     /// Multiplies two 2x2 matrices.
     /// </summary>
-    /// <param name="A">The first matrix.</param>
-    /// <param name="B">The second matrix.</param>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
     /// <returns>The product of the two matrices.</returns>
-    public static Matrix2x2 Multiply(in Matrix2x2 A, in Matrix2x2 B) => new(Multiply(A, B.Ex), Multiply(A, B.Ey));
+    public static Matrix2x2 Multiply(in Matrix2x2 left, in Matrix2x2 right) => new(Multiply(left, right.Ex), Multiply(left, right.Ey));
 
     /// <summary>
     /// Multiplies the transpose of matrix A by matrix B (A^T * B).
     /// </summary>
-    /// <param name="A">The first matrix.</param>
-    /// <param name="B">The second matrix.</param>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
     /// <returns>The resulting matrix after multiplying A^T by B.</returns>
-    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 A, in Matrix2x2 B)
+    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right)
     {
-        Vector2 c1 = new(Vector2.Dot(A.Ex, B.Ex), Vector2.Dot(A.Ey, B.Ex));
-        Vector2 c2 = new(Vector2.Dot(A.Ex, B.Ey), Vector2.Dot(A.Ey, B.Ey));
+        Vector2 c1 = new(Vector2.Dot(left.Ex, right.Ex), Vector2.Dot(left.Ey, right.Ex));
+        Vector2 c2 = new(Vector2.Dot(left.Ex, right.Ey), Vector2.Dot(left.Ey, right.Ey));
         return new Matrix2x2(c1, c2);
     }
+
+    /// <summary>
+    /// Checks whether this matrix is equal to another matrix.
+    /// </summary>
+    /// <param name="other">The matrix to compare with.</param>
+    /// <returns>True if the matrices are equal, otherwise false.</returns>
+    public readonly bool Equals(Matrix2x2 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey);
+
+    /// <summary>
+    /// Determines whether this instance and a specified object are equal.
+    /// </summary>
+    /// <param name="obj">The object to compare with.</param>
+    /// <returns>True if the specified object is a Matrix2x2 and equal to this instance.</returns>
+    public override readonly bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
+
+    /// <summary>
+    /// Returns the hash code for this matrix.
+    /// </summary>
+    /// <returns>A hash code for the current object.</returns>
+    public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey);
+
+    /// <summary>
+    /// Returns a string representation of this matrix.
+    /// </summary>
+    /// <returns>A string that represents the matrix.</returns>
+    public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
+
+    /// <summary>
+    /// Checks if two matrices are equal.
+    /// </summary>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
+    /// <returns>True if both matrices are equal, otherwise false.</returns>
+    public static bool operator ==(in Matrix2x2 left, in Matrix2x2 right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two matrices are not equal.
+    /// </summary>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
+    /// <returns>True if the matrices are not equal, otherwise false.</returns>
+    public static bool operator !=(in Matrix2x2 left, in Matrix2x2 right) => !left.Equals(right);
 }

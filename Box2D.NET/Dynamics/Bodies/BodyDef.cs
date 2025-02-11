@@ -1,4 +1,4 @@
-using Box2D.NET.Common;
+using Box2D.NET.Common.Math;
 
 namespace Box2D.NET.Dynamics.Bodies;
 

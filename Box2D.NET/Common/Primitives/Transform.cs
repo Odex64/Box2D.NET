@@ -39,15 +39,6 @@ public struct Transform : IEquatable<Transform>
     }
 
     /// <summary>
-    /// Sets this transform to the identity transform (zero position, identity rotation).
-    /// </summary>
-    public void SetIdentity()
-    {
-        Position.SetZero();
-        Rotation.SetIdentity();
-    }
-
-    /// <summary>
     /// Sets this transform based on the position and angle.
     /// </summary>
     /// <param name="position">The position vector.</param>
@@ -56,6 +47,15 @@ public struct Transform : IEquatable<Transform>
     {
         Position = position;
         Rotation.Set(angle);
+    }
+
+    /// <summary>
+    /// Sets this transform to the identity transform (zero position, identity rotation).
+    /// </summary>
+    public void SetIdentity()
+    {
+        Position.SetZero();
+        Rotation.SetIdentity();
     }
 
     /// <inheritdoc />
@@ -69,22 +69,6 @@ public struct Transform : IEquatable<Transform>
 
     /// <inheritdoc />
     public readonly override string ToString() => $"(Position: {Position}, Rotation: {Rotation})";
-
-    /// <summary>
-    /// Checks if two transforms are equal.
-    /// </summary>
-    /// <param name="left">The first transform.</param>
-    /// <param name="right">The second transform.</param>
-    /// <returns>True if both transforms are equal, otherwise false.</returns>
-    public static bool operator ==(in Transform left, in Transform right) => left.Equals(right);
-
-    /// <summary>
-    /// Checks if two transforms are not equal.
-    /// </summary>
-    /// <param name="left">The first transform.</param>
-    /// <param name="right">The second transform.</param>
-    /// <returns>True if the transforms are not equal, otherwise false.</returns>
-    public static bool operator !=(in Transform left, in Transform right) => !left.Equals(right);
 
     /// <summary>
     /// Applies the transformation T to the vector v.
@@ -146,4 +130,20 @@ public struct Transform : IEquatable<Transform>
         Rotation.MultiplyTranspose(left.Rotation, right.Rotation),
         Rotation.MultiplyTranspose(left.Rotation, right.Position - left.Position)
     );
+
+    /// <summary>
+    /// Checks if two transforms are equal.
+    /// </summary>
+    /// <param name="left">The first transform.</param>
+    /// <param name="right">The second transform.</param>
+    /// <returns>True if both transforms are equal, otherwise false.</returns>
+    public static bool operator ==(in Transform left, in Transform right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two transforms are not equal.
+    /// </summary>
+    /// <param name="left">The first transform.</param>
+    /// <param name="right">The second transform.</param>
+    /// <returns>True if the transforms are not equal, otherwise false.</returns>
+    public static bool operator !=(in Transform left, in Transform right) => !left.Equals(right);
 }

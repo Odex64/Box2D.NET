@@ -64,13 +64,17 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <returns>The solution vector x.</returns>
     public readonly Vector3 Solve33(Vector3 vector)
     {
-        float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
+        Vector3 crossEyEz = Vector3.Cross(Ey, Ez);
+        Vector3 crossExEz = Vector3.Cross(Ex, Ez);
+        Vector3 crossExEy = Vector3.Cross(Ex, Ey);
+
+        float det = Vector3.Dot(Ex, crossEyEz);
         if (det != 0f)
             det = 1f / det;
 
-        float x = det * Vector3.Dot(vector, Vector3.Cross(Ey, Ez));
-        float y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
-        float z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, vector));
+        float x = det * Vector3.Dot(vector, crossEyEz);
+        float y = det * Vector3.Dot(Ex, crossExEz);
+        float z = det * Vector3.Dot(Ex, crossExEy);
 
         return new Vector3(x, y, z);
     }
@@ -86,6 +90,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
+
         if (det != 0f)
             det = 1f / det;
 
@@ -148,6 +153,18 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         );
     }
 
+    /// <inheritdoc />
+    public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
+
+    /// <inheritdoc />
+    public readonly override bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
+
+    /// <inheritdoc />
+    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
+
+    /// <inheritdoc />
+    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
+
     /// <summary>
     /// Multiplies a 3x3 matrix by a 3D vector.
     /// </summary>
@@ -166,18 +183,6 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
-
-    /// <inheritdoc />
-    public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
-
-    /// <inheritdoc />
-    public readonly override bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
-
-    /// <inheritdoc />
-    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
-
-    /// <inheritdoc />
-    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
 
     /// <summary>
     /// Checks if two matrices are equal.

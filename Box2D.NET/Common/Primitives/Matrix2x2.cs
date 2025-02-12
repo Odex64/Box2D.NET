@@ -91,15 +91,16 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     {
         float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
         float det = a * d - b * c;
+
         if (det != 0f)
             det = 1f / det;
 
-        Matrix2x2 inverse;
-        inverse.Ex.X = det * d;
-        inverse.Ey.X = -det * b;
-        inverse.Ex.Y = -det * c;
-        inverse.Ey.Y = det * a;
-        return inverse;
+        return new Matrix2x2(
+            det * d, // Ex.X
+            -det * b, // Ey.X
+            -det * c, // Ex.Y
+            det * a // Ey.Y
+        );
     }
 
     /// <summary>
@@ -112,14 +113,27 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
-        if (det != 0.0f)
-            det = 1.0f / det;
+
+        if (det != 0f)
+            det = 1f / det;
 
         return new Vector2(
             det * (a22 * vector.X - a12 * vector.Y),
             det * (a11 * vector.Y - a21 * vector.X)
         );
     }
+
+    /// <inheritdoc />
+    public readonly bool Equals(Matrix2x2 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey);
+
+    /// <inheritdoc />
+    public readonly override bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
+
+    /// <inheritdoc />
+    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey);
+
+    /// <inheritdoc />
+    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
 
     /// <summary>
     /// Multiplies a matrix by a vector. If the matrix is a rotation matrix,
@@ -162,24 +176,12 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="left">The first matrix.</param>
     /// <param name="right">The second matrix.</param>
     /// <returns>The resulting matrix after multiplying A^T by B.</returns>
-    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right)
-    {
-        Vector2 c1 = new Vector2(Vector2.Dot(left.Ex, right.Ex), Vector2.Dot(left.Ey, right.Ex));
-        Vector2 c2 = new Vector2(Vector2.Dot(left.Ex, right.Ey), Vector2.Dot(left.Ey, right.Ey));
-        return new Matrix2x2(c1, c2);
-    }
-
-    /// <inheritdoc />
-    public readonly bool Equals(Matrix2x2 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey);
-
-    /// <inheritdoc />
-    public readonly override bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
-
-    /// <inheritdoc />
-    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey);
-
-    /// <inheritdoc />
-    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
+    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right) => new Matrix2x2(
+        left.Ex.X * right.Ex.X + left.Ey.X * right.Ex.Y,
+        left.Ex.X * right.Ey.X + left.Ey.X * right.Ey.Y,
+        left.Ex.Y * right.Ex.X + left.Ey.Y * right.Ex.Y,
+        left.Ex.Y * right.Ey.X + left.Ey.Y * right.Ey.Y
+    );
 
     /// <summary>
     /// Checks if two matrices are equal.

@@ -13,19 +13,19 @@ public struct BodyDef
     /// </summary>
     public BodyDef()
     {
-        Position = new Vector2(0.0f, 0.0f);
-        Angle = 0.0f;
-        LinearVelocity = new Vector2(0.0f, 0.0f);
-        AngularVelocity = 0.0f;
-        LinearDamping = 0.0f;
-        AngularDamping = 0.0f;
+        Position = new Vector2(0f, 0f);
+        Angle = 0f;
+        LinearVelocity = new Vector2(0f, 0f);
+        AngularVelocity = 0f;
+        LinearDamping = 0f;
+        AngularDamping = 0f;
         AllowSleep = true;
         IsAwake = true;
         IsFixedRotation = false;
         IsBullet = false;
         Type = BodyType.Static;
         IsEnabled = true;
-        GravityScale = 1.0f;
+        GravityScale = 1f;
     }
 
     /// <summary>
@@ -57,7 +57,7 @@ public struct BodyDef
 
     /// <summary>
     /// Linear damping is used to reduce the linear velocity. The damping parameter
-    /// can be larger than 1.0f, but the damping effect becomes sensitive to the
+    /// can be larger than 1f, but the damping effect becomes sensitive to the
     /// time step when the damping parameter is large.
     /// Units are 1/time.
     /// </summary>
@@ -65,7 +65,7 @@ public struct BodyDef
 
     /// <summary>
     /// Angular damping is used to reduce the angular velocity. The damping parameter
-    /// can be larger than 1.0f, but the damping effect becomes sensitive to the
+    /// can be larger than 1f, but the damping effect becomes sensitive to the
     /// time step when the damping parameter is large.
     /// Units are 1/time.
     /// </summary>

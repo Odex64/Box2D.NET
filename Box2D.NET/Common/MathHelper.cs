@@ -29,10 +29,10 @@ public static class MathHelper
             return false;
 
         // Convert the value to an integer for bitwise operations
-        int intValue = Convert.ToInt32(value);
+        int num = Convert.ToInt32(value);
 
         // A number is a power of two if it has exactly one bit set in its binary representation
-        return (intValue & (intValue - 1)) == 0;
+        return (num & (num - 1)) == 0;
     }
 
     /// <summary>
@@ -53,15 +53,15 @@ public static class MathHelper
             return T.One;
 
         // Convert to int for bitwise manipulation
-        int x = Convert.ToInt32(value);
+        int num = Convert.ToInt32(value);
 
-        x |= x >> 1;
-        x |= x >> 2;
-        x |= x >> 4;
-        x |= x >> 8;
-        x |= x >> 16;
+        num |= num >> 1;
+        num |= num >> 2;
+        num |= num >> 4;
+        num |= num >> 8;
+        num |= num >> 16;
 
         // Return the next power of two (x + 1)
-        return (T)Convert.ChangeType(x + 1, typeof(T));
+        return (T)Convert.ChangeType(num + 1, typeof(T));
     }
 }

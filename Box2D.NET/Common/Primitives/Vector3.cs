@@ -49,14 +49,11 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     public static Vector3 UnitZ { get; } = new Vector3(0f, 0f, 1f);
 
     /// <summary>
-    /// Sets this vector to all zeros.
+    /// Checks if this vector contains finite coordinates.
+    /// Note: in Box2D this is a method, but I transformed it to a property for convenience.
     /// </summary>
-    public void SetZero()
-    {
-        X = 0f;
-        Y = 0f;
-        Z = 0f;
-    }
+    /// <returns>True if both components are finite, otherwise false.</returns>
+    public readonly bool IsValid => float.IsFinite(X) && float.IsFinite(Y) && float.IsFinite(Z);
 
     /// <summary>
     /// Sets this vector to the specified coordinates.
@@ -71,17 +68,126 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
         Z = z;
     }
 
-    /// <inheritdoc />
-    public readonly override bool Equals(object? obj) => obj is Vector3 other && Equals(other);
+    /// <summary>
+    /// Sets this vector to all zeros.
+    /// </summary>
+    public void SetZero()
+    {
+        X = 0f;
+        Y = 0f;
+        Z = 0f;
+    }
+
+    /// <summary>
+    /// Gets the length (magnitude) of the vector.
+    /// </summary>
+    public float Length() => MathF.Sqrt(LengthSquared());
+
+    /// <summary>
+    /// Gets the squared length (magnitude) of the vector.
+    /// More efficient than Length() since it avoids a square root calculation.
+    /// </summary>
+    public float LengthSquared() => X * X + Y * Y + Z * Z;
+
+    /// <summary>
+    /// Converts this vector into a unit vector and returns its original length.
+    /// </summary>
+    /// <returns>The length of the vector before normalization.</returns>
+    public float Normalize()
+    {
+        float length = Length();
+        if (length < float.Epsilon)
+            return 0f;
+
+        float invLength = 1f / length;
+        X *= invLength;
+        Y *= invLength;
+        Z *= invLength;
+
+        return length;
+    }
 
     /// <inheritdoc />
     public readonly bool Equals(Vector3 other) => X == other.X && Y == other.Y && Z == other.Z;
+
+    /// <inheritdoc />
+    public readonly override bool Equals(object? obj) => obj is Vector3 other && Equals(other);
 
     /// <inheritdoc />
     public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
     /// <inheritdoc />
     public readonly override string ToString() => $"(X: {X}, Y: {Y}, Z: {Z})";
+
+    /// <summary>
+    /// Computes the distance between two vectors.
+    /// </summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The distance between the vectors.</returns>
+    public static float Distance(in Vector3 left, in Vector3 right)
+    {
+        float dx = left.X - right.X;
+        float dy = left.Y - right.Y;
+        float dz = left.Z - right.Z;
+        return MathF.Sqrt(dx * dx + dy * dy + dz * dz);
+    }
+
+    /// <summary>
+    /// Computes the squared distance between two vectors.
+    /// More efficient than Distance() since it avoids a square root calculation.
+    /// </summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The squared distance between the vectors.</returns>
+    public static float DistanceSquared(in Vector3 left, in Vector3 right)
+    {
+        float dx = left.X - right.X;
+        float dy = left.Y - right.Y;
+        float dz = left.Z - right.Z;
+        return dx * dx + dy * dy + dz * dz;
+    }
+
+    /// <summary>
+    /// Performs a linear interpolation between two vectors.
+    /// </summary>
+    /// <param name="start">The starting vector.</param>
+    /// <param name="end">The ending vector.</param>
+    /// <param name="factor">The interpolation factor, typically between 0 and 1.</param>
+    /// <returns>A vector representing the linear interpolation between <paramref name="start" /> and <paramref name="end" />.</returns>
+    public static Vector3 Lerp(in Vector3 start, in Vector3 end, float factor)
+    {
+        // Ensures t is within the valid range
+        factor = Math.Clamp(factor, 0f, 1f);
+
+        // Perform linear interpolation for each component (X, Y, Z)
+        float x = start.X + (end.X - start.X) * factor;
+        float y = start.Y + (end.Y - start.Y) * factor;
+        float z = start.Z + (end.Z - start.Z) * factor;
+
+        return new Vector3(x, y, z);
+    }
+
+    /// <summary>
+    /// Calculates the dot product of two vectors.
+    /// </summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>The dot product of the two vectors.</returns>
+    public static float Dot(in Vector3 left, in Vector3 right) =>
+        left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+
+    /// <summary>
+    /// Calculates the cross product of two vectors.
+    /// </summary>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new vector that is the cross product of the two input vectors.</returns>
+    public static Vector3 Cross(in Vector3 left, in Vector3 right) => new Vector3(
+        left.Y * right.Z - left.Z * right.Y,
+        left.Z * right.X - left.X * right.Z,
+        left.X * right.Y - left.Y * right.X
+    );
 
     /// <summary>
     /// Checks if two vectors are equal.
@@ -97,23 +203,23 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// Negates this vector.
     /// </summary>
     /// <returns>A new vector that is the negation of this vector.</returns>
-    public static Vector3 operator -(in Vector3 v) => new Vector3(-v.X, -v.Y, -v.Z);
+    public static Vector3 operator -(in Vector3 vector) => new Vector3(-vector.X, -vector.Y, -vector.Z);
 
     /// <summary>
     /// Adds two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
     /// <returns>The resulting vector after addition.</returns>
-    public static Vector3 operator +(in Vector3 a, in Vector3 b) => new Vector3(a.X + b.X, a.Y + b.Y, a.Z + b.Z);
+    public static Vector3 operator +(in Vector3 left, in Vector3 right) => new Vector3(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
 
     /// <summary>
     /// Subtracts the second vector from the first vector.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
     /// <returns>The resulting vector after subtraction.</returns>
-    public static Vector3 operator -(in Vector3 a, in Vector3 b) => new Vector3(a.X - b.X, a.Y - b.Y, a.Z - b.Z);
+    public static Vector3 operator -(in Vector3 left, in Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
     /// <summary>
     /// Multiplies two vectors component-wise.
@@ -121,7 +227,8 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>A new vector where each component is the product of the corresponding components of the input vectors.</returns>
-    public static Vector3 operator *(in Vector3 left, in Vector3 right) => new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+    public static Vector3 operator *(in Vector3 left, in Vector3 right) =>
+        new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -129,7 +236,8 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="v">The vector.</param>
     /// <param name="scalar">The scalar value.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3 operator *(in Vector3 v, float scalar) => new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(in Vector3 v, float scalar) =>
+        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -137,7 +245,8 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="scalar">The scalar value.</param>
     /// <param name="v">The vector.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3 operator *(float scalar, in Vector3 v) => new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(float scalar, in Vector3 v) =>
+        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Divides a vector by another vector component-wise.
@@ -173,52 +282,5 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
             throw new DivideByZeroException("Cannot divide by a vector with zero components.");
 
         return new Vector3(scalar / vector.X, scalar / vector.Y, scalar / vector.Z);
-    }
-
-    /// <summary>
-    /// Checks if this vector contains finite coordinates.
-    /// Note: in Box2D this is a method, but I transformed it to a property for convenience.
-    /// </summary>
-    /// <returns>True if both components are finite, otherwise false.</returns>
-    public readonly bool IsValid => float.IsFinite(X) && float.IsFinite(Y) && float.IsFinite(Z);
-
-    /// <summary>
-    /// Calculates the dot product of two vectors.
-    /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
-    /// <returns>The dot product of the two vectors.</returns>
-    public static float Dot(in Vector3 left, in Vector3 right) => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
-
-    /// <summary>
-    /// Calculates the cross product of two vectors.
-    /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
-    /// <returns>A new vector that is the cross product of the two input vectors.</returns>
-    public static Vector3 Cross(in Vector3 left, in Vector3 right) => new Vector3(
-        left.Y * right.Z - left.Z * right.Y,
-        left.Z * right.X - left.X * right.Z,
-        left.X * right.Y - left.Y * right.X
-    );
-
-    /// <summary>
-    /// Performs a linear interpolation between two vectors.
-    /// </summary>
-    /// <param name="start">The starting vector.</param>
-    /// <param name="end">The ending vector.</param>
-    /// <param name="factor">The interpolation factor, typically between 0 and 1.</param>
-    /// <returns>A vector representing the linear interpolation between <paramref name="start" /> and <paramref name="end" />.</returns>
-    public static Vector3 Lerp(in Vector3 start, in Vector3 end, float factor)
-    {
-        // Ensures t is within the valid range
-        factor = Math.Clamp(factor, 0f, 1f);
-
-        // Perform linear interpolation for each component (X, Y, Z)
-        float x = start.X + (end.X - start.X) * factor;
-        float y = start.Y + (end.Y - start.Y) * factor;
-        float z = start.Z + (end.Z - start.Z) * factor;
-
-        return new Vector3(x, y, z);
     }
 }

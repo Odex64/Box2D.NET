@@ -62,19 +62,19 @@ public struct Rotation : IEquatable<Rotation>
     /// Gets the angle in radians.
     /// </summary>
     /// <returns>The angle in radians.</returns>
-    public readonly float GetAngle() => MathF.Atan2(Sine, Cosine);
+    public readonly float Angle => MathF.Atan2(Sine, Cosine);
 
     /// <summary>
     /// Gets the x-axis of the rotation.
     /// </summary>
     /// <returns>The x-axis as a 2D vector.</returns>
-    public readonly Vector2 GetXAxis() => new Vector2(Cosine, Sine);
+    public readonly Vector2 AxisX => new Vector2(Cosine, Sine);
 
     /// <summary>
     /// Gets the y-axis of the rotation.
     /// </summary>
     /// <returns>The y-axis as a 2D vector.</returns>
-    public readonly Vector2 GetYAxis() => new Vector2(-Sine, Cosine);
+    public readonly Vector2 AxisY => new Vector2(-Sine, Cosine);
 
     /// <inheritdoc />
     public readonly bool Equals(Rotation other) => Cosine == other.Cosine && Sine == other.Sine;
@@ -88,21 +88,6 @@ public struct Rotation : IEquatable<Rotation>
     /// <inheritdoc />
     public readonly override string ToString() => $"(Sine: {Sine}, Cosine: {Cosine})";
 
-    /// <summary>
-    /// Checks if two Rotation instances are equal.
-    /// </summary>
-    /// <param name="left">The first Rotation instance.</param>
-    /// <param name="right">The second Rotation instance.</param>
-    /// <returns>True if both instances are equal; otherwise, false.</returns>
-    public static bool operator ==(in Rotation left, in Rotation right) => left.Equals(right);
-
-    /// <summary>
-    /// Checks if two Rotation instances are not equal.
-    /// </summary>
-    /// <param name="left">The first Rotation instance.</param>
-    /// <param name="right">The second Rotation instance.</param>
-    /// <returns>True if both instances are not equal; otherwise, false.</returns>
-    public static bool operator !=(in Rotation left, in Rotation right) => !left.Equals(right);
 
     /// <summary>
     /// Multiplies two rotations: q * r, which combines two rotations into a single resulting rotation.
@@ -147,4 +132,20 @@ public struct Rotation : IEquatable<Rotation>
         rotation.Cosine * vector.X + rotation.Sine * vector.Y, // x-component after inverse rotation
         -rotation.Sine * vector.X + rotation.Cosine * vector.Y // y-component after inverse rotation
     );
+
+    /// <summary>
+    /// Checks if two Rotation instances are equal.
+    /// </summary>
+    /// <param name="left">The first Rotation instance.</param>
+    /// <param name="right">The second Rotation instance.</param>
+    /// <returns>True if both instances are equal; otherwise, false.</returns>
+    public static bool operator ==(in Rotation left, in Rotation right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two Rotation instances are not equal.
+    /// </summary>
+    /// <param name="left">The first Rotation instance.</param>
+    /// <param name="right">The second Rotation instance.</param>
+    /// <returns>True if both instances are not equal; otherwise, false.</returns>
+    public static bool operator !=(in Rotation left, in Rotation right) => !left.Equals(right);
 }

@@ -58,38 +58,38 @@ public struct Sweep : IEquatable<Sweep>
     /// Computes the transform for a given interpolation factor (beta), which is used to
     /// interpolate between two sweep states (initial and current state).
     /// </summary>
-    /// <param name="xf">The transform to store the result.</param>
+    /// <param name="transform">The transform to store the result.</param>
     /// <param name="beta">
-    /// The interpolation factor, where 0.0f corresponds to the initial state (c0, a0) and 1.0f corresponds
+    /// The interpolation factor, where 0f corresponds to the initial state (c0, a0) and 1f corresponds
     /// to the current state (c, a).
     /// </param>
-    public readonly void GetTransform(ref Transform xf, float beta)
+    public readonly void GetTransform(ref Transform transform, float beta)
     {
         // Interpolate the position: (1 - beta) * c0 + beta * c
-        xf.Position = (1.0f - beta) * C0 + beta * C;
+        transform.Position = (1f - beta) * C0 + beta * C;
 
         // Interpolate the angle: (1 - beta) * a0 + beta * a
-        float angle = (1.0f - beta) * A0 + beta * A;
+        float angle = (1f - beta) * A0 + beta * A;
 
         // Set the rotation (angle) of the transform.
-        xf.Rotation.Set(angle);
+        transform.Rotation.Set(angle);
 
         // Shift the position to account for the local center of rotation.
-        xf.Position -= Rotation.Multiply(xf.Rotation, LocalCenter);
+        transform.Position -= Rotation.Multiply(transform.Rotation, LocalCenter);
     }
 
     /// <summary>
     /// Advances the sweep to a new value of alpha, interpolating the position and angle between
     /// the current and initial states based on the given alpha value.
     /// </summary>
-    /// <param name="alpha">The new alpha value (0.0f to 1.0f), which represents the interpolation factor.</param>
+    /// <param name="alpha">The new alpha value (0f to 1f), which represents the interpolation factor.</param>
     public void Advance(float alpha)
     {
-        // Assert that alpha0 is less than 1.0f (the initial alpha value).
-        Debug.Assert(Alpha0 < 1.0f);
+        // Assert that alpha0 is less than 1f (the initial alpha value).
+        Debug.Assert(Alpha0 < 1f);
 
         // Calculate the interpolation factor 'beta' based on the change in alpha.
-        float beta = (alpha - Alpha0) / (1.0f - Alpha0);
+        float beta = (alpha - Alpha0) / (1f - Alpha0);
 
         // Interpolate the position (c0 to c).
         C0 += beta * (C - C0);
@@ -108,7 +108,7 @@ public struct Sweep : IEquatable<Sweep>
     public void Normalize()
     {
         // Define the constant 2π for angle normalization.
-        float twoPi = 2.0f * MathF.PI;
+        const float twoPi = 2f * MathF.PI;
 
         // Compute the "rounding" value to bring 'a0' within the range [-π, π].
         float d = twoPi * MathF.Floor(A0 / twoPi);
@@ -119,13 +119,7 @@ public struct Sweep : IEquatable<Sweep>
     }
 
     /// <inheritdoc />
-    public readonly bool Equals(Sweep other) =>
-        LocalCenter.Equals(other.LocalCenter) &&
-        C0.Equals(other.C0) &&
-        C.Equals(other.C) &&
-        A0 == other.A0 &&
-        A == other.A &&
-        Alpha0 == other.Alpha0;
+    public readonly bool Equals(Sweep other) => LocalCenter.Equals(other.LocalCenter) && C0.Equals(other.C0) && C.Equals(other.C) && A0 == other.A0 && A == other.A && Alpha0 == other.Alpha0;
 
     /// <inheritdoc />
     public readonly override bool Equals(object? obj) => obj is Sweep other && Equals(other);

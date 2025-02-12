@@ -8,7 +8,7 @@
         <RootNamespace>Box2D.NET</RootNamespace>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
-    
+
     <!-- Nuget -->
     <PropertyGroup>
         <Title>Box2D.NET</Title>

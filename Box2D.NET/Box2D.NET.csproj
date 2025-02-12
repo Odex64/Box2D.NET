@@ -2,21 +2,22 @@
     <!-- Project -->
     <PropertyGroup>
         <OutputType>library</OutputType>
-        <TargetFramework>net9.0</TargetFramework>
+        <TargetFramework>net8.0</TargetFramework>
         <ImplicitUsings>disable</ImplicitUsings>
         <Nullable>enable</Nullable>
         <RootNamespace>Box2D.NET</RootNamespace>
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
-
+    
     <!-- Nuget -->
     <PropertyGroup>
         <Title>Box2D.NET</Title>
         <Authors>Odex64</Authors>
         <Version>1.0.0</Version>
+        <Copyright>Copyright 2025, by Carmine Pietroluongo. All rights reserved.</Copyright>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <Description>C# Port of Box2D</Description>
+        <Description>Modern C# port of the final version of Box2D v2</Description>
         <PackageProjectUrl>https://www.nuget.org/packages/Box2D.NET</PackageProjectUrl>
         <PackageLicenseUrl>https://github.com/Odex64/Box2D.NET/blob/main/LICENSE</PackageLicenseUrl>
         <RepositoryUrl>https://github.com/Odex64/Box2D.NET</RepositoryUrl>

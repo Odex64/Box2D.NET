@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// A 2D column vector.
@@ -21,6 +21,21 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// The Y component of the vector.
     /// </summary>
     public float Y = y;
+
+    /// <summary>
+    /// Get an empty vector.
+    /// </summary>
+    public static Vector2 Zero { get; } = new Vector2(0f, 0f);
+
+    /// <summary>
+    /// Get a vector with unit x.
+    /// </summary>
+    public static Vector2 UnitX { get; } = new Vector2(1f, 0f);
+
+    /// <summary>
+    /// Get a vector with unit y.
+    /// </summary>
+    public static Vector2 UnitY { get; } = new Vector2(0f, 1f);
 
     /// <summary>
     /// Set this vector to all zeros.
@@ -255,5 +270,24 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     {
         Vector2 c = new(left.X - right.X, left.Y - right.Y);
         return Dot(c, c);
+    }
+
+    /// <summary>
+    /// Linearly interpolates between two vectors based on a given interpolation factor.
+    /// </summary>
+    /// <param name="start">The starting vector.</param>
+    /// <param name="end">The target vector.</param>
+    /// <param name="factor">The interpolation factor, typically between 0 and 1.</param>
+    /// <returns>A new Vector2 representing the interpolated result.</returns>
+    public static Vector2 Lerp(in Vector2 start, in Vector2 end, float factor)
+    {
+        // Ensures t is within the valid range
+        factor = Math.Clamp(factor, 0f, 1f);
+
+        // Perform linear interpolation for each component (X, Y)
+        float x = start.X + (end.X - start.X) * factor;
+        float y = start.Y + (end.Y - start.Y) * factor;
+
+        return new Vector2(x, y);
     }
 }

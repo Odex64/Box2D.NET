@@ -1,7 +1,7 @@
 using System;
 using System.Diagnostics;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// Describes the motion of a body/shape for time of impact (TOI) computation.
@@ -120,9 +120,9 @@ public struct Sweep : IEquatable<Sweep>
         LocalCenter.Equals(other.LocalCenter) &&
         C0.Equals(other.C0) &&
         C.Equals(other.C) &&
-        A0.Equals(other.A0) &&
-        A.Equals(other.A) &&
-        Alpha0.Equals(other.Alpha0);
+        A0 == other.A0 &&
+        A == other.A &&
+        Alpha0 == other.Alpha0;
 
     /// <inheritdoc />
     public override readonly bool Equals(object? obj) => obj is Sweep other && Equals(other);

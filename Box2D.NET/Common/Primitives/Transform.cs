@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// Represents a 2D transform containing translation (position) and rotation.
@@ -30,12 +30,12 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// Initializes the transform using a position vector and a rotation.
     /// </summary>
-    /// <param name="position">The position vector.</param>
     /// <param name="rotation">The rotation.</param>
-    public Transform(in Vector2 position, in Rotation rotation)
+    /// <param name="position">The position vector.</param>
+    public Transform(in Rotation rotation, in Vector2 position)
     {
-        Position = position;
         Rotation = rotation;
+        Position = position;
     }
 
     /// <summary>
@@ -89,16 +89,16 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// Applies the transformation T to the vector v.
     /// </summary>
-    /// <param name="T">The transformation to apply (rotation and translation).</param>
-    /// <param name="v">The vector to transform.</param>
+    /// <param name="transform">The transformation to apply (rotation and translation).</param>
+    /// <param name="vector">The vector to transform.</param>
     /// <returns>The transformed vector.</returns>
-    public static Vector2 Multiply(in Transform T, in Vector2 v)
+    public static Vector2 Multiply(in Transform transform, in Vector2 vector)
     {
         // Calculate the new x position: rotate the vector and then apply translation.
-        float x = T.Rotation.Cosine * v.X - T.Rotation.Sine * v.Y + T.Position.X;
+        float x = transform.Rotation.Cosine * vector.X - transform.Rotation.Sine * vector.Y + transform.Position.X;
 
         // Calculate the new y position: rotate the vector and then apply translation.
-        float y = T.Rotation.Sine * v.X + T.Rotation.Cosine * v.Y + T.Position.Y;
+        float y = transform.Rotation.Sine * vector.X + transform.Rotation.Cosine * vector.Y + transform.Position.Y;
 
         // Return the new vector after transformation.
         return new Vector2(x, y);
@@ -107,18 +107,18 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// Applies the inverse of transformation T to the vector v.
     /// </summary>
-    /// <param name="T">The transformation to invert and apply.</param>
-    /// <param name="v">The vector to transform.</param>
+    /// <param name="transform">The transformation to invert and apply.</param>
+    /// <param name="vector">The vector to transform.</param>
     /// <returns>The vector after applying the inverse transformation.</returns>
-    public static Vector2 MultiplyTranspose(in Transform T, in Vector2 v)
+    public static Vector2 MultiplyTranspose(in Transform transform, in Vector2 vector)
     {
         // Subtract the position of the transform from the vector to get the relative vector.
-        float px = v.X - T.Position.X;
-        float py = v.Y - T.Position.Y;
+        float px = vector.X - transform.Position.X;
+        float py = vector.Y - transform.Position.Y;
 
         // Apply the inverse rotation to the relative vector.
-        float x = T.Rotation.Cosine * px + T.Rotation.Sine * py;
-        float y = -T.Rotation.Sine * px + T.Rotation.Cosine * py;
+        float x = transform.Rotation.Cosine * px + transform.Rotation.Sine * py;
+        float y = -transform.Rotation.Sine * px + transform.Rotation.Cosine * py;
 
         // Return the transformed vector after applying the inverse rotation.
         return new Vector2(x, y);
@@ -128,46 +128,22 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// Combines two transformations A and B into a single transformation.
     /// </summary>
-    /// <param name="A">The first transformation.</param>
-    /// <param name="B">The second transformation.</param>
+    /// <param name="left">The first transformation.</param>
+    /// <param name="right">The second transformation.</param>
     /// <returns>The resulting transformation after combining A and B.</returns>
-    public static Transform Multiply(in Transform A, in Transform B)
-    {
-        // Create a new transformation to store the result.
-        Transform C = new()
-        {
-            // Combine the rotations of A and B (apply B's rotation then A's).
-            Rotation = Rotation.Multiply(A.Rotation, B.Rotation),
-
-            // Combine the positions: apply B's position then A's position.
-            // Rotate B's position by A's rotation, then add A's position.
-            Position = Rotation.Multiply(A.Rotation, B.Position) + A.Position
-        };
-
-        // Return the resulting combined transformation.
-        return C;
-    }
-
+    public static Transform Multiply(in Transform left, in Transform right) => new(
+        Rotation.Multiply(left.Rotation, right.Rotation),
+        Rotation.Multiply(left.Rotation, right.Position) + left.Position
+    );
 
     /// <summary>
     /// Combines the inverse of two transformations A and B into a single transformation.
     /// </summary>
-    /// <param name="A">The first transformation.</param>
-    /// <param name="B">The second transformation.</param>
+    /// <param name="left">The first transformation.</param>
+    /// <param name="right">The second transformation.</param>
     /// <returns>The resulting inverse transformation after combining A and B.</returns>
-    public static Transform MultiplyTranspose(in Transform A, in Transform B)
-    {
-        // Create a new transformation to store the result.
-        Transform C = new()
-        {
-            // Combine the inverse rotations: apply B's rotation, then apply the inverse of A's rotation.
-            Rotation = Rotation.MultiplyTranspose(A.Rotation, B.Rotation),
-
-            // Combine the inverse positions: first subtract A's position from B's, then apply the inverse rotation of A.
-            Position = Rotation.MultiplyTranspose(A.Rotation, B.Position - A.Position)
-        };
-
-        // Return the resulting inverse combined transformation.
-        return C;
-    }
+    public static Transform MultiplyTranspose(in Transform left, in Transform right) => new(
+        Rotation.MultiplyTranspose(left.Rotation, right.Rotation),
+        Rotation.MultiplyTranspose(left.Rotation, right.Position - left.Position)
+    );
 }

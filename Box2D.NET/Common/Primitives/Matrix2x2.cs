@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// Represents a 2x2 matrix with two column vectors (ex and ey).
@@ -106,9 +106,9 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// Solves the equation A * x = b, where b is a column vector.
     /// This is more efficient than computing the inverse in one-shot cases.
     /// </summary>
-    /// <param name="b">The column vector b.</param>
+    /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector2 Solve(in Vector2 b)
+    public readonly Vector2 Solve(in Vector2 vector)
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
@@ -118,8 +118,8 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         }
 
         Vector2 x;
-        x.X = det * (a22 * b.X - a12 * b.Y);
-        x.Y = det * (a11 * b.Y - a21 * b.X);
+        x.X = det * (a22 * vector.X - a12 * vector.Y);
+        x.Y = det * (a11 * vector.Y - a21 * vector.X);
         return x;
     }
 

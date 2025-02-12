@@ -28,7 +28,7 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore
 
-      - name: Build library
+      - name: Build projects
         run: dotnet build --configuration Release --no-restore
 
       - name: Upload library
@@ -43,6 +43,7 @@ jobs:
     needs: build
     runs-on: ubuntu-24.04
     if: github.event_name == 'release'
+
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4

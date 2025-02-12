@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// A 3D column vector with X, Y, and Z components.
@@ -27,6 +27,26 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// The Z-coordinate of the vector.
     /// </summary>
     public float Z = z;
+
+    /// <summary>
+    /// Get an empty vector.
+    /// </summary>
+    public static Vector3 Zero { get; } = new Vector3(0f, 0f, 0f);
+
+    /// <summary>
+    /// Get a vector with unit x.
+    /// </summary>
+    public static Vector3 UnitX { get; } = new Vector3(1f, 0f, 0f);
+
+    /// <summary>
+    /// Get a vector with unit y.
+    /// </summary>
+    public static Vector3 UnitY { get; } = new Vector3(0f, 1f, 0f);
+
+    /// <summary>
+    /// Get a vector with unit z.
+    /// </summary>
+    public static Vector3 UnitZ { get; } = new Vector3(0f, 0f, 1f);
 
     /// <summary>
     /// Sets this vector to all zeros.
@@ -164,20 +184,40 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <summary>
     /// Calculates the dot product of two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
     /// <returns>The dot product of the two vectors.</returns>
-    public static float Dot(in Vector3 a, in Vector3 b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
+    public static float Dot(in Vector3 left, in Vector3 right) => left.X * right.X + left.Y * right.Y + left.Z * right.Z;
 
     /// <summary>
     /// Calculates the cross product of two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
     /// <returns>A new vector that is the cross product of the two input vectors.</returns>
-    public static Vector3 Cross(in Vector3 a, in Vector3 b) => new(
-        a.Y * b.Z - a.Z * b.Y,
-        a.Z * b.X - a.X * b.Z,
-        a.X * b.Y - a.Y * b.X
+    public static Vector3 Cross(in Vector3 left, in Vector3 right) => new(
+        left.Y * right.Z - left.Z * right.Y,
+        left.Z * right.X - left.X * right.Z,
+        left.X * right.Y - left.Y * right.X
     );
+
+    /// <summary>
+    /// Performs a linear interpolation between two vectors.
+    /// </summary>
+    /// <param name="start">The starting vector.</param>
+    /// <param name="end">The ending vector.</param>
+    /// <param name="factor">The interpolation factor, typically between 0 and 1.</param>
+    /// <returns>A vector representing the linear interpolation between <paramref name="start"/> and <paramref name="end"/>.</returns>
+    public static Vector3 Lerp(in Vector3 start, in Vector3 end, float factor)
+    {
+        // Ensures t is within the valid range
+        factor = Math.Clamp(factor, 0f, 1f);
+
+        // Perform linear interpolation for each component (X, Y, Z)
+        float x = start.X + (end.X - start.X) * factor;
+        float y = start.Y + (end.Y - start.Y) * factor;
+        float z = start.Z + (end.Z - start.Z) * factor;
+
+        return new Vector3(x, y, z);
+    }
 }

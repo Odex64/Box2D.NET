@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// Represents a 3x3 matrix with three column vectors (ex, ey, ez).
@@ -60,9 +60,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// Solves the equation A * x = b, where b is a column vector.
     /// This is more efficient than computing the inverse in one-shot cases.
     /// </summary>
-    /// <param name="b">The column vector b.</param>
+    /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector3 Solve33(Vector3 b)
+    public readonly Vector3 Solve33(Vector3 vector)
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
@@ -71,9 +71,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         }
 
         Vector3 x;
-        x.X = det * Vector3.Dot(b, Vector3.Cross(Ey, Ez));
-        x.Y = det * Vector3.Dot(Ex, Vector3.Cross(b, Ez));
-        x.Z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, b));
+        x.X = det * Vector3.Dot(vector, Vector3.Cross(Ey, Ez));
+        x.Y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
+        x.Z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, vector));
         return x;
     }
 
@@ -82,9 +82,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// This is more efficient than computing the inverse in one-shot cases.
     /// Solves only the upper 2x2 matrix equation.
     /// </summary>
-    /// <param name="b">The column vector b.</param>
+    /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector2 Solve22(Vector2 b)
+    public readonly Vector2 Solve22(Vector2 vector)
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
@@ -94,8 +94,8 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         }
 
         Vector2 x;
-        x.X = det * (a22 * b.X - a12 * b.Y);
-        x.Y = det * (a11 * b.Y - a21 * b.X);
+        x.X = det * (a22 * vector.X - a12 * vector.Y);
+        x.Y = det * (a11 * vector.Y - a21 * vector.X);
         return x;
     }
 

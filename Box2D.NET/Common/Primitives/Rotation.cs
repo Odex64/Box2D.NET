@@ -1,6 +1,6 @@
 using System;
 
-namespace Box2D.NET.Common.Math;
+namespace Box2D.NET.Common.Primitives;
 
 /// <summary>
 /// Represents a 2D rotation using sine and cosine values.
@@ -106,15 +106,15 @@ public struct Rotation : IEquatable<Rotation>
     /// <summary>
     /// Multiplies two rotations: q * r, which combines two rotations into a single resulting rotation.
     /// </summary>
-    /// <param name="q">The first rotation (q).</param>
-    /// <param name="r">The second rotation (r).</param>
+    /// <param name="left">The first rotation (q).</param>
+    /// <param name="right">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q * r.</returns>
-    public static Rotation Multiply(in Rotation q, in Rotation r)
+    public static Rotation Multiply(in Rotation left, in Rotation right)
     {
         Rotation qr = new()
         {
-            Sine = q.Sine * r.Cosine + q.Cosine * r.Sine, // sine part of the resulting rotation
-            Cosine = q.Cosine * r.Cosine - q.Sine * r.Sine // cosine part of the resulting rotation
+            Sine = left.Sine * right.Cosine + left.Cosine * right.Sine, // sine part of the resulting rotation
+            Cosine = left.Cosine * right.Cosine - left.Sine * right.Sine // cosine part of the resulting rotation
         };
         return qr;
     }
@@ -122,33 +122,33 @@ public struct Rotation : IEquatable<Rotation>
     /// <summary>
     /// Multiplies two rotations in a transposed order: q^T * r, which combines the rotations in reverse order.
     /// </summary>
-    /// <param name="q">The first rotation (q).</param>
-    /// <param name="r">The second rotation (r).</param>
+    /// <param name="left">The first rotation (q).</param>
+    /// <param name="right">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q^T * r.</returns>
-    public static Rotation MultiplyTranspose(in Rotation q, in Rotation r) => new(
-        q.Cosine * r.Sine - q.Sine * r.Cosine, // cosine
-        q.Cosine * r.Cosine + q.Sine * r.Sine // sine
+    public static Rotation MultiplyTranspose(in Rotation left, in Rotation right) => new(
+        left.Cosine * right.Sine - left.Sine * right.Cosine, // cosine
+        left.Cosine * right.Cosine + left.Sine * right.Sine // sine
     );
 
     /// <summary>
     /// Rotates a vector by a given rotation (q). This performs the transformation of vector v using the rotation q.
     /// </summary>
-    /// <param name="q">The rotation to apply to the vector.</param>
-    /// <param name="v">The vector to rotate.</param>
+    /// <param name="rotation">The rotation to apply to the vector.</param>
+    /// <param name="vector">The vector to rotate.</param>
     /// <returns>The rotated vector.</returns>
-    public static Vector2 Multiply(in Rotation q, in Vector2 v) => new(
-        q.Cosine * v.X - q.Sine * v.Y,  // x-component after rotation
-        q.Sine * v.X + q.Cosine * v.Y   // y-component after rotation
+    public static Vector2 Multiply(in Rotation rotation, in Vector2 vector) => new(
+        rotation.Cosine * vector.X - rotation.Sine * vector.Y,  // x-component after rotation
+        rotation.Sine * vector.X + rotation.Cosine * vector.Y   // y-component after rotation
     );
 
     /// <summary>
     /// Inverse rotates a vector by a given rotation (q), effectively applying q^T (transpose of q) to the vector.
     /// </summary>
-    /// <param name="q">The rotation to apply the inverse of.</param>
-    /// <param name="v">The vector to rotate.</param>
+    /// <param name="rotation">The rotation to apply the inverse of.</param>
+    /// <param name="vector">The vector to rotate.</param>
     /// <returns>The inverse rotated vector.</returns>
-    public static Vector2 MultiplyTranspose(in Rotation q, in Vector2 v) => new(
-        q.Cosine * v.X + q.Sine * v.Y,  // x-component after inverse rotation
-        -q.Sine * v.X + q.Cosine * v.Y  // y-component after inverse rotation
+    public static Vector2 MultiplyTranspose(in Rotation rotation, in Vector2 vector) => new(
+        rotation.Cosine * vector.X + rotation.Sine * vector.Y,  // x-component after inverse rotation
+        -rotation.Sine * vector.X + rotation.Cosine * vector.Y  // y-component after inverse rotation
     );
 }

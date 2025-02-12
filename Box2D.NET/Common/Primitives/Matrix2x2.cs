@@ -92,13 +92,13 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
         float det = a * d - b * c;
         if (det != 0f)
-        {
             det = 1f / det;
-        }
 
         Matrix2x2 inverse;
-        inverse.Ex.X = det * d; inverse.Ey.X = -det * b;
-        inverse.Ex.Y = -det * c; inverse.Ey.Y = det * a;
+        inverse.Ex.X = det * d;
+        inverse.Ey.X = -det * b;
+        inverse.Ex.Y = -det * c;
+        inverse.Ey.Y = det * a;
         return inverse;
     }
 
@@ -113,14 +113,12 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
         if (det != 0.0f)
-        {
             det = 1.0f / det;
-        }
 
-        Vector2 x;
-        x.X = det * (a22 * vector.X - a12 * vector.Y);
-        x.Y = det * (a11 * vector.Y - a21 * vector.X);
-        return x;
+        return new Vector2(
+            det * (a22 * vector.X - a12 * vector.Y),
+            det * (a11 * vector.Y - a21 * vector.X)
+        );
     }
 
     /// <summary>
@@ -130,7 +128,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="matrix">The matrix.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 Multiply(in Matrix2x2 matrix, in Vector2 vector) => new(
+    public static Vector2 Multiply(in Matrix2x2 matrix, in Vector2 vector) => new Vector2(
         matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
@@ -142,7 +140,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="matrix">The matrix.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 MultiplyTranspose(in Matrix2x2 matrix, in Vector2 vector) => new(
+    public static Vector2 MultiplyTranspose(in Matrix2x2 matrix, in Vector2 vector) => new Vector2(
         Vector2.Dot(vector, matrix.Ex),
         Vector2.Dot(vector, matrix.Ey)
     );
@@ -153,7 +151,10 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="left">The first matrix.</param>
     /// <param name="right">The second matrix.</param>
     /// <returns>The product of the two matrices.</returns>
-    public static Matrix2x2 Multiply(in Matrix2x2 left, in Matrix2x2 right) => new(Multiply(left, right.Ex), Multiply(left, right.Ey));
+    public static Matrix2x2 Multiply(in Matrix2x2 left, in Matrix2x2 right) => new Matrix2x2(
+        Multiply(left, right.Ex),
+        Multiply(left, right.Ey)
+    );
 
     /// <summary>
     /// Multiplies the transpose of matrix A by matrix B (A^T * B).
@@ -163,8 +164,8 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <returns>The resulting matrix after multiplying A^T by B.</returns>
     public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right)
     {
-        Vector2 c1 = new(Vector2.Dot(left.Ex, right.Ex), Vector2.Dot(left.Ey, right.Ex));
-        Vector2 c2 = new(Vector2.Dot(left.Ex, right.Ey), Vector2.Dot(left.Ey, right.Ey));
+        Vector2 c1 = new Vector2(Vector2.Dot(left.Ex, right.Ex), Vector2.Dot(left.Ey, right.Ex));
+        Vector2 c2 = new Vector2(Vector2.Dot(left.Ex, right.Ey), Vector2.Dot(left.Ey, right.Ey));
         return new Matrix2x2(c1, c2);
     }
 
@@ -172,13 +173,13 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     public readonly bool Equals(Matrix2x2 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey);
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Matrix2x2 other && Equals(other);
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey);
+    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
+    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
 
     /// <summary>
     /// Checks if two matrices are equal.

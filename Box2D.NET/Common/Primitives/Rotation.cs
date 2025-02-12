@@ -11,6 +11,7 @@ public struct Rotation : IEquatable<Rotation>
     /// The sine component of the rotation.
     /// </summary>
     public float Sine;
+
     /// <summary>
     /// The cosine component of the rotation.
     /// </summary>
@@ -67,25 +68,25 @@ public struct Rotation : IEquatable<Rotation>
     /// Gets the x-axis of the rotation.
     /// </summary>
     /// <returns>The x-axis as a 2D vector.</returns>
-    public readonly Vector2 GetXAxis() => new(Cosine, Sine);
+    public readonly Vector2 GetXAxis() => new Vector2(Cosine, Sine);
 
     /// <summary>
     /// Gets the y-axis of the rotation.
     /// </summary>
     /// <returns>The y-axis as a 2D vector.</returns>
-    public readonly Vector2 GetYAxis() => new(-Sine, Cosine);
+    public readonly Vector2 GetYAxis() => new Vector2(-Sine, Cosine);
 
     /// <inheritdoc />
     public readonly bool Equals(Rotation other) => Cosine == other.Cosine && Sine == other.Sine;
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Rotation other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Rotation other && Equals(other);
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(Sine, Cosine);
+    public readonly override int GetHashCode() => HashCode.Combine(Sine, Cosine);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"(Sin: {Sine}, Cos: {Cosine})";
+    public readonly override string ToString() => $"(Sin: {Sine}, Cos: {Cosine})";
 
     /// <summary>
     /// Checks if two Rotation instances are equal.
@@ -109,15 +110,10 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="left">The first rotation (q).</param>
     /// <param name="right">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q * r.</returns>
-    public static Rotation Multiply(in Rotation left, in Rotation right)
-    {
-        Rotation qr = new()
-        {
-            Sine = left.Sine * right.Cosine + left.Cosine * right.Sine, // sine part of the resulting rotation
-            Cosine = left.Cosine * right.Cosine - left.Sine * right.Sine // cosine part of the resulting rotation
-        };
-        return qr;
-    }
+    public static Rotation Multiply(in Rotation left, in Rotation right) => new Rotation(
+        left.Sine * right.Cosine + left.Cosine * right.Sine, // sine
+        left.Cosine * right.Cosine - left.Sine * right.Sine // cosine
+    );
 
     /// <summary>
     /// Multiplies two rotations in a transposed order: q^T * r, which combines the rotations in reverse order.
@@ -125,9 +121,9 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="left">The first rotation (q).</param>
     /// <param name="right">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q^T * r.</returns>
-    public static Rotation MultiplyTranspose(in Rotation left, in Rotation right) => new(
-        left.Cosine * right.Sine - left.Sine * right.Cosine, // cosine
-        left.Cosine * right.Cosine + left.Sine * right.Sine // sine
+    public static Rotation MultiplyTranspose(in Rotation left, in Rotation right) => new Rotation(
+        left.Cosine * right.Sine - left.Sine * right.Cosine, // sine
+        left.Cosine * right.Cosine + left.Sine * right.Sine // cosine
     );
 
     /// <summary>
@@ -136,9 +132,9 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="rotation">The rotation to apply to the vector.</param>
     /// <param name="vector">The vector to rotate.</param>
     /// <returns>The rotated vector.</returns>
-    public static Vector2 Multiply(in Rotation rotation, in Vector2 vector) => new(
-        rotation.Cosine * vector.X - rotation.Sine * vector.Y,  // x-component after rotation
-        rotation.Sine * vector.X + rotation.Cosine * vector.Y   // y-component after rotation
+    public static Vector2 Multiply(in Rotation rotation, in Vector2 vector) => new Vector2(
+        rotation.Cosine * vector.X - rotation.Sine * vector.Y, // x-component after rotation
+        rotation.Sine * vector.X + rotation.Cosine * vector.Y // y-component after rotation
     );
 
     /// <summary>
@@ -147,8 +143,8 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="rotation">The rotation to apply the inverse of.</param>
     /// <param name="vector">The vector to rotate.</param>
     /// <returns>The inverse rotated vector.</returns>
-    public static Vector2 MultiplyTranspose(in Rotation rotation, in Vector2 vector) => new(
-        rotation.Cosine * vector.X + rotation.Sine * vector.Y,  // x-component after inverse rotation
-        -rotation.Sine * vector.X + rotation.Cosine * vector.Y  // y-component after inverse rotation
+    public static Vector2 MultiplyTranspose(in Rotation rotation, in Vector2 vector) => new Vector2(
+        rotation.Cosine * vector.X + rotation.Sine * vector.Y, // x-component after inverse rotation
+        -rotation.Sine * vector.X + rotation.Cosine * vector.Y // y-component after inverse rotation
     );
 }

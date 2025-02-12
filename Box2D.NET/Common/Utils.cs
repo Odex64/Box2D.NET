@@ -16,13 +16,9 @@ public static class Utils
     /// <param name="left">The first value to swap.</param>
     /// <param name="right">The second value to swap.</param>
     /// <remarks>
-    /// This method uses tuple deconstruction to swap the values of <paramref name="left"/> 
-    /// and <paramref name="right"/> efficiently. Both values are passed by reference, so
+    /// This method uses tuple deconstruction to swap the values of <paramref name="left" />
+    /// and <paramref name="right" /> efficiently. Both values are passed by reference, so
     /// the changes are reflected outside the method.
     /// </remarks>
-    public static void Swap<T>(ref T left, ref T right)
-    {
-        // Swap the values of left and right using tuple deconstruction
-        (right, left) = (left, right);
-    }
+    public static void Swap<T>(ref T left, ref T right) => (right, left) = (left, right);
 }

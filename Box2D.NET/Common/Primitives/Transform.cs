@@ -62,13 +62,13 @@ public struct Transform : IEquatable<Transform>
     public readonly bool Equals(Transform other) => Position.Equals(other.Position) && Rotation.Equals(other.Rotation);
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Transform other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Transform other && Equals(other);
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(Position, Rotation);
+    public readonly override int GetHashCode() => HashCode.Combine(Position, Rotation);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"(Position: {Position}, Rotation: {Rotation})";
+    public readonly override string ToString() => $"(Position: {Position}, Rotation: {Rotation})";
 
     /// <summary>
     /// Checks if two transforms are equal.
@@ -131,7 +131,7 @@ public struct Transform : IEquatable<Transform>
     /// <param name="left">The first transformation.</param>
     /// <param name="right">The second transformation.</param>
     /// <returns>The resulting transformation after combining A and B.</returns>
-    public static Transform Multiply(in Transform left, in Transform right) => new(
+    public static Transform Multiply(in Transform left, in Transform right) => new Transform(
         Rotation.Multiply(left.Rotation, right.Rotation),
         Rotation.Multiply(left.Rotation, right.Position) + left.Position
     );
@@ -142,7 +142,7 @@ public struct Transform : IEquatable<Transform>
     /// <param name="left">The first transformation.</param>
     /// <param name="right">The second transformation.</param>
     /// <returns>The resulting inverse transformation after combining A and B.</returns>
-    public static Transform MultiplyTranspose(in Transform left, in Transform right) => new(
+    public static Transform MultiplyTranspose(in Transform left, in Transform right) => new Transform(
         Rotation.MultiplyTranspose(left.Rotation, right.Rotation),
         Rotation.MultiplyTranspose(left.Rotation, right.Position - left.Position)
     );

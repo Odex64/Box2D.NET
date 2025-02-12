@@ -62,7 +62,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// </summary>
     /// <param name="vector">The vector to negate.</param>
     /// <returns>The negated vector.</returns>
-    public static Vector2 operator -(in Vector2 vector) => new(-vector.X, -vector.Y);
+    public static Vector2 operator -(in Vector2 vector) => new Vector2(-vector.X, -vector.Y);
 
     /// <summary>
     /// Adds a vector to this vector.
@@ -70,7 +70,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector to add.</param>
     /// <returns>The result of adding the two vectors.</returns>
-    public static Vector2 operator +(in Vector2 left, in Vector2 right) => new(left.X + right.X, left.Y + right.Y);
+    public static Vector2 operator +(in Vector2 left, in Vector2 right) => new Vector2(left.X + right.X, left.Y + right.Y);
 
     /// <summary>
     /// Subtracts a vector from this vector.
@@ -78,7 +78,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector to subtract.</param>
     /// <returns>The result of subtracting the second vector from the first vector.</returns>
-    public static Vector2 operator -(in Vector2 left, in Vector2 right) => new(left.X - right.X, left.Y - right.Y);
+    public static Vector2 operator -(in Vector2 left, in Vector2 right) => new Vector2(left.X - right.X, left.Y - right.Y);
 
     /// <summary>
     /// Multiplies a vector from this vector.
@@ -86,7 +86,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The result of multiplying the second vector from the first vector.</returns>
-    public static Vector2 operator *(in Vector2 left, in Vector2 right) => new(left.X * right.X, left.Y * right.Y);
+    public static Vector2 operator *(in Vector2 left, in Vector2 right) => new Vector2(left.X * right.X, left.Y * right.Y);
 
     /// <summary>
     /// Multiplies this vector by a scalar.
@@ -94,7 +94,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="vector">The vector to multiply.</param>
     /// <param name="scalar">The scalar to multiply by.</param>
     /// <returns>The result of multiplying the vector by the scalar.</returns>
-    public static Vector2 operator *(in Vector2 vector, float scalar) => new(vector.X * scalar, vector.Y * scalar);
+    public static Vector2 operator *(in Vector2 vector, float scalar) => new Vector2(vector.X * scalar, vector.Y * scalar);
 
     /// <summary>
     /// Multiplies this vector by a scalar (scalar on the left side).
@@ -102,7 +102,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="scalar">The scalar to multiply by.</param>
     /// <param name="vector">The vector to multiply.</param>
     /// <returns>The result of multiplying the scalar by the vector.</returns>
-    public static Vector2 operator *(float scalar, in Vector2 vector) => new(vector.X * scalar, vector.Y * scalar);
+    public static Vector2 operator *(float scalar, in Vector2 vector) => new Vector2(vector.X * scalar, vector.Y * scalar);
 
     /// <summary>
     /// Divides a vector by another vector component-wise.
@@ -128,8 +128,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <exception cref="DivideByZeroException">Thrown if scalar is zero.</exception>
     public static Vector2 operator /(in Vector2 vector, float scalar)
     {
-        if (scalar == 0)
-            throw new DivideByZeroException("Cannot divide by zero.");
+        if (scalar == 0) throw new DivideByZeroException("Cannot divide by zero.");
 
         return new Vector2(vector.X / scalar, vector.Y / scalar);
     }
@@ -150,16 +149,16 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     }
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Vector2 other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Vector2 other && Equals(other);
 
     /// <inheritdoc />
     public readonly bool Equals(Vector2 other) => X == other.X && Y == other.Y;
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(X, Y);
+    public readonly override int GetHashCode() => HashCode.Combine(X, Y);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"({X}, {Y})";
+    public readonly override string ToString() => $"({X}, {Y})";
 
     /// <summary>
     /// Checks if two vectors are equal.
@@ -190,10 +189,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     public float Normalize()
     {
         float length = Length();
-        if (length < float.Epsilon)
-        {
-            return 0f;
-        }
+        if (length < float.Epsilon) return 0f;
 
         float invLength = 1f / length;
         X *= invLength;
@@ -213,7 +209,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// Gets the skew vector such that dot(skewVec, other) == cross(vec, other).
     /// </summary>
     /// <returns>The skew vector.</returns>
-    public readonly Vector2 Skew() => new(-Y, X);
+    public readonly Vector2 Skew() => new Vector2(-Y, X);
 
     /// <summary>
     /// Computes the dot product of two vectors.
@@ -237,7 +233,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="vector">The vector.</param>
     /// <param name="scalar">The scalar.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 Cross(in Vector2 vector, float scalar) => new(scalar * vector.Y, -scalar * vector.X);
+    public static Vector2 Cross(in Vector2 vector, float scalar) => new Vector2(scalar * vector.Y, -scalar * vector.X);
 
     /// <summary>
     /// Computes the cross product of a scalar and a vector. In 2D, this produces a vector.
@@ -245,7 +241,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <param name="scalar">The scalar.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 Cross(float scalar, in Vector2 vector) => new(-scalar * vector.Y, scalar * vector.X);
+    public static Vector2 Cross(float scalar, in Vector2 vector) => new Vector2(-scalar * vector.Y, scalar * vector.X);
 
     /// <summary>
     /// Computes the distance between two points represented by vectors.
@@ -255,7 +251,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <returns>The distance between the two points.</returns>
     public static float Distance(in Vector2 left, in Vector2 right)
     {
-        Vector2 c = new(left.X - right.X, left.Y - right.Y);
+        Vector2 c = new Vector2(left.X - right.X, left.Y - right.Y);
         return c.Length();
     }
 
@@ -268,7 +264,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <returns>The squared distance between the two points.</returns>
     public static float DistanceSquared(in Vector2 left, in Vector2 right)
     {
-        Vector2 c = new(left.X - right.X, left.Y - right.Y);
+        Vector2 c = new Vector2(left.X - right.X, left.Y - right.Y);
         return Dot(c, c);
     }
 

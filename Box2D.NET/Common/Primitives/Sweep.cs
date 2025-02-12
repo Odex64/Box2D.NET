@@ -59,7 +59,10 @@ public struct Sweep : IEquatable<Sweep>
     /// interpolate between two sweep states (initial and current state).
     /// </summary>
     /// <param name="xf">The transform to store the result.</param>
-    /// <param name="beta">The interpolation factor, where 0.0f corresponds to the initial state (c0, a0) and 1.0f corresponds to the current state (c, a).</param>
+    /// <param name="beta">
+    /// The interpolation factor, where 0.0f corresponds to the initial state (c0, a0) and 1.0f corresponds
+    /// to the current state (c, a).
+    /// </param>
     public readonly void GetTransform(ref Transform xf, float beta)
     {
         // Interpolate the position: (1 - beta) * c0 + beta * c
@@ -125,13 +128,14 @@ public struct Sweep : IEquatable<Sweep>
         Alpha0 == other.Alpha0;
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Sweep other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Sweep other && Equals(other);
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(LocalCenter, C0, C, A0, A, Alpha0);
+    public readonly override int GetHashCode() => HashCode.Combine(LocalCenter, C0, C, A0, A, Alpha0);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"(LocalCenter: {LocalCenter}, C0: {C0}, C: {C}, A0: {A0}, A: {A}, Alpha0: {Alpha0})";
+    public readonly override string ToString() =>
+        $"(LocalCenter: {LocalCenter}, C0: {C0}, C: {C}, A0: {A0}, A: {A}, Alpha0: {Alpha0})";
 
     /// <summary>
     /// Checks if two sweeps are equal.

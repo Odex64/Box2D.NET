@@ -15,7 +15,7 @@ public static class MathHelper
     /// <summary>
     /// Determines if a number is a power of two.
     /// </summary>
-    /// <typeparam name="T">The numeric type, must implement <see cref="INumber{T}"/>.</typeparam>
+    /// <typeparam name="T">The numeric type, must implement <see cref="INumber{T}" />.</typeparam>
     /// <param name="value">The number to check.</param>
     /// <returns>True if the number is a power of two; otherwise, false.</returns>
     /// <remarks>
@@ -38,12 +38,12 @@ public static class MathHelper
     /// <summary>
     /// Returns the next power of two greater than or equal to the given number.
     /// </summary>
-    /// <typeparam name="T">The numeric type, must implement <see cref="INumber{T}"/>.</typeparam>
+    /// <typeparam name="T">The numeric type, must implement <see cref="INumber{T}" />.</typeparam>
     /// <param name="value">The number to find the next power of two for.</param>
-    /// <returns>The next power of two greater than or equal to <paramref name="value"/>.</returns>
+    /// <returns>The next power of two greater than or equal to <paramref name="value" />.</returns>
     /// <remarks>
     /// This method uses a bitwise trick to find the next power of two:
-    /// The method progressively ORs the number with right-shifted versions of itself to fill in all bits 
+    /// The method progressively ORs the number with right-shifted versions of itself to fill in all bits
     /// to the right of the most significant bit with `1`s, and then adds `1` to find the next power of two.
     /// </remarks>
     public static T NextPowerOfTwo<T>(T value) where T : INumber<T>

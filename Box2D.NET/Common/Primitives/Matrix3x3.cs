@@ -66,15 +66,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
-        {
             det = 1f / det;
-        }
 
-        Vector3 x;
-        x.X = det * Vector3.Dot(vector, Vector3.Cross(Ey, Ez));
-        x.Y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
-        x.Z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, vector));
-        return x;
+        float x = det * Vector3.Dot(vector, Vector3.Cross(Ey, Ez));
+        float y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
+        float z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, vector));
+
+        return new Vector3(x, y, z);
     }
 
     /// <summary>
@@ -89,14 +87,12 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
         if (det != 0f)
-        {
             det = 1f / det;
-        }
 
-        Vector2 x;
-        x.X = det * (a22 * vector.X - a12 * vector.Y);
-        x.Y = det * (a11 * vector.Y - a21 * vector.X);
-        return x;
+        float x = det * (a22 * vector.X - a12 * vector.Y);
+        float y = det * (a11 * vector.Y - a21 * vector.X);
+
+        return new Vector2(x, y);
     }
 
     /// <summary>
@@ -104,21 +100,18 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// Returns the zero matrix if singular.
     /// </summary>
     /// <param name="matrix">The output inverse matrix.</param>
-    public void GetInverse22(out Matrix3x3 matrix)
+    public readonly void GetInverse22(out Matrix3x3 matrix)
     {
         float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
         float det = a * d - b * c;
         if (det != 0f)
-        {
             det = 1f / det;
-        }
 
-        matrix = new Matrix3x3
-        {
-            Ex = new Vector3(det * d, -det * c, 0f),
-            Ey = new Vector3(-det * b, det * a, 0f),
-            Ez = new Vector3(0f, 0f, 0f)
-        };
+        matrix = new Matrix3x3(
+            new Vector3(det * d, -det * c, 0f),
+            new Vector3(-det * b, det * a, 0f),
+            new Vector3(0f, 0f, 0f)
+        );
     }
 
     /// <summary>
@@ -126,36 +119,33 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// Returns the zero matrix if singular.
     /// </summary>
     /// <param name="matrix">The output symmetric inverse matrix.</param>
-    public void GetSymInverse33(out Matrix3x3 matrix)
+    public readonly void GetSymInverse33(out Matrix3x3 matrix)
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
-        {
             det = 1f / det;
-        }
 
         float a11 = Ex.X, a12 = Ey.X, a13 = Ez.X;
         float a22 = Ey.Y, a23 = Ez.Y;
         float a33 = Ez.Z;
 
-        matrix = new Matrix3x3
-        {
-            Ex = new Vector3(
+        matrix = new Matrix3x3(
+            new Vector3(
                 det * (a22 * a33 - a23 * a23),
                 det * (a13 * a23 - a12 * a33),
                 det * (a12 * a23 - a13 * a22)
             ),
-            Ey = new Vector3(
+            new Vector3(
                 det * (a13 * a23 - a12 * a33),
                 det * (a11 * a33 - a13 * a13),
                 det * (a13 * a12 - a11 * a23)
             ),
-            Ez = new Vector3(
+            new Vector3(
                 det * (a12 * a23 - a13 * a22),
                 det * (a13 * a12 - a11 * a23),
                 det * (a11 * a22 - a12 * a12)
             )
-        };
+        );
     }
 
     /// <summary>
@@ -172,7 +162,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <param name="matrix">The 3x3 matrix.</param>
     /// <param name="vector">The 2D vector.</param>
     /// <returns>The resulting 2D vector after multiplication.</returns>
-    public static Vector2 Multiply22(in Matrix3x3 matrix, in Vector2 vector) => new(
+    public static Vector2 Multiply22(in Matrix3x3 matrix, in Vector2 vector) => new Vector2(
         matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
@@ -181,13 +171,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
 
     /// <inheritdoc />
-    public override readonly bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Matrix3x3 other && Equals(other);
 
     /// <inheritdoc />
-    public override readonly int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
+    public readonly override int GetHashCode() => HashCode.Combine(Ex, Ey, Ez);
 
     /// <inheritdoc />
-    public override readonly string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
+    public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
 
     /// <summary>
     /// Checks if two matrices are equal.

@@ -32,7 +32,6 @@ public static class MathHelper
         int intValue = Convert.ToInt32(value);
 
         // A number is a power of two if it has exactly one bit set in its binary representation
-        // This is true if (value & (value - 1)) == 0
         return (intValue & (intValue - 1)) == 0;
     }
 
@@ -46,7 +45,6 @@ public static class MathHelper
     /// This method uses a bitwise trick to find the next power of two:
     /// The method progressively ORs the number with right-shifted versions of itself to fill in all bits 
     /// to the right of the most significant bit with `1`s, and then adds `1` to find the next power of two.
-    /// If the input number is already a power of two, it will return the same value.
     /// </remarks>
     public static T NextPowerOfTwo<T>(T value) where T : INumber<T>
     {
@@ -55,10 +53,8 @@ public static class MathHelper
             return T.One;
 
         // Convert to int for bitwise manipulation
-        int intValue = Convert.ToInt32(value);
+        int x = Convert.ToInt32(value);
 
-        // Use the efficient bitwise trick to find the next power of two
-        int x = intValue;
         x |= x >> 1;
         x |= x >> 2;
         x |= x >> 4;

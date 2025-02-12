@@ -157,7 +157,8 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <exception cref="DivideByZeroException">Thrown if scalar is zero.</exception>
     public static Vector3 operator /(in Vector3 vector, float scalar)
     {
-        if (scalar == 0) throw new DivideByZeroException("Cannot divide by zero.");
+        if (scalar == 0)
+            throw new DivideByZeroException("Cannot divide by zero.");
 
         return new Vector3(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
     }

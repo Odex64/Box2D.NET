@@ -128,7 +128,8 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <exception cref="DivideByZeroException">Thrown if scalar is zero.</exception>
     public static Vector2 operator /(in Vector2 vector, float scalar)
     {
-        if (scalar == 0) throw new DivideByZeroException("Cannot divide by zero.");
+        if (scalar == 0)
+            throw new DivideByZeroException("Cannot divide by zero.");
 
         return new Vector2(vector.X / scalar, vector.Y / scalar);
     }
@@ -189,7 +190,8 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     public float Normalize()
     {
         float length = Length();
-        if (length < float.Epsilon) return 0f;
+        if (length < float.Epsilon)
+            return 0f;
 
         float invLength = 1f / length;
         X *= invLength;

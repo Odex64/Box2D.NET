@@ -158,7 +158,7 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     public readonly override int GetHashCode() => HashCode.Combine(X, Y);
 
     /// <inheritdoc />
-    public readonly override string ToString() => $"({X}, {Y})";
+    public readonly override string ToString() => $"(X: {X}, Y: {Y})";
 
     /// <summary>
     /// Checks if two vectors are equal.

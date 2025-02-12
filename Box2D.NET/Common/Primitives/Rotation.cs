@@ -86,7 +86,7 @@ public struct Rotation : IEquatable<Rotation>
     public readonly override int GetHashCode() => HashCode.Combine(Sine, Cosine);
 
     /// <inheritdoc />
-    public readonly override string ToString() => $"(Sin: {Sine}, Cos: {Cosine})";
+    public readonly override string ToString() => $"(Sine: {Sine}, Cosine: {Cosine})";
 
     /// <summary>
     /// Checks if two Rotation instances are equal.

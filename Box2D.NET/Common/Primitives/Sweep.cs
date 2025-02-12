@@ -134,8 +134,7 @@ public struct Sweep : IEquatable<Sweep>
     public readonly override int GetHashCode() => HashCode.Combine(LocalCenter, C0, C, A0, A, Alpha0);
 
     /// <inheritdoc />
-    public readonly override string ToString() =>
-        $"(LocalCenter: {LocalCenter}, C0: {C0}, C: {C}, A0: {A0}, A: {A}, Alpha0: {Alpha0})";
+    public readonly override string ToString() => $"(LocalCenter: {LocalCenter}, C0: {C0}, C: {C}, A0: {A0}, A: {A}, Alpha0: {Alpha0})";
 
     /// <summary>
     /// Checks if two sweeps are equal.

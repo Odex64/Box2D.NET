@@ -81,7 +81,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
 
     /// <inheritdoc />
-    public readonly override string ToString() => $"({X}, {Y}, {Z})";
+    public readonly override string ToString() => $"(X: {X}, Y: {Y}, Z: {Z})";
 
     /// <summary>
     /// Checks if two vectors are equal.

@@ -1,0 +1,24 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Project -->
+    <PropertyGroup>
+        <OutputType>library</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Box2D.NET.Unit</RootNamespace>
+        <InvariantGlobalization>true</InvariantGlobalization>
+        <ParallelizeTestCollections>true</ParallelizeTestCollections>
+    </PropertyGroup>
+
+    <!-- Box2D.NET -->
+    <ItemGroup>
+        <ProjectReference Include="..\Box2D.NET\Box2D.NET.csproj"/>
+    </ItemGroup>
+
+    <!-- Unit test framework -->
+    <ItemGroup>
+        <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.13.0" />
+        <PackageReference Include="NUnit" Version="4.3.2"/>
+        <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
+    </ItemGroup>
+</Project>

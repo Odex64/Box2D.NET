@@ -68,13 +68,13 @@ public struct Rotation : IEquatable<Rotation>
     /// Gets the x-axis of the rotation.
     /// </summary>
     /// <returns>The x-axis as a 2D vector.</returns>
-    public readonly Vector2B AxisX => new Vector2B(Cosine, Sine);
+    public readonly Vector2 AxisX => new Vector2(Cosine, Sine);
 
     /// <summary>
     /// Gets the y-axis of the rotation.
     /// </summary>
     /// <returns>The y-axis as a 2D vector.</returns>
-    public readonly Vector2B AxisY => new Vector2B(-Sine, Cosine);
+    public readonly Vector2 AxisY => new Vector2(-Sine, Cosine);
 
     /// <inheritdoc />
     public readonly bool Equals(Rotation other) => Cosine == other.Cosine && Sine == other.Sine;
@@ -117,7 +117,7 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="rotation">The rotation to apply to the vector.</param>
     /// <param name="vector">The vector to rotate.</param>
     /// <returns>The rotated vector.</returns>
-    public static Vector2B Multiply(in Rotation rotation, in Vector2B vector) => new Vector2B(
+    public static Vector2 Multiply(in Rotation rotation, in Vector2 vector) => new Vector2(
         rotation.Cosine * vector.X - rotation.Sine * vector.Y, // x-component after rotation
         rotation.Sine * vector.X + rotation.Cosine * vector.Y // y-component after rotation
     );
@@ -128,7 +128,7 @@ public struct Rotation : IEquatable<Rotation>
     /// <param name="rotation">The rotation to apply the inverse of.</param>
     /// <param name="vector">The vector to rotate.</param>
     /// <returns>The inverse rotated vector.</returns>
-    public static Vector2B MultiplyTranspose(in Rotation rotation, in Vector2B vector) => new Vector2B(
+    public static Vector2 MultiplyTranspose(in Rotation rotation, in Vector2 vector) => new Vector2(
         rotation.Cosine * vector.X + rotation.Sine * vector.Y, // x-component after inverse rotation
         -rotation.Sine * vector.X + rotation.Cosine * vector.Y // y-component after inverse rotation
     );

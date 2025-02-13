@@ -11,7 +11,7 @@ namespace Box2D.NET.Common.Primitives;
 /// <param name="x">The X-coordinate.</param>
 /// <param name="y">The Y-coordinate.</param>
 /// <param name="z">The Z-coordinate.</param>
-public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
+public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
 {
     /// <summary>
     /// The X-coordinate of the vector.
@@ -31,22 +31,22 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <summary>
     /// Get an empty vector.
     /// </summary>
-    public static Vector3B Zero { get; } = new Vector3B(0f, 0f, 0f);
+    public static Vector3 Zero { get; } = new Vector3(0f, 0f, 0f);
 
     /// <summary>
     /// Get a vector with unit x.
     /// </summary>
-    public static Vector3B UnitX { get; } = new Vector3B(1f, 0f, 0f);
+    public static Vector3 UnitX { get; } = new Vector3(1f, 0f, 0f);
 
     /// <summary>
     /// Get a vector with unit y.
     /// </summary>
-    public static Vector3B UnitY { get; } = new Vector3B(0f, 1f, 0f);
+    public static Vector3 UnitY { get; } = new Vector3(0f, 1f, 0f);
 
     /// <summary>
     /// Get a vector with unit z.
     /// </summary>
-    public static Vector3B UnitZ { get; } = new Vector3B(0f, 0f, 1f);
+    public static Vector3 UnitZ { get; } = new Vector3(0f, 0f, 1f);
 
     /// <summary>
     /// Checks if this vector contains finite coordinates.
@@ -108,10 +108,10 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     }
 
     /// <inheritdoc />
-    public readonly bool Equals(Vector3B other) => X == other.X && Y == other.Y && Z == other.Z;
+    public readonly bool Equals(Vector3 other) => X == other.X && Y == other.Y && Z == other.Z;
 
     /// <inheritdoc />
-    public readonly override bool Equals(object? obj) => obj is Vector3B other && Equals(other);
+    public readonly override bool Equals(object? obj) => obj is Vector3 other && Equals(other);
 
     /// <inheritdoc />
     public readonly override int GetHashCode() => HashCode.Combine(X, Y, Z);
@@ -125,7 +125,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The distance between the vectors.</returns>
-    public static float Distance(in Vector3B left, in Vector3B right)
+    public static float Distance(in Vector3 left, in Vector3 right)
     {
         float dx = left.X - right.X;
         float dy = left.Y - right.Y;
@@ -140,7 +140,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The squared distance between the vectors.</returns>
-    public static float DistanceSquared(in Vector3B left, in Vector3B right)
+    public static float DistanceSquared(in Vector3 left, in Vector3 right)
     {
         float dx = left.X - right.X;
         float dy = left.Y - right.Y;
@@ -155,7 +155,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="end">The ending vector.</param>
     /// <param name="factor">The interpolation factor, typically between 0 and 1.</param>
     /// <returns>A vector representing the linear interpolation between <paramref name="start" /> and <paramref name="end" />.</returns>
-    public static Vector3B Lerp(in Vector3B start, in Vector3B end, float factor)
+    public static Vector3 Lerp(in Vector3 start, in Vector3 end, float factor)
     {
         // Ensures t is within the valid range
         factor = Math.Clamp(factor, 0f, 1f);
@@ -165,7 +165,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
         float y = start.Y + (end.Y - start.Y) * factor;
         float z = start.Z + (end.Z - start.Z) * factor;
 
-        return new Vector3B(x, y, z);
+        return new Vector3(x, y, z);
     }
 
     /// <summary>
@@ -174,7 +174,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The dot product of the two vectors.</returns>
-    public static float Dot(in Vector3B left, in Vector3B right) =>
+    public static float Dot(in Vector3 left, in Vector3 right) =>
         left.X * right.X + left.Y * right.Y + left.Z * right.Z;
 
     /// <summary>
@@ -183,7 +183,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>A new vector that is the cross product of the two input vectors.</returns>
-    public static Vector3B Cross(in Vector3B left, in Vector3B right) => new Vector3B(
+    public static Vector3 Cross(in Vector3 left, in Vector3 right) => new Vector3(
         left.Y * right.Z - left.Z * right.Y,
         left.Z * right.X - left.X * right.Z,
         left.X * right.Y - left.Y * right.X
@@ -192,18 +192,18 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <summary>
     /// Checks if two vectors are equal.
     /// </summary>
-    public static bool operator ==(in Vector3B left, in Vector3B right) => left.Equals(right);
+    public static bool operator ==(in Vector3 left, in Vector3 right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two vectors are not equal.
     /// </summary>
-    public static bool operator !=(in Vector3B left, in Vector3B right) => !left.Equals(right);
+    public static bool operator !=(in Vector3 left, in Vector3 right) => !left.Equals(right);
 
     /// <summary>
     /// Negates this vector.
     /// </summary>
     /// <returns>A new vector that is the negation of this vector.</returns>
-    public static Vector3B operator -(in Vector3B vector) => new Vector3B(-vector.X, -vector.Y, -vector.Z);
+    public static Vector3 operator -(in Vector3 vector) => new Vector3(-vector.X, -vector.Y, -vector.Z);
 
     /// <summary>
     /// Adds two vectors.
@@ -211,7 +211,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The resulting vector after addition.</returns>
-    public static Vector3B operator +(in Vector3B left, in Vector3B right) => new Vector3B(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
+    public static Vector3 operator +(in Vector3 left, in Vector3 right) => new Vector3(left.X + right.X, left.Y + right.Y, left.Z + right.Z);
 
     /// <summary>
     /// Subtracts the second vector from the first vector.
@@ -219,7 +219,7 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>The resulting vector after subtraction.</returns>
-    public static Vector3B operator -(in Vector3B left, in Vector3B right) => new Vector3B(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
+    public static Vector3 operator -(in Vector3 left, in Vector3 right) => new Vector3(left.X - right.X, left.Y - right.Y, left.Z - right.Z);
 
     /// <summary>
     /// Multiplies two vectors component-wise.
@@ -227,8 +227,8 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>A new vector where each component is the product of the corresponding components of the input vectors.</returns>
-    public static Vector3B operator *(in Vector3B left, in Vector3B right) =>
-        new Vector3B(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+    public static Vector3 operator *(in Vector3 left, in Vector3 right) =>
+        new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -236,8 +236,8 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="v">The vector.</param>
     /// <param name="scalar">The scalar value.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3B operator *(in Vector3B v, float scalar) =>
-        new Vector3B(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(in Vector3 v, float scalar) =>
+        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -245,42 +245,42 @@ public struct Vector3B(float x, float y, float z) : IEquatable<Vector3B>
     /// <param name="scalar">The scalar value.</param>
     /// <param name="v">The vector.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3B operator *(float scalar, in Vector3B v) =>
-        new Vector3B(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(float scalar, in Vector3 v) =>
+        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Divides a vector by another vector component-wise.
     /// </summary>
     /// <exception cref="DivideByZeroException">Thrown if any component of the divisor vector is zero.</exception>
-    public static Vector3B operator /(in Vector3B left, in Vector3B right)
+    public static Vector3 operator /(in Vector3 left, in Vector3 right)
     {
         if (right.X == 0 || right.Y == 0 || right.Z == 0)
             throw new DivideByZeroException("Cannot divide by a vector with zero components.");
 
-        return new Vector3B(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
+        return new Vector3(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
     }
 
     /// <summary>
     /// Divides a vector by a scalar.
     /// </summary>
     /// <exception cref="DivideByZeroException">Thrown if scalar is zero.</exception>
-    public static Vector3B operator /(in Vector3B vector, float scalar)
+    public static Vector3 operator /(in Vector3 vector, float scalar)
     {
         if (scalar == 0)
             throw new DivideByZeroException("Cannot divide by zero.");
 
-        return new Vector3B(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
+        return new Vector3(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
     }
 
     /// <summary>
     /// Divides a scalar by a vector component-wise.
     /// </summary>
     /// <exception cref="DivideByZeroException">Thrown if any component of the vector is zero.</exception>
-    public static Vector3B operator /(float scalar, in Vector3B vector)
+    public static Vector3 operator /(float scalar, in Vector3 vector)
     {
         if (vector.X == 0 || vector.Y == 0 || vector.Z == 0)
             throw new DivideByZeroException("Cannot divide by a vector with zero components.");
 
-        return new Vector3B(scalar / vector.X, scalar / vector.Y, scalar / vector.Z);
+        return new Vector3(scalar / vector.X, scalar / vector.Y, scalar / vector.Z);
     }
 }

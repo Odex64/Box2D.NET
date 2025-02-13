@@ -13,17 +13,17 @@ public struct Sweep : IEquatable<Sweep>
     /// <summary>
     /// Local center of mass position.
     /// </summary>
-    public Vector2B LocalCenter;
+    public Vector2 LocalCenter;
 
     /// <summary>
     /// Center world positions at the initial time (alpha0).
     /// </summary>
-    public Vector2B C0;
+    public Vector2 C0;
 
     /// <summary>
     /// Center world positions at the current time.
     /// </summary>
-    public Vector2B C;
+    public Vector2 C;
 
     /// <summary>
     /// World angles at the initial time (alpha0).
@@ -46,9 +46,9 @@ public struct Sweep : IEquatable<Sweep>
     /// </summary>
     public Sweep()
     {
-        LocalCenter = new Vector2B();
-        C0 = new Vector2B();
-        C = new Vector2B();
+        LocalCenter = new Vector2();
+        C0 = new Vector2();
+        C = new Vector2();
         A0 = 0f;
         A = 0f;
         Alpha0 = 0f;

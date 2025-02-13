@@ -9,13 +9,6 @@
         <InvariantGlobalization>true</InvariantGlobalization>
     </PropertyGroup>
 
-	<!-- Packages -->
-	<ItemGroup>
-      <PackageReference Include="NUnit" Version="4.3.2" />
-      <PackageReference Include="NUnit3TestAdapter" Version="5.0.0" />
-      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.6.0" />
-    </ItemGroup>
-
     <!-- Nuget -->
     <PropertyGroup>
         <Title>Box2D.NET</Title>
@@ -32,16 +25,16 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-		<EnforceEditorConfigSettings>true</EnforceEditorConfigSettings>
-		<ParallelizeTestCollections>true</ParallelizeTestCollections>
-		<RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
+        <EnforceEditorConfigSettings>true</EnforceEditorConfigSettings>
+        <ParallelizeTestCollections>true</ParallelizeTestCollections>
+        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     </PropertyGroup>
 
     <!-- Files -->
     <ItemGroup>
-		<None Update="..\test.runsettings">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
+        <None Update="..\test.runsettings">
+            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+        </None>
         <None Include="..\README.md">
             <Pack>true</Pack>
             <PackagePath>\</PackagePath>

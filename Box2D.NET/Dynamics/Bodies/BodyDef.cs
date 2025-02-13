@@ -13,9 +13,9 @@ public struct BodyDef
     /// </summary>
     public BodyDef()
     {
-        Position = new Vector2(0f, 0f);
+        Position = new Vector2B(0f, 0f);
         Angle = 0f;
-        LinearVelocity = new Vector2(0f, 0f);
+        LinearVelocity = new Vector2B(0f, 0f);
         AngularVelocity = 0f;
         LinearDamping = 0f;
         AngularDamping = 0f;
@@ -38,7 +38,7 @@ public struct BodyDef
     /// The world position of the body. Avoid creating bodies at the origin
     /// since this can lead to many overlapping shapes.
     /// </summary>
-    public Vector2 Position;
+    public Vector2B Position;
 
     /// <summary>
     /// The world angle of the body in radians.
@@ -48,7 +48,7 @@ public struct BodyDef
     /// <summary>
     /// The linear velocity of the body's origin in world coordinates.
     /// </summary>
-    public Vector2 LinearVelocity;
+    public Vector2B LinearVelocity;
 
     /// <summary>
     /// The angular velocity of the body.

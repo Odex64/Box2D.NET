@@ -11,26 +11,26 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <summary>
     /// The first column vector of the matrix.
     /// </summary>
-    public Vector3 Ex;
+    public Vector3B Ex;
 
     /// <summary>
     /// The second column vector of the matrix.
     /// </summary>
-    public Vector3 Ey;
+    public Vector3B Ey;
 
     /// <summary>
     /// The third column vector of the matrix.
     /// </summary>
-    public Vector3 Ez;
+    public Vector3B Ez;
 
     /// <summary>
     /// Default constructor initializes the matrix to zero.
     /// </summary>
     public Matrix3x3()
     {
-        Ex = new Vector3();
-        Ey = new Vector3();
-        Ez = new Vector3();
+        Ex = new Vector3B();
+        Ey = new Vector3B();
+        Ez = new Vector3B();
     }
 
     /// <summary>
@@ -39,7 +39,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <param name="c1">The first column vector.</param>
     /// <param name="c2">The second column vector.</param>
     /// <param name="c3">The third column vector.</param>
-    public Matrix3x3(in Vector3 c1, in Vector3 c2, in Vector3 c3)
+    public Matrix3x3(in Vector3B c1, in Vector3B c2, in Vector3B c3)
     {
         Ex = c1;
         Ey = c2;
@@ -62,21 +62,21 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// </summary>
     /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector3 Solve33(Vector3 vector)
+    public readonly Vector3B Solve33(Vector3B vector)
     {
-        Vector3 crossEyEz = Vector3.Cross(Ey, Ez);
-        Vector3 crossExEz = Vector3.Cross(Ex, Ez);
-        Vector3 crossExEy = Vector3.Cross(Ex, Ey);
+        Vector3B crossEyEz = Vector3B.Cross(Ey, Ez);
+        Vector3B crossExEz = Vector3B.Cross(Ex, Ez);
+        Vector3B crossExEy = Vector3B.Cross(Ex, Ey);
 
-        float det = Vector3.Dot(Ex, crossEyEz);
+        float det = Vector3B.Dot(Ex, crossEyEz);
         if (det != 0f)
             det = 1f / det;
 
-        float x = det * Vector3.Dot(vector, crossEyEz);
-        float y = det * Vector3.Dot(Ex, crossExEz);
-        float z = det * Vector3.Dot(Ex, crossExEy);
+        float x = det * Vector3B.Dot(vector, crossEyEz);
+        float y = det * Vector3B.Dot(Ex, crossExEz);
+        float z = det * Vector3B.Dot(Ex, crossExEy);
 
-        return new Vector3(x, y, z);
+        return new Vector3B(x, y, z);
     }
 
     /// <summary>
@@ -86,7 +86,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// </summary>
     /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector2 Solve22(Vector2 vector)
+    public readonly Vector2B Solve22(Vector2B vector)
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
@@ -97,7 +97,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         float x = det * (a22 * vector.X - a12 * vector.Y);
         float y = det * (a11 * vector.Y - a21 * vector.X);
 
-        return new Vector2(x, y);
+        return new Vector2B(x, y);
     }
 
     /// <summary>
@@ -113,9 +113,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
             det = 1f / det;
 
         matrix = new Matrix3x3(
-            new Vector3(det * d, -det * c, 0f),
-            new Vector3(-det * b, det * a, 0f),
-            new Vector3(0f, 0f, 0f)
+            new Vector3B(det * d, -det * c, 0f),
+            new Vector3B(-det * b, det * a, 0f),
+            new Vector3B(0f, 0f, 0f)
         );
     }
 
@@ -126,7 +126,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <param name="matrix">The output symmetric inverse matrix.</param>
     public readonly void GetSymInverse33(out Matrix3x3 matrix)
     {
-        float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
+        float det = Vector3B.Dot(Ex, Vector3B.Cross(Ey, Ez));
         if (det != 0f)
             det = 1f / det;
 
@@ -135,17 +135,17 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         float a33 = Ez.Z;
 
         matrix = new Matrix3x3(
-            new Vector3(
+            new Vector3B(
                 det * (a22 * a33 - a23 * a23),
                 det * (a13 * a23 - a12 * a33),
                 det * (a12 * a23 - a13 * a22)
             ),
-            new Vector3(
+            new Vector3B(
                 det * (a13 * a23 - a12 * a33),
                 det * (a11 * a33 - a13 * a13),
                 det * (a13 * a12 - a11 * a23)
             ),
-            new Vector3(
+            new Vector3B(
                 det * (a12 * a23 - a13 * a22),
                 det * (a13 * a12 - a11 * a23),
                 det * (a11 * a22 - a12 * a12)
@@ -171,7 +171,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <param name="matrix">The matrix.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting 3D vector after multiplication.</returns>
-    public static Vector3 Multiply(in Matrix3x3 matrix, in Vector3 vector) => vector.X * matrix.Ex + vector.Y * matrix.Ey + vector.Z * matrix.Ez;
+    public static Vector3B Multiply(in Matrix3x3 matrix, in Vector3B vector) => vector.X * matrix.Ex + vector.Y * matrix.Ey + vector.Z * matrix.Ez;
 
     /// <summary>
     /// Multiplies the upper-left 2x2 portion of a 3x3 matrix by a 2D vector.
@@ -179,7 +179,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <param name="matrix">The 3x3 matrix.</param>
     /// <param name="vector">The 2D vector.</param>
     /// <returns>The resulting 2D vector after multiplication.</returns>
-    public static Vector2 Multiply22(in Matrix3x3 matrix, in Vector2 vector) => new Vector2(
+    public static Vector2B Multiply22(in Matrix3x3 matrix, in Vector2B vector) => new Vector2B(
         matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );

@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RunSettings>
+  <RunConfiguration>
+    <!-- Set target framework if needed -->
+    <TargetFrameworkVersion>net9.0</TargetFrameworkVersion>
+
+    <!-- Specify the results directory -->
+    <ResultsDirectory>TestResults</ResultsDirectory>
+
+    <!-- Define the maximum number of parallel test assemblies -->
+    <MaxCpuCount>4</MaxCpuCount>
+
+    <!-- Timeouts (in ms) -->
+    <TestSessionTimeout>600000</TestSessionTimeout> <!-- 10 minutes -->
+    <TestTimeout>10000</TestTimeout> <!-- 10 seconds per test -->
+
+    <!-- Run tests from Box2D.NET/Tests -->
+    <TestAdaptersPaths>Box2D.NET/Tests</TestAdaptersPaths>
+
+    <!-- Treat test adapter warnings as errors -->
+    <TreatTestAdapterWarningsAsErrors>true</TreatTestAdapterWarningsAsErrors>
+
+    <!-- Filter tests to only include NUnit tests -->
+    <TestCaseFilter>FullyQualifiedName~Box2D.NET.Tests</TestCaseFilter>
+  </RunConfiguration>
+
+  <DataCollectionRunSettings>
+    <DataCollectors>
+      <!-- Enables code coverage -->
+      <DataCollector friendlyName="Code Coverage">
+        <Configuration>
+          <Format>cobertura,lcov,opencover</Format>
+          <IncludeTestAssembly>true</IncludeTestAssembly>
+        </Configuration>
+      </DataCollector>
+    </DataCollectors>
+  </DataCollectionRunSettings>
+
+  <!-- NUnit specific settings -->
+  <NUnit>
+    <TestOutputXml>TestResults/NUnitTestResults.xml</TestOutputXml>
+    <InternalTraceLevel>Off</InternalTraceLevel>
+  </NUnit>
+</RunSettings>

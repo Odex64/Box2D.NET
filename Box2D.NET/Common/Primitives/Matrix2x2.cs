@@ -10,20 +10,20 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <summary>
     /// The first column vector of the matrix.
     /// </summary>
-    public Vector2 Ex;
+    public Vector2B Ex;
 
     /// <summary>
     /// The second column vector of the matrix.
     /// </summary>
-    public Vector2 Ey;
+    public Vector2B Ey;
 
     /// <summary>
     /// Default constructor initializes the matrix to zero.
     /// </summary>
     public Matrix2x2()
     {
-        Ex = new Vector2();
-        Ey = new Vector2();
+        Ex = new Vector2B();
+        Ey = new Vector2B();
     }
 
     /// <summary>
@@ -31,7 +31,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// </summary>
     /// <param name="c1">The first column vector.</param>
     /// <param name="c2">The second column vector.</param>
-    public Matrix2x2(in Vector2 c1, in Vector2 c2)
+    public Matrix2x2(in Vector2B c1, in Vector2B c2)
     {
         Ex = c1;
         Ey = c2;
@@ -46,8 +46,8 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="a22">The value at row 2, column 2.</param>
     public Matrix2x2(float a11, float a12, float a21, float a22)
     {
-        Ex = new Vector2(a11, a21);
-        Ey = new Vector2(a12, a22);
+        Ex = new Vector2B(a11, a21);
+        Ey = new Vector2B(a12, a22);
     }
 
     /// <summary>
@@ -55,7 +55,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// </summary>
     /// <param name="c1">The first column vector.</param>
     /// <param name="c2">The second column vector.</param>
-    public void Set(in Vector2 c1, in Vector2 c2)
+    public void Set(in Vector2B c1, in Vector2B c2)
     {
         Ex = c1;
         Ey = c2;
@@ -109,7 +109,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// </summary>
     /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector2 Solve(in Vector2 vector)
+    public readonly Vector2B Solve(in Vector2B vector)
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
@@ -117,7 +117,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         if (det != 0f)
             det = 1f / det;
 
-        return new Vector2(
+        return new Vector2B(
             det * (a22 * vector.X - a12 * vector.Y),
             det * (a11 * vector.Y - a21 * vector.X)
         );
@@ -142,7 +142,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="matrix">The matrix.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 Multiply(in Matrix2x2 matrix, in Vector2 vector) => new Vector2(
+    public static Vector2B Multiply(in Matrix2x2 matrix, in Vector2B vector) => new Vector2B(
         matrix.Ex.X * vector.X + matrix.Ey.X * vector.Y,
         matrix.Ex.Y * vector.X + matrix.Ey.Y * vector.Y
     );
@@ -154,9 +154,9 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="matrix">The matrix.</param>
     /// <param name="vector">The vector.</param>
     /// <returns>The resulting vector.</returns>
-    public static Vector2 MultiplyTranspose(in Matrix2x2 matrix, in Vector2 vector) => new Vector2(
-        Vector2.Dot(vector, matrix.Ex),
-        Vector2.Dot(vector, matrix.Ey)
+    public static Vector2B MultiplyTranspose(in Matrix2x2 matrix, in Vector2B vector) => new Vector2B(
+        Vector2B.Dot(vector, matrix.Ex),
+        Vector2B.Dot(vector, matrix.Ey)
     );
 
     /// <summary>

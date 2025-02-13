@@ -11,7 +11,7 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// The translation (position) component of the transform.
     /// </summary>
-    public Vector2 Position;
+    public Vector2B Position;
 
     /// <summary>
     /// The rotation component of the transform.
@@ -23,7 +23,7 @@ public struct Transform : IEquatable<Transform>
     /// </summary>
     public Transform()
     {
-        Position = new Vector2();
+        Position = new Vector2B();
         Rotation = new Rotation();
     }
 
@@ -32,7 +32,7 @@ public struct Transform : IEquatable<Transform>
     /// </summary>
     /// <param name="rotation">The rotation.</param>
     /// <param name="position">The position vector.</param>
-    public Transform(in Rotation rotation, in Vector2 position)
+    public Transform(in Rotation rotation, in Vector2B position)
     {
         Rotation = rotation;
         Position = position;
@@ -43,7 +43,7 @@ public struct Transform : IEquatable<Transform>
     /// </summary>
     /// <param name="position">The position vector.</param>
     /// <param name="angle">The angle in radians.</param>
-    public void Set(in Vector2 position, float angle)
+    public void Set(in Vector2B position, float angle)
     {
         Position = position;
         Rotation.Set(angle);
@@ -76,7 +76,7 @@ public struct Transform : IEquatable<Transform>
     /// <param name="transform">The transformation to apply (rotation and translation).</param>
     /// <param name="vector">The vector to transform.</param>
     /// <returns>The transformed vector.</returns>
-    public static Vector2 Multiply(in Transform transform, in Vector2 vector)
+    public static Vector2B Multiply(in Transform transform, in Vector2B vector)
     {
         // Calculate the new x position: rotate the vector and then apply translation.
         float x = transform.Rotation.Cosine * vector.X - transform.Rotation.Sine * vector.Y + transform.Position.X;
@@ -85,7 +85,7 @@ public struct Transform : IEquatable<Transform>
         float y = transform.Rotation.Sine * vector.X + transform.Rotation.Cosine * vector.Y + transform.Position.Y;
 
         // Return the new vector after transformation.
-        return new Vector2(x, y);
+        return new Vector2B(x, y);
     }
 
     /// <summary>
@@ -94,7 +94,7 @@ public struct Transform : IEquatable<Transform>
     /// <param name="transform">The transformation to invert and apply.</param>
     /// <param name="vector">The vector to transform.</param>
     /// <returns>The vector after applying the inverse transformation.</returns>
-    public static Vector2 MultiplyTranspose(in Transform transform, in Vector2 vector)
+    public static Vector2B MultiplyTranspose(in Transform transform, in Vector2B vector)
     {
         // Subtract the position of the transform from the vector to get the relative vector.
         float px = vector.X - transform.Position.X;
@@ -105,7 +105,7 @@ public struct Transform : IEquatable<Transform>
         float y = -transform.Rotation.Sine * px + transform.Rotation.Cosine * py;
 
         // Return the transformed vector after applying the inverse rotation.
-        return new Vector2(x, y);
+        return new Vector2B(x, y);
     }
 
 

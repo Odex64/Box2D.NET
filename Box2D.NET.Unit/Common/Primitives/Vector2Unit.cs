@@ -108,7 +108,6 @@ public sealed class Vector2Unit
         });
     }
 
-
     [Test]
     public void Dot()
     {

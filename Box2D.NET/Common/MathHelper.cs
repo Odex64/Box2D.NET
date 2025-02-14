@@ -36,7 +36,7 @@ public static class MathHelper
     }
 
     /// <summary>
-    /// Returns the next power of two greater than or equal to the given number.
+    /// Returns the next power of two greater than the given number.
     /// </summary>
     /// <typeparam name="T">The numeric type, must implement <see cref="INumber{T}" />.</typeparam>
     /// <param name="value">The number to find the next power of two for.</param>

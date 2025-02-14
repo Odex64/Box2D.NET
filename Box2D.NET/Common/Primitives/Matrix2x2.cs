@@ -29,12 +29,12 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <summary>
     /// Constructs a matrix using two column vectors.
     /// </summary>
-    /// <param name="c1">The first column vector.</param>
-    /// <param name="c2">The second column vector.</param>
-    public Matrix2x2(in Vector2 c1, in Vector2 c2)
+    /// <param name="ex">The first column vector.</param>
+    /// <param name="ey">The second column vector.</param>
+    public Matrix2x2(in Vector2 ex, in Vector2 ey)
     {
-        Ex = c1;
-        Ey = c2;
+        Ex = ex;
+        Ey = ey;
     }
 
     /// <summary>

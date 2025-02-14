@@ -108,7 +108,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     }
 
     /// <inheritdoc />
-    public readonly bool Equals(Vector3 other) => X == other.X && Y == other.Y && Z == other.Z;
+    public readonly bool Equals(Vector3 other) => X.ToleranceEquals(other.X) && Y.ToleranceEquals(other.Y) && Z.ToleranceEquals(other.Z);
 
     /// <inheritdoc />
     public readonly override bool Equals(object? obj) => obj is Vector3 other && Equals(other);

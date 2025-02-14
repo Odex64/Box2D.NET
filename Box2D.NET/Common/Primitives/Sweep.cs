@@ -119,7 +119,7 @@ public struct Sweep : IEquatable<Sweep>
     }
 
     /// <inheritdoc />
-    public readonly bool Equals(Sweep other) => LocalCenter.Equals(other.LocalCenter) && C0.Equals(other.C0) && C.Equals(other.C) && A0 == other.A0 && A == other.A && Alpha0 == other.Alpha0;
+    public readonly bool Equals(Sweep other) => LocalCenter.Equals(other.LocalCenter) && C0.Equals(other.C0) && C.Equals(other.C) && A0.ToleranceEquals(other.A0) && A.ToleranceEquals(other.A) && Alpha0.ToleranceEquals(other.Alpha0);
 
     /// <inheritdoc />
     public readonly override bool Equals(object? obj) => obj is Sweep other && Equals(other);

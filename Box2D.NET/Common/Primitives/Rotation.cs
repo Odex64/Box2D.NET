@@ -77,7 +77,7 @@ public struct Rotation : IEquatable<Rotation>
     public readonly Vector2 AxisY => new Vector2(-Sine, Cosine);
 
     /// <inheritdoc />
-    public readonly bool Equals(Rotation other) => Cosine == other.Cosine && Sine == other.Sine;
+    public readonly bool Equals(Rotation other) => Cosine.ToleranceEquals(other.Cosine) && Sine.ToleranceEquals(other.Sine);
 
     /// <inheritdoc />
     public readonly override bool Equals(object? obj) => obj is Rotation other && Equals(other);

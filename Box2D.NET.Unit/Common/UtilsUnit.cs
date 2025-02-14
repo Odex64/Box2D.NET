@@ -1,26 +1,34 @@
 ﻿using Box2D.NET.Common;
-using Box2D.NET.Unit.Helpers;
 using NUnit.Framework;
 
 namespace Box2D.NET.Unit.Common;
 
 [TestFixture]
-public class UtilsUnit
+public sealed class UtilsUnit
 {
     [Test]
     public void SwapValues()
     {
-        int a = 5, b = 10;
+        int a = 10, b = 20;
         Utils.Swap(ref a, ref b);
-        Generics.AreEqual(b, 5);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(a, Is.EqualTo(20));
+            Assert.That(b, Is.EqualTo(10));
+        });
     }
 
     [Test]
     public void SwapObjects()
     {
-        string str1 = "hello", str2 = "world";
-        Utils.Swap(ref str1, ref str2);
-        Generics.AreEqual(str2, "hello");
-        Generics.AreEqual(str1, "world");
+        string a = "hello", b = "world";
+        Utils.Swap(ref a, ref b);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(a, Is.EqualTo("world"));
+            Assert.That(b, Is.EqualTo("hello"));
+        });
     }
 }

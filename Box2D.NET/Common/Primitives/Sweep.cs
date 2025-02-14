@@ -107,15 +107,31 @@ public struct Sweep : IEquatable<Sweep>
     /// </summary>
     public void Normalize()
     {
-        // Define the constant 2π for angle normalization.
         const float twoPi = 2f * MathF.PI;
 
-        // Compute the "rounding" value to bring 'a0' within the range [-π, π].
-        float d = twoPi * MathF.Floor(A0 / twoPi);
+        // Normalize A0 to the range [-π, π]
+        A0 %= twoPi;
+        switch (A0)
+        {
+            case < -MathF.PI:
+                A0 += twoPi;
+                break;
+            case > MathF.PI:
+                A0 -= twoPi;
+                break;
+        }
 
-        // Subtract the rounding value from 'a0' and 'a' to normalize them.
-        A0 -= d;
-        A -= d;
+        // Normalize A to the range [-π, π]
+        A %= twoPi;
+        switch (A)
+        {
+            case < -MathF.PI:
+                A += twoPi;
+                break;
+            case > MathF.PI:
+                A -= twoPi;
+                break;
+        }
     }
 
     /// <inheritdoc />

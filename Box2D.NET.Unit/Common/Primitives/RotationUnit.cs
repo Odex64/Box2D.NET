@@ -5,7 +5,7 @@ using NUnit.Framework;
 namespace Box2D.NET.Unit.Common.Primitives;
 
 [TestFixture]
-public class RotationUnit
+public sealed class RotationUnit
 {
     [Test]
     public void AngleConstructor()

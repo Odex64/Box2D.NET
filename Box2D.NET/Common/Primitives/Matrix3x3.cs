@@ -87,16 +87,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     public readonly Vector3 Solve33(Vector3 vector)
     {
         Vector3 crossEyEz = Vector3.Cross(Ey, Ez);
-        Vector3 crossExEz = Vector3.Cross(Ex, Ez);
-        Vector3 crossExEy = Vector3.Cross(Ex, Ey);
-
         float det = Vector3.Dot(Ex, crossEyEz);
         if (det != 0f)
             det = 1f / det;
 
         float x = det * Vector3.Dot(vector, crossEyEz);
-        float y = det * Vector3.Dot(Ex, crossExEz);
-        float z = det * Vector3.Dot(Ex, crossExEy);
+        float y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
+        float z = det * Vector3.Dot(Ex, Vector3.Cross(Ey, vector));
 
         return new Vector3(x, y, z);
     }
@@ -146,7 +143,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// Returns the zero matrix if singular.
     /// </summary>
     /// <param name="matrix">The output symmetric inverse matrix.</param>
-    public readonly void GetSymInverse33(out Matrix3x3 matrix)
+    public readonly void GetSymmetricInverse33(out Matrix3x3 matrix)
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)

@@ -177,10 +177,10 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <param name="right">The second matrix.</param>
     /// <returns>The resulting matrix after multiplying A^T by B.</returns>
     public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right) => new Matrix2x2(
-        left.Ex.X * right.Ex.X + left.Ey.X * right.Ex.Y,
-        left.Ex.X * right.Ey.X + left.Ey.X * right.Ey.Y,
-        left.Ex.Y * right.Ex.X + left.Ey.Y * right.Ex.Y,
-        left.Ex.Y * right.Ey.X + left.Ey.Y * right.Ey.Y
+        Vector2.Dot(left.Ex, right.Ex),
+        Vector2.Dot(left.Ex, right.Ey),
+        Vector2.Dot(left.Ey, right.Ex),
+        Vector2.Dot(left.Ey, right.Ey)
     );
 
     /// <summary>

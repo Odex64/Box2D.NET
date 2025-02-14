@@ -2,7 +2,7 @@
 using Box2D.NET.Common.Primitives;
 using NUnit.Framework;
 
-namespace Box2D.NET.Unit.Primitives;
+namespace Box2D.NET.Unit.Common.Primitives;
 
 [TestFixture]
 public sealed class Vector2Unit

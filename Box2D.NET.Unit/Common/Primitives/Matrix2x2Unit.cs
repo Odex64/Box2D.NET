@@ -7,7 +7,7 @@ namespace Box2D.NET.Unit.Common.Primitives;
 public sealed class Matrix2X2Unit
 {
     [Test]
-    public void Constructor()
+    public void Constructors()
     {
         const float a11 = 1f;
         const float a12 = 2f;
@@ -42,6 +42,15 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
+    public void SetZero()
+    {
+        Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
+        matrix.SetZero();
+
+        Assert.That(matrix, Is.EqualTo(new Matrix2x2(0f, 0f, 0f, 0f)));
+    }
+
+    [Test]
     public void GetInverse()
     {
         Matrix2x2 matrix = new Matrix2x2(4f, 7f, 2f, 6f);
@@ -61,6 +70,26 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
+    public void MultiplyByVector()
+    {
+        Matrix2x2 matrix = new Matrix2x2(2f, 1f, 3f, 4f);
+        Vector2 vector = new Vector2(1f, 2f);
+        Vector2 result = Matrix2x2.Multiply(matrix, vector);
+
+        Assert.That(result, Is.EqualTo(new Vector2(4f, 11f)));
+    }
+
+    [Test]
+    public void MultiplyTransposeByVector()
+    {
+        Matrix2x2 matrix = new Matrix2x2(2f, 1f, 3f, 4f);
+        Vector2 vector = new Vector2(1f, 2f);
+        Vector2 result = Matrix2x2.MultiplyTranspose(matrix, vector);
+
+        Assert.That(result, Is.EqualTo(new Vector2(8f, 9f)));
+    }
+
+    [Test]
     public void Multiply()
     {
         Matrix2x2 m1 = new Matrix2x2(1f, 2f, 3f, 4f);
@@ -68,5 +97,15 @@ public sealed class Matrix2X2Unit
         Matrix2x2 result = Matrix2x2.Multiply(m1, m2);
 
         Assert.That(result, Is.EqualTo(new Matrix2x2(4f, 4f, 10f, 8f)));
+    }
+
+    [Test]
+    public void MultiplyTranspose()
+    {
+        Matrix2x2 m1 = new Matrix2x2(2f, 1f, 3f, 4f);
+        Matrix2x2 m2 = new Matrix2x2(1f, 2f, 3f, 4f);
+        Matrix2x2 result = Matrix2x2.MultiplyTranspose(m1, m2);
+
+        Assert.That(result, Is.EqualTo(new Matrix2x2(11f, 16f, 13f, 18f)));
     }
 }

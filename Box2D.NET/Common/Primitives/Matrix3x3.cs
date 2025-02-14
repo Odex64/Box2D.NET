@@ -47,6 +47,28 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     }
 
     /// <summary>
+    /// Constructs a matrix using the elements of a 3x3 matrix in row-major order.
+    /// </summary>
+    /// <param name="a11">The element in row 1, column 1.</param>
+    /// <param name="a12">The element in row 1, column 2.</param>
+    /// <param name="a13">The element in row 1, column 3.</param>
+    /// <param name="a21">The element in row 2, column 1.</param>
+    /// <param name="a22">The element in row 2, column 2.</param>
+    /// <param name="a23">The element in row 2, column 3.</param>
+    /// <param name="a31">The element in row 3, column 1.</param>
+    /// <param name="a32">The element in row 3, column 2.</param>
+    /// <param name="a33">The element in row 3, column 3.</param>
+    public Matrix3x3(
+        float a11, float a12, float a13,
+        float a21, float a22, float a23,
+        float a31, float a32, float a33)
+    {
+        Ex = new Vector3(a11, a21, a31);
+        Ey = new Vector3(a12, a22, a32);
+        Ez = new Vector3(a13, a23, a33);
+    }
+
+    /// <summary>
     /// Sets this matrix to all zeros.
     /// </summary>
     public void SetZero()

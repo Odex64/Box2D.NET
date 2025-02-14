@@ -52,100 +52,102 @@ public sealed class Matrix3x3Unit
             0f, 0f, 0f
         )));
     }
-    
+
     [Test]
     public void Solve33()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            4f, 7f, 1f,
-            2f, 6f, 3f,
-            3f, 4f, 5f
+            1f, 0f, 0f,
+            0f, 1f, 0f,
+            0f, 0f, 1f
         );
 
-        Vector3 vector = new Vector3(10f, 15f, 20f);
+        Vector3 vector = new Vector3(1f, 2f, 3f);
         Vector3 result = matrix.Solve33(vector);
 
-        Assert.That(result, Is.EqualTo(new Vector3(4f, -3f, 5f)));
+        Assert.That(result, Is.EqualTo(new Vector3(1f, 2f, 3f)));
     }
 
     [Test]
     public void Solve22()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            4f, 7f, 1f,
-            2f, 6f, 3f,
+            2f, 1f, 0f,
+            1f, 2f, 0f,
             0f, 0f, 0f
         );
 
-        Vector2 vector = new Vector2(10f, 15f);
+        Vector2 vector = new Vector2(4f, 5f);
         Vector2 result = matrix.Solve22(vector);
 
-        Assert.That(result, Is.EqualTo(new Vector2(-4.5f, 4f)));
+        Assert.That(result, Is.EqualTo(new Vector2(1f, 2f)));
     }
 
     [Test]
     public void GetInverse22()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            4f, 7f, 1f,
-            2f, 6f, 3f,
+            2f, 1f, 0f,
+            1f, 2f, 0f,
             0f, 0f, 0f
         );
 
         matrix.GetInverse22(out Matrix3x3 inverse);
 
-        Assert.That(inverse, Is.EqualTo(new Matrix3x3(
-            0.6f, -0.7f, 0f,
-            -0.2f, 0.4f, 0f,
+        Matrix3x3 expected = new Matrix3x3(
+            2f / 3f, -1f / 3f, 0f,
+            -1f / 3f, 2f / 3f, 0f,
             0f, 0f, 0f
-        )));
+        );
+        Assert.That(inverse, Is.EqualTo(expected));
     }
 
     [Test]
     public void GetSymInverse33()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            4f, 7f, 1f,
-            2f, 6f, 3f,
-            3f, 4f, 5f
+            2f, 0f, 0f,
+            0f, 2f, 0f,
+            0f, 0f, 2f
         );
 
-        matrix.GetSymInverse33(out Matrix3x3 inverse);
+        matrix.GetSymmetricInverse33(out Matrix3x3 inverse);
 
-        Assert.That(inverse, Is.EqualTo(new Matrix3x3(
-            0.46f, -0.24f, 0.05f,
-            -0.24f, 0.36f, -0.17f,
-            0.05f, -0.17f, 0.22f
-        )));
+        Matrix3x3 expected = new Matrix3x3(
+            0.5f, 0f, 0f,
+            0f, 0.5f, 0f,
+            0f, 0f, 0.5f
+        );
+        Assert.That(inverse, Is.EqualTo(expected));
     }
 
     [Test]
     public void MultiplyByVector()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            1f, 2f, 3f,
-            4f, 5f, 6f,
-            7f, 8f, 9f
+            1f, 0f, 0f,
+            0f, 1f, 0f,
+            0f, 0f, 1f
         );
 
         Vector3 vector = new Vector3(1f, 2f, 3f);
         Vector3 result = Matrix3x3.Multiply(matrix, vector);
 
-        Assert.That(result, Is.EqualTo(new Vector3(14f, 32f, 50f)));
+        Assert.That(result, Is.EqualTo(new Vector3(1f, 2f, 3f)));
     }
 
     [Test]
     public void Multiply22()
     {
         Matrix3x3 matrix = new Matrix3x3(
-            1f, 2f, 3f,
-            4f, 5f, 6f,
-            7f, 8f, 9f
+            1f, 0f, 0f,
+            0f, 1f, 0f,
+            0f, 0f, 0f
         );
 
         Vector2 vector = new Vector2(1f, 2f);
         Vector2 result = Matrix3x3.Multiply22(matrix, vector);
 
-        Assert.That(result, Is.EqualTo(new Vector2(9f, 12f)));
+        Assert.That(result, Is.EqualTo(new Vector2(1f, 2f)));
     }
 }

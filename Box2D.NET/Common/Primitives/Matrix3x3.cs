@@ -193,6 +193,18 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     public static Vector3 Multiply(in Matrix3x3 matrix, in Vector3 vector) => vector.X * matrix.Ex + vector.Y * matrix.Ey + vector.Z * matrix.Ez;
 
     /// <summary>
+    /// Multiplies two 3x3 matrices.
+    /// </summary>
+    /// <param name="left">The first matrix.</param>
+    /// <param name="right">The second matrix.</param>
+    /// <returns>The resulting matrix after multiplication.</returns>
+    public static Matrix3x3 MultiplyMatrix(in Matrix3x3 left, in Matrix3x3 right) => new Matrix3x3(
+        Multiply(left, right.Ex), // First column
+        Multiply(left, right.Ey), // Second column
+        Multiply(left, right.Ez)  // Third column
+    );
+
+    /// <summary>
     /// Multiplies the upper-left 2x2 portion of a 3x3 matrix by a 2D vector.
     /// </summary>
     /// <param name="matrix">The 3x3 matrix.</param>

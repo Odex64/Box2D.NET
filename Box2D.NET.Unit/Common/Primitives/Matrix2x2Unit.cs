@@ -108,4 +108,114 @@ public sealed class Matrix2X2Unit
 
         Assert.That(result, Is.EqualTo(new Matrix2x2(11f, 16f, 13f, 18f)));
     }
+
+    [Test]
+    public void DefaultConstructor_IsZero()
+    {
+        Matrix2x2 matrix = new Matrix2x2();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(matrix.Ex, Is.EqualTo(Vector2.Zero));
+            Assert.That(matrix.Ey, Is.EqualTo(Vector2.Zero));
+        });
+    }
+
+    [Test]
+    public void GetInverse_SingularMatrix()
+    {
+        Matrix2x2 singularMatrix = new Matrix2x2(2f, 4f, 1f, 2f); // det = 2*2 - 4*1 = 0
+
+        Matrix2x2 inverse = singularMatrix.GetInverse(); // Should not crash, but return zero matrix
+
+        Assert.That(inverse, Is.EqualTo(new Matrix2x2(0f, 0f, 0f, 0f)));
+    }
+
+    [Test]
+    public void SetIdentity_AfterModification()
+    {
+        Matrix2x2 matrix = new Matrix2x2(3f, 5f, 7f, 9f);
+        matrix.SetIdentity();
+
+        Assert.That(matrix, Is.EqualTo(new Matrix2x2(1f, 0f, 0f, 1f)));
+    }
+
+    [Test]
+    public void SetZero_AfterModification()
+    {
+        Matrix2x2 matrix = new Matrix2x2(3f, 5f, 7f, 9f);
+        matrix.SetZero();
+
+        Assert.That(matrix, Is.EqualTo(new Matrix2x2(0f, 0f, 0f, 0f)));
+    }
+
+    [Test]
+    public void Multiply_IdentityMatrix()
+    {
+        Matrix2x2 identity = new Matrix2x2();
+        identity.SetIdentity();
+        Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
+
+        Matrix2x2 result = Matrix2x2.Multiply(matrix, identity);
+
+        Assert.That(result, Is.EqualTo(matrix)); // Multiplying by identity should return the same matrix
+    }
+
+    [Test]
+    public void Multiply_ZeroMatrix()
+    {
+        Matrix2x2 zeroMatrix = new Matrix2x2(0f, 0f, 0f, 0f);
+        Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
+
+        Matrix2x2 result = Matrix2x2.Multiply(matrix, zeroMatrix);
+
+        Assert.That(result, Is.EqualTo(zeroMatrix)); // Multiplying by zero matrix should return zero matrix
+    }
+
+    [Test]
+    public void MultiplyTranspose_SymmetricMatrix()
+    {
+        Matrix2x2 symmetric = new Matrix2x2(1f, 2f, 2f, 3f); // Symmetric: Ex.X = Ey.Y, Ex.Y = Ey.X
+
+        Matrix2x2 result = Matrix2x2.MultiplyTranspose(symmetric, symmetric);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(result.Ex.X, Is.EqualTo(Vector2.Dot(symmetric.Ex, symmetric.Ex)));
+            Assert.That(result.Ex.Y, Is.EqualTo(Vector2.Dot(symmetric.Ey, symmetric.Ex)));
+            Assert.That(result.Ey.X, Is.EqualTo(Vector2.Dot(symmetric.Ex, symmetric.Ey)));
+            Assert.That(result.Ey.Y, Is.EqualTo(Vector2.Dot(symmetric.Ey, symmetric.Ey)));
+        });
+    }
+
+    [Test]
+    public void Solve_ZeroVector()
+    {
+        Matrix2x2 matrix = new Matrix2x2(4f, 7f, 2f, 6f);
+        Vector2 zeroVector = new Vector2(0f, 0f);
+        Vector2 result = matrix.Solve(zeroVector);
+
+        Assert.That(result, Is.EqualTo(Vector2.Zero)); // Solving Ax = 0 should return x = 0
+    }
+
+    [Test]
+    public void Solve_NearSingularMatrix()
+    {
+        Matrix2x2 nearSingular = new Matrix2x2(1.00001f, 2f, 1f, 2f);
+        Vector2 vector = new Vector2(3f, 4f);
+        Vector2 result = nearSingular.Solve(vector);
+
+        Assert.That(result.X, Is.Not.NaN);
+        Assert.That(result.Y, Is.Not.NaN);
+    }
+
+    [Test]
+    public void GetHashCode_Consistency()
+    {
+        Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
+        int hash1 = matrix.GetHashCode();
+        int hash2 = matrix.GetHashCode();
+
+        Assert.That(hash1, Is.EqualTo(hash2)); // Hash should remain the same
+    }
 }

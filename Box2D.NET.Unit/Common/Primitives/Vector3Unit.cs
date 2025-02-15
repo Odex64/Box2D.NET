@@ -239,4 +239,122 @@ public sealed class Vector3Unit
             _ = 10f / vector;
         });
     }
+
+    [Test]
+    public void Normalize_ZeroVector()
+    {
+        Vector3 zeroVector = new Vector3(0f, 0f, 0f);
+        float length = zeroVector.Normalize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(length, Is.EqualTo(0f));
+            Assert.That(zeroVector, Is.EqualTo(Vector3.Zero)); // Should remain unchanged
+        });
+    }
+
+    [Test]
+    public void Equals_NearEqualVectors()
+    {
+        Vector3 v1 = new Vector3(1.000001f, 2.000001f, 3.000001f);
+        Vector3 v2 = new Vector3(1.000002f, 2.000002f, 3.000002f);
+
+        Assert.That(v1, Is.EqualTo(v2)); // Should be equal within precision
+    }
+
+    [Test]
+    public void GetHashCode_Consistency()
+    {
+        Vector3 v1 = new Vector3(3f, 4f, 5f);
+        int hash1 = v1.GetHashCode();
+        int hash2 = v1.GetHashCode();
+
+        Assert.That(hash1, Is.EqualTo(hash2)); // Hash should remain the same
+    }
+
+    [Test]
+    public void Lerp_Clamping()
+    {
+        Vector3 start = new Vector3(0f, 0f, 0f);
+        Vector3 end = new Vector3(10f, 10f, 10f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Vector3.Lerp(start, end, -10f), Is.EqualTo(new Vector3(0f, 0f, 0f))); // Clamped to 0
+            Assert.That(Vector3.Lerp(start, end, 10f), Is.EqualTo(new Vector3(10f, 10f, 10f))); // Clamped to 1
+        });
+    }
+
+    [Test]
+    public void Arithmetic_NaN_Infinity()
+    {
+        Vector3 nanVector = new Vector3(float.NaN, float.NaN, float.NaN);
+        Vector3 infVector = new Vector3(float.PositiveInfinity, float.PositiveInfinity, float.PositiveInfinity);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(nanVector.IsValid, Is.False);
+            Assert.That(infVector.IsValid, Is.False);
+        });
+    }
+
+    [Test]
+    public void StaticProperties_AreImmutable()
+    {
+        Vector3 originalZero = Vector3.Zero;
+        Vector3 originalUnitX = Vector3.UnitX;
+        Vector3 originalUnitY = Vector3.UnitY;
+        Vector3 originalUnitZ = Vector3.UnitZ;
+
+        Vector3.Zero.Set(1f, 1f, 1f);
+        Vector3.UnitX.Set(2f, 2f, 2f);
+        Vector3.UnitY.Set(3f, 3f, 3f);
+        Vector3.UnitZ.Set(4f, 4f, 4f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Vector3.Zero, Is.EqualTo(originalZero));
+            Assert.That(Vector3.UnitX, Is.EqualTo(originalUnitX));
+            Assert.That(Vector3.UnitY, Is.EqualTo(originalUnitY));
+            Assert.That(Vector3.UnitZ, Is.EqualTo(originalUnitZ));
+        });
+    }
+
+    [Test]
+    public void Distance_SamePoint_ShouldBeZero()
+    {
+        Vector3 point = new Vector3(5f, 5f, 5f);
+        float distance = Vector3.Distance(point, point);
+
+        Assert.That(distance, Is.EqualTo(0f));
+    }
+
+    [Test]
+    public void DistanceSquared_SamePoint_ShouldBeZero()
+    {
+        Vector3 point = new Vector3(5f, 5f, 5f);
+        float distanceSquared = Vector3.DistanceSquared(point, point);
+
+        Assert.That(distanceSquared, Is.EqualTo(0f));
+    }
+
+    [Test]
+    public void Cross_Product_OrthogonalVectors()
+    {
+        Vector3 v1 = new Vector3(1f, 0f, 0f);
+        Vector3 v2 = new Vector3(0f, 1f, 0f);
+        Vector3 result = Vector3.Cross(v1, v2);
+
+        Assert.That(result, Is.EqualTo(new Vector3(0f, 0f, 1f))); // Should be perpendicular
+    }
+
+    [Test]
+    public void Cross_Product_ParallelVectors()
+    {
+        Vector3 v1 = new Vector3(2f, 2f, 2f);
+        Vector3 v2 = new Vector3(4f, 4f, 4f);
+        Vector3 result = Vector3.Cross(v1, v2);
+
+        Assert.That(result, Is.EqualTo(Vector3.Zero)); // Cross product of parallel vectors should be zero
+    }
 }

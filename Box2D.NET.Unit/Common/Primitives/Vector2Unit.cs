@@ -264,4 +264,108 @@ public sealed class Vector2Unit
             _ = 10f / vector;
         });
     }
+
+    [Test]
+    public void Normalize_ZeroVector()
+    {
+        Vector2 zeroVector = new Vector2(0f, 0f);
+        float length = zeroVector.Normalize();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(length, Is.EqualTo(0f));
+            Assert.That(zeroVector, Is.EqualTo(Vector2.Zero)); // Should remain unchanged
+        });
+    }
+
+    [Test]
+    public void Equals_NearEqualVectors()
+    {
+        Vector2 v1 = new Vector2(1.000001f, 2.000001f);
+        Vector2 v2 = new Vector2(1.000002f, 2.000002f);
+
+        Assert.That(v1, Is.EqualTo(v2)); // Should be equal within precision
+    }
+
+    [Test]
+    public void GetHashCode_Consistency()
+    {
+        Vector2 v1 = new Vector2(3f, 4f);
+        int hash1 = v1.GetHashCode();
+        int hash2 = v1.GetHashCode();
+
+        Assert.That(hash1, Is.EqualTo(hash2)); // Hash should remain the same
+    }
+
+    [Test]
+    public void Lerp_Clamping()
+    {
+        Vector2 start = new Vector2(0f, 0f);
+        Vector2 end = new Vector2(10f, 10f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Vector2.Lerp(start, end, -10f), Is.EqualTo(new Vector2(0f, 0f))); // Clamped to 0
+            Assert.That(Vector2.Lerp(start, end, 10f), Is.EqualTo(new Vector2(10f, 10f))); // Clamped to 1
+        });
+    }
+
+    [Test]
+    public void Arithmetic_NaN_Infinity()
+    {
+        Vector2 nanVector = new Vector2(float.NaN, float.NaN);
+        Vector2 infVector = new Vector2(float.PositiveInfinity, float.PositiveInfinity);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(nanVector.IsValid, Is.False);
+            Assert.That(infVector.IsValid, Is.False);
+        });
+    }
+
+    [Test]
+    public void StaticProperties_AreImmutable()
+    {
+        Vector2 originalZero = Vector2.Zero;
+        Vector2 originalUnitX = Vector2.UnitX;
+        Vector2 originalUnitY = Vector2.UnitY;
+
+        Vector2.Zero.Set(1f, 1f);
+        Vector2.UnitX.Set(2f, 2f);
+        Vector2.UnitY.Set(3f, 3f);
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(Vector2.Zero, Is.EqualTo(originalZero));
+            Assert.That(Vector2.UnitX, Is.EqualTo(originalUnitX));
+            Assert.That(Vector2.UnitY, Is.EqualTo(originalUnitY));
+        });
+    }
+
+    [Test]
+    public void Distance_SamePoint_ShouldBeZero()
+    {
+        Vector2 point = new Vector2(5f, 5f);
+        float distance = Vector2.Distance(point, point);
+
+        Assert.That(distance, Is.EqualTo(0f));
+    }
+
+    [Test]
+    public void DistanceSquared_SamePoint_ShouldBeZero()
+    {
+        Vector2 point = new Vector2(5f, 5f);
+        float distanceSquared = Vector2.DistanceSquared(point, point);
+
+        Assert.That(distanceSquared, Is.EqualTo(0f));
+    }
+
+    [Test]
+    public void Skew_ZeroVector()
+    {
+        Vector2 zeroVector = new Vector2(0f, 0f);
+        Vector2 skew = zeroVector.Skew();
+
+        Assert.That(skew, Is.EqualTo(Vector2.Zero));
+    }
 }

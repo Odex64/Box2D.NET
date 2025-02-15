@@ -88,4 +88,126 @@ public sealed class TransformUnit
 
         Assert.That(result, Is.EqualTo(new Transform(new Rotation(0f, 1f), new Vector2(2f, -2f))));
     }
+
+    [Test]
+    public void DefaultConstructor_IsIdentity()
+    {
+        Transform transform = new Transform();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(transform.Position, Is.EqualTo(Vector2.Zero));
+            Assert.That(transform.Rotation, Is.EqualTo(new Rotation(0f, 1f)));
+        });
+    }
+
+    [Test]
+    public void Equals_NearEqualTransforms()
+    {
+        Transform t1 = new Transform(new Rotation(MathF.PI / 4f), new Vector2(1.00001f, 2.00001f));
+        Transform t2 = new Transform(new Rotation(MathF.PI / 4f), new Vector2(1.00002f, 2.00002f));
+
+        Assert.That(t1, Is.EqualTo(t2)); // Should be equal within precision
+    }
+
+    [Test]
+    public void GetHashCode_Consistency()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 4f), new Vector2(1f, 2f));
+        int hash1 = transform.GetHashCode();
+        int hash2 = transform.GetHashCode();
+
+        Assert.That(hash1, Is.EqualTo(hash2)); // Hash should remain the same
+    }
+
+    [Test]
+    public void IdentityTransform_DoesNotModifyVector()
+    {
+        Transform identity = new Transform();
+        Vector2 vector = new Vector2(3f, 4f);
+
+        Vector2 result = Transform.Multiply(identity, vector);
+
+        Assert.That(result, Is.EqualTo(vector)); // Should not change
+    }
+
+    [Test]
+    public void Multiply_ByIdentityTransform()
+    {
+        Transform identity = new Transform();
+        Transform t = new Transform(new Rotation(MathF.PI / 3f), new Vector2(2f, 3f));
+
+        Transform result = Transform.Multiply(t, identity);
+
+        Assert.That(result, Is.EqualTo(t)); // Multiplying by identity should return the same transform
+    }
+
+    [Test]
+    public void Multiply_InverseTransform()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 4f), new Vector2(2f, 3f));
+        Transform inverse = Transform.MultiplyTranspose(transform, transform);
+
+        Assert.That(inverse, Is.EqualTo(new Transform(new Rotation(0f, 1f), new Vector2(0f, 0f))));
+    }
+
+    [Test]
+    public void Multiply_ByZeroTranslation()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(0f, 0f));
+        Vector2 vector = new Vector2(1f, 2f);
+
+        Vector2 result = Transform.Multiply(transform, vector);
+
+        // Rotating (1,2) by 90 degrees gives (-2,1), no translation should occur
+        Assert.That(result, Is.EqualTo(new Vector2(-2f, 1f)));
+    }
+
+    [Test]
+    public void MultiplyTranspose_ByZeroTranslation()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(0f, 0f));
+        Vector2 vector = new Vector2(1f, 2f);
+
+        Vector2 result = Transform.MultiplyTranspose(transform, vector);
+
+        // Applying inverse rotation should give back original vector
+        Assert.That(result, Is.EqualTo(new Vector2(1f, 2f)));
+    }
+
+    [Test]
+    public void Multiply_TranslationOnly()
+    {
+        Transform transform = new Transform(new Rotation(0f), new Vector2(3f, 4f));
+        Vector2 vector = new Vector2(1f, 2f);
+
+        Vector2 result = Transform.Multiply(transform, vector);
+
+        // Only translation should occur
+        Assert.That(result, Is.EqualTo(new Vector2(4f, 6f)));
+    }
+
+    [Test]
+    public void Multiply_TranslationThenRotation()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(3f, 4f));
+        Vector2 vector = new Vector2(1f, 0f);
+
+        Vector2 result = Transform.Multiply(transform, vector);
+
+        // Rotating (1,0) by 90 degrees gives (0,1), then translating by (3,4) gives (3,5)
+        Assert.That(result, Is.EqualTo(new Vector2(3f, 5f)));
+    }
+
+    [Test]
+    public void MultiplyTranspose_TranslationThenRotation()
+    {
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(3f, 4f));
+        Vector2 vector = new Vector2(3f, 5f);
+
+        Vector2 result = Transform.MultiplyTranspose(transform, vector);
+
+        // Undo translation (-3,-4) then undo rotation (-90 degrees) to get back original (1,0)
+        Assert.That(result, Is.EqualTo(new Vector2(1f, 0f)));
+    }
 }

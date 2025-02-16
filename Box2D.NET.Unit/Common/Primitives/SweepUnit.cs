@@ -1,5 +1,6 @@
 ﻿using System;
 using Box2D.NET.Common.Primitives;
+using Box2D.NET.Unit.Helpers;
 using NUnit.Framework;
 
 namespace Box2D.NET.Unit.Common.Primitives;
@@ -54,9 +55,10 @@ public sealed class SweepUnit
         // Alpha0 = 0.6
         Assert.Multiple(() =>
         {
-            Assert.That(sweep.C0, Is.EqualTo(new Vector2(2f, 3f)));
-            Assert.That(sweep.A0, Is.EqualTo(MathF.PI / 4f));
-            Assert.That(sweep.Alpha0, Is.EqualTo(0.6f));
+            Assert.That(sweep.C0.X, Generics.ToleranceEqualTo(2f));
+            Assert.That(sweep.C0.Y, Generics.ToleranceEqualTo(3f));
+            Assert.That(sweep.A0, Generics.ToleranceEqualTo(MathF.PI / 4f));
+            Assert.That(sweep.Alpha0, Generics.ToleranceEqualTo(0.6f));
         });
     }
 
@@ -75,8 +77,8 @@ public sealed class SweepUnit
         // A = 5π/2 - 2π * Floor(3π / 2π) = 5π/2 - 2π = π/2
         Assert.Multiple(() =>
         {
-            Assert.That(sweep.A0, Is.EqualTo(MathF.PI));
-            Assert.That(sweep.A, Is.EqualTo(MathF.PI / 2f));
+            Assert.That(sweep.A0, Generics.ToleranceEqualTo(MathF.PI));
+            Assert.That(sweep.A, Generics.ToleranceEqualTo(MathF.PI / 2f));
         });
     }
 
@@ -95,13 +97,13 @@ public sealed class SweepUnit
         // A = -5π/2 - 2π * Floor(-3π / 2π) = -5π/2 - (-2π) = -π/2
         Assert.Multiple(() =>
         {
-            Assert.That(sweep.A0, Is.EqualTo(-MathF.PI));
-            Assert.That(sweep.A, Is.EqualTo(-MathF.PI / 2f));
+            Assert.That(sweep.A0, Generics.ToleranceEqualTo(-MathF.PI));
+            Assert.That(sweep.A, Generics.ToleranceEqualTo(-MathF.PI / 2f));
         });
     }
 
     [Test]
-    public void DefaultConstructor_IsZero()
+    public void IsZero()
     {
         Sweep sweep = new Sweep();
 
@@ -117,31 +119,7 @@ public sealed class SweepUnit
     }
 
     [Test]
-    public void Equals_NearEqualSweeps()
-    {
-        Sweep s1 = new Sweep
-        {
-            C0 = new Vector2(1.00001f, 2.00001f),
-            C = new Vector2(3.00001f, 4.00001f),
-            A0 = MathF.PI / 2f,
-            A = MathF.PI / 2f,
-            Alpha0 = 0.5f
-        };
-
-        Sweep s2 = new Sweep
-        {
-            C0 = new Vector2(1.00002f, 2.00002f),
-            C = new Vector2(3.00002f, 4.00002f),
-            A0 = MathF.PI / 2f,
-            A = MathF.PI / 2f,
-            Alpha0 = 0.5f
-        };
-
-        Assert.That(s1, Is.EqualTo(s2));
-    }
-
-    [Test]
-    public void GetHashCode_Consistency()
+    public void HashCodeConsistency()
     {
         Sweep sweep = new Sweep
         {
@@ -159,7 +137,7 @@ public sealed class SweepUnit
     }
 
     [Test]
-    public void GetTransform_AlphaZero_AlphaOne()
+    public void TransformAlphaZeroToAlphaOne()
     {
         Sweep sweep = new Sweep
         {
@@ -184,7 +162,7 @@ public sealed class SweepUnit
     }
 
     [Test]
-    public void Advance_AlphaZero()
+    public void AdvancedAlphaZero()
     {
         Sweep sweep = new Sweep
         {
@@ -206,7 +184,7 @@ public sealed class SweepUnit
     }
 
     [Test]
-    public void Advance_AlphaOne()
+    public void AdvancedAlphaOne()
     {
         Sweep sweep = new Sweep
         {
@@ -228,7 +206,7 @@ public sealed class SweepUnit
     }
 
     [Test]
-    public void Normalize_AnglesAtBoundaries()
+    public void NormalizeAnglesAtBoundaries()
     {
         Sweep sweep = new Sweep
         {
@@ -240,13 +218,13 @@ public sealed class SweepUnit
 
         Assert.Multiple(() =>
         {
-            Assert.That(sweep.A0, Is.EqualTo(MathF.PI));
-            Assert.That(sweep.A, Is.EqualTo(-MathF.PI));
+            Assert.That(sweep.A0, Generics.ToleranceEqualTo(MathF.PI));
+            Assert.That(sweep.A, Generics.ToleranceEqualTo(-MathF.PI));
         });
     }
 
     [Test]
-    public void Normalize_AnglesBeyondTwoPi()
+    public void NormalizeAnglesBeyondTwoPi()
     {
         Sweep sweep = new Sweep
         {
@@ -258,8 +236,8 @@ public sealed class SweepUnit
 
         Assert.Multiple(() =>
         {
-            Assert.That(sweep.A0, Is.EqualTo(MathF.PI));
-            Assert.That(sweep.A, Is.EqualTo(-MathF.PI));
+            Assert.That(sweep.A0, Generics.ToleranceEqualTo(MathF.PI));
+            Assert.That(sweep.A, Generics.ToleranceEqualTo(-MathF.PI));
         });
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Diagnostics;
+using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
 
 namespace Box2D.NET.Collisions.Manifolds;
@@ -30,9 +31,9 @@ public struct WorldManifold
     /// <param name="normal">World vector pointing from A to B.</param>
     /// <param name="points">World contact points.</param>
     /// <param name="separations">Separation values.</param>
-    public WorldManifold(Vector2 normal, Vector2[] points, float[] separations)
+    public WorldManifold(in Vector2 normal, in Vector2[] points, float[] separations)
     {
-        Debug.Assert(points.Length <= Manifold.MaxManifoldPoints && separations.Length <= Manifold.MaxManifoldPoints);
+        Debug.Assert(points.Length <= Constants.MaxManifoldPoints && separations.Length <= Constants.MaxManifoldPoints);
         Normal = normal;
         Points = points;
         Separations = separations;
@@ -40,8 +41,8 @@ public struct WorldManifold
 
     public WorldManifold()
     {
-        Points = new Vector2[Manifold.MaxManifoldPoints];
-        Separations = new float[Manifold.MaxManifoldPoints];
+        Points = new Vector2[Constants.MaxManifoldPoints];
+        Separations = new float[Constants.MaxManifoldPoints];
     }
 
     /// <summary>
@@ -53,7 +54,8 @@ public struct WorldManifold
     /// <exception cref="InvalidEnumArgumentException"></exception>
     public void Initialize(in Manifold manifold, in Transform xfA, float radiusA, in Transform xfB, float radiusB)
     {
-        if (manifold.PointCount == 0)
+        int pointsCount = manifold.Points.Length;
+        if (pointsCount == 0)
         {
             return;
         }
@@ -84,7 +86,7 @@ public struct WorldManifold
                     Normal = Rotation.Multiply(xfA.Rotation, manifold.LocalNormal);
                     Vector2 planePoint = Transform.Multiply(xfA, manifold.LocalPoint);
 
-                    for (int i = 0; i < manifold.PointCount; ++i)
+                    for (int i = 0; i < pointsCount; ++i)
                     {
                         Vector2 clipPoint = Transform.Multiply(xfB, manifold.Points[i].LocalPoint);
                         Vector2 cA = clipPoint + (radiusA - Vector2.Dot(clipPoint - planePoint, Normal)) * Normal;
@@ -100,7 +102,7 @@ public struct WorldManifold
                     Normal = Rotation.Multiply(xfB.Rotation, manifold.LocalNormal);
                     Vector2 planePoint = Transform.Multiply(xfB, manifold.LocalPoint);
 
-                    for (int i = 0; i < manifold.PointCount; ++i)
+                    for (int i = 0; i < pointsCount; ++i)
                     {
                         Vector2 clipPoint = Transform.Multiply(xfA, manifold.Points[i].LocalPoint);
                         Vector2 cB = clipPoint + (radiusB - Vector2.Dot(clipPoint - planePoint, Normal)) * Normal;

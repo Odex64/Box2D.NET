@@ -44,7 +44,7 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     /// <param name="normalImpulse">The non-penetration impulse.</param>
     /// <param name="tangentImpulse">The friction impulse.</param>
     /// <param name="id">Uniquely identifies a contact point between two shapes.</param>
-    public ManifoldPoint(Vector2 localPoint, float normalImpulse, float tangentImpulse, ContactId id)
+    public ManifoldPoint(in Vector2 localPoint, float normalImpulse, float tangentImpulse, in ContactId id)
     {
         LocalPoint = localPoint;
         NormalImpulse = normalImpulse;
@@ -72,10 +72,10 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     /// <summary>
     /// Checks if two ManifoldPoint are equal.
     /// </summary>
-    public static bool operator ==(ManifoldPoint left, ManifoldPoint right) => left.Equals(right);
+    public static bool operator ==(in ManifoldPoint left, in ManifoldPoint right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two ManifoldPoint are not equal.
     /// </summary>
-    public static bool operator !=(ManifoldPoint left, ManifoldPoint right) => !(left == right);
+    public static bool operator !=(in ManifoldPoint left, in ManifoldPoint right) => !(left == right);
 }

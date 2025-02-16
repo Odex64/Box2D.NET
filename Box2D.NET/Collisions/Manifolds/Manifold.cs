@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
 
 namespace Box2D.NET.Collisions.Manifolds;
@@ -25,11 +26,6 @@ namespace Box2D.NET.Collisions.Manifolds;
 public struct Manifold : IEquatable<Manifold>
 {
     /// <summary>
-    /// The maximum number of manifold points.
-    /// </summary>
-    public const int MaxManifoldPoints = 2;
-
-    /// <summary>
     /// The points of contact.
     /// </summary>
     public readonly ManifoldPoint[] Points;
@@ -50,56 +46,47 @@ public struct Manifold : IEquatable<Manifold>
     public ManifoldType Type;
 
     /// <summary>
-    /// The number of manifold points.
-    /// </summary>
-    public int PointCount;
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="Manifold" /> struct.
     /// </summary>
     /// <param name="points">The points of contact.</param>
     /// <param name="localNormal">The local normal.</param>
     /// <param name="localPoint">The local point.</param>
     /// <param name="type">The manifold type.</param>
-    /// <param name="pointCount">The number of manifold points.</param>
-    public Manifold(ManifoldPoint[] points, Vector2 localNormal, Vector2 localPoint, ManifoldType type, int pointCount)
+    public Manifold(in ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, in ManifoldType type)
     {
-        Debug.Assert(points.Length <= MaxManifoldPoints);
+        Debug.Assert(points.Length <= Constants.MaxManifoldPoints);
         Points = points;
         LocalNormal = localNormal;
         LocalPoint = localPoint;
         Type = type;
-        PointCount = pointCount;
     }
 
-    public Manifold() => Points = new ManifoldPoint[MaxManifoldPoints];
+    public Manifold() => Points = new ManifoldPoint[Constants.MaxManifoldPoints];
 
     /// <inheritdoc />
     public bool Equals(Manifold other) =>
         Points.AsSpan().SequenceEqual(other.Points) &&
         LocalNormal.Equals(other.LocalNormal) &&
         LocalPoint.Equals(other.LocalPoint) &&
-        Type == other.Type &&
-        PointCount == other.PointCount;
+        Type == other.Type;
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is Manifold other && Equals(other);
 
     /// <inheritdoc />
-    public override int GetHashCode() =>
-        HashCode.Combine(LocalNormal, LocalPoint, Type, PointCount, HashCode.Combine(Points[0], Points[1]));
+    public override int GetHashCode() => HashCode.Combine(LocalNormal, LocalPoint, Type, Points);
 
     /// <inheritdoc />
     public override string ToString() =>
-        $"(Points: [{string.Join(", ", Points)}], LocalNormal: {LocalNormal}, LocalPoint: {LocalPoint}, Type: {Type}, PointCount: {PointCount})";
+        $"(Points: [{string.Join(", ", Points)}], LocalNormal: {LocalNormal}, LocalPoint: {LocalPoint}, Type: {Type})";
 
     /// <summary>
     /// Checks if two <see cref="Manifold" /> instances are equal.
     /// </summary>
-    public static bool operator ==(Manifold left, Manifold right) => left.Equals(right);
+    public static bool operator ==(in Manifold left, in Manifold right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="Manifold" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(Manifold left, Manifold right) => !(left == right);
+    public static bool operator !=(in Manifold left, in Manifold right) => !(left == right);
 }

@@ -232,8 +232,8 @@ public sealed class SweepUnit
     {
         Sweep sweep = new Sweep
         {
-            A0 = MathF.PI,  // π
-            A = -MathF.PI   // -π
+            A0 = MathF.PI, // π
+            A = -MathF.PI // -π
         };
 
         sweep.Normalize();
@@ -251,7 +251,7 @@ public sealed class SweepUnit
         Sweep sweep = new Sweep
         {
             A0 = 3f * MathF.PI, // 3π
-            A = -3f * MathF.PI  // -3π
+            A = -3f * MathF.PI // -3π
         };
 
         sweep.Normalize();

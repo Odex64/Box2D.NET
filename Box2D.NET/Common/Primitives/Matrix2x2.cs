@@ -22,8 +22,8 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// </summary>
     public Matrix2x2()
     {
-        Ex = new Vector2();
-        Ey = new Vector2();
+        Ex = Vector2.Zero;
+        Ey = Vector2.Zero;
     }
 
     /// <summary>

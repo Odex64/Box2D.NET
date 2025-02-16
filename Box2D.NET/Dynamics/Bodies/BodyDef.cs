@@ -13,9 +13,9 @@ public struct BodyDef
     /// </summary>
     public BodyDef()
     {
-        Position = new Vector2(0f, 0f);
+        Position = Vector2.Zero;
         Angle = 0f;
-        LinearVelocity = new Vector2(0f, 0f);
+        LinearVelocity = Vector2.Zero;
         AngularVelocity = 0f;
         LinearDamping = 0f;
         AngularDamping = 0f;

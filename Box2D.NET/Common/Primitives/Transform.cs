@@ -23,7 +23,7 @@ public struct Transform : IEquatable<Transform>
     /// </summary>
     public Transform()
     {
-        Position = new Vector2();
+        Position = Vector2.Zero;
         Rotation = new Rotation();
     }
 

@@ -4,7 +4,7 @@ using NUnit.Framework;
 namespace Box2D.NET.Unit.Common.Primitives;
 
 [TestFixture]
-public sealed class Matrix2X2Unit
+public sealed class Matrix2x2Unit
 {
     [Test]
     public void Constructors()
@@ -29,6 +29,18 @@ public sealed class Matrix2X2Unit
         {
             Assert.That(matrix.Ex, Is.EqualTo(ex));
             Assert.That(matrix.Ey, Is.EqualTo(ey));
+        });
+    }
+
+    [Test]
+    public void DefaultConstructor()
+    {
+        Matrix2x2 matrix = new Matrix2x2();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(matrix.Ex, Is.EqualTo(Vector2.Zero));
+            Assert.That(matrix.Ey, Is.EqualTo(Vector2.Zero));
         });
     }
 
@@ -110,19 +122,7 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void DefaultConstructor_IsZero()
-    {
-        Matrix2x2 matrix = new Matrix2x2();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(matrix.Ex, Is.EqualTo(Vector2.Zero));
-            Assert.That(matrix.Ey, Is.EqualTo(Vector2.Zero));
-        });
-    }
-
-    [Test]
-    public void GetInverse_SingularMatrix()
+    public void GetInverseSingular()
     {
         Matrix2x2 singularMatrix = new Matrix2x2(2f, 4f, 1f, 2f); // det = 2*2 - 4*1 = 0
 
@@ -132,25 +132,7 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void SetIdentity_AfterModification()
-    {
-        Matrix2x2 matrix = new Matrix2x2(3f, 5f, 7f, 9f);
-        matrix.SetIdentity();
-
-        Assert.That(matrix, Is.EqualTo(new Matrix2x2(1f, 0f, 0f, 1f)));
-    }
-
-    [Test]
-    public void SetZero_AfterModification()
-    {
-        Matrix2x2 matrix = new Matrix2x2(3f, 5f, 7f, 9f);
-        matrix.SetZero();
-
-        Assert.That(matrix, Is.EqualTo(new Matrix2x2(0f, 0f, 0f, 0f)));
-    }
-
-    [Test]
-    public void Multiply_IdentityMatrix()
+    public void MultiplyIdentity()
     {
         Matrix2x2 identity = new Matrix2x2();
         identity.SetIdentity();
@@ -162,7 +144,7 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void Multiply_ZeroMatrix()
+    public void MultiplyZero()
     {
         Matrix2x2 zeroMatrix = new Matrix2x2(0f, 0f, 0f, 0f);
         Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
@@ -173,7 +155,7 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void MultiplyTranspose_SymmetricMatrix()
+    public void MultiplyTransposeSymmetric()
     {
         Matrix2x2 symmetric = new Matrix2x2(1f, 2f, 2f, 3f); // Symmetric: Ex.X = Ey.Y, Ex.Y = Ey.X
 
@@ -189,17 +171,17 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void Solve_ZeroVector()
+    public void SolveByZeroVector()
     {
         Matrix2x2 matrix = new Matrix2x2(4f, 7f, 2f, 6f);
-        Vector2 zeroVector = new Vector2(0f, 0f);
+        Vector2 zeroVector = Vector2.Zero;
         Vector2 result = matrix.Solve(zeroVector);
 
         Assert.That(result, Is.EqualTo(Vector2.Zero)); // Solving Ax = 0 should return x = 0
     }
 
     [Test]
-    public void Solve_NearSingularMatrix()
+    public void SolveNearSingularMatrix()
     {
         Matrix2x2 nearSingular = new Matrix2x2(1.00001f, 2f, 1f, 2f);
         Vector2 vector = new Vector2(3f, 4f);
@@ -210,7 +192,7 @@ public sealed class Matrix2X2Unit
     }
 
     [Test]
-    public void GetHashCode_Consistency()
+    public void GetHashCodeConsistency()
     {
         Matrix2x2 matrix = new Matrix2x2(1f, 2f, 3f, 4f);
         int hash1 = matrix.GetHashCode();

@@ -76,7 +76,7 @@ public sealed class Vector2Unit
     public void Distance()
     {
         Vector2 point1 = new Vector2(3f, 4f);
-        Vector2 point2 = new Vector2(0f, 0f);
+        Vector2 point2 = Vector2.Zero;
         float distance = Vector2.Distance(point1, point2);
 
         Assert.That(distance, Is.EqualTo(5f));
@@ -86,7 +86,7 @@ public sealed class Vector2Unit
     public void DistanceSquared()
     {
         Vector2 point1 = new Vector2(3f, 4f);
-        Vector2 point2 = new Vector2(0f, 0f);
+        Vector2 point2 = Vector2.Zero;
         float distanceSquared = Vector2.DistanceSquared(point1, point2);
 
         Assert.That(distanceSquared, Is.EqualTo(25f));
@@ -95,15 +95,15 @@ public sealed class Vector2Unit
     [Test]
     public void Lerp()
     {
-        Vector2 start = new Vector2(0f, 0f);
+        Vector2 start = Vector2.Zero;
         Vector2 end = new Vector2(10f, 10f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Vector2.Lerp(start, end, 0f), Is.EqualTo(new Vector2(0f, 0f))); // Start
+            Assert.That(Vector2.Lerp(start, end, 0f), Is.EqualTo(Vector2.Zero)); // Start
             Assert.That(Vector2.Lerp(start, end, 1f), Is.EqualTo(new Vector2(10f, 10f))); // End
             Assert.That(Vector2.Lerp(start, end, 0.5f), Is.EqualTo(new Vector2(5f, 5f))); // Midpoint
-            Assert.That(Vector2.Lerp(start, end, -1f), Is.EqualTo(new Vector2(0f, 0f))); // Clamped to 0
+            Assert.That(Vector2.Lerp(start, end, -1f), Is.EqualTo(Vector2.Zero)); // Clamped to 0
             Assert.That(Vector2.Lerp(start, end, 2f), Is.EqualTo(new Vector2(10f, 10f))); // Clamped to 1
         });
     }
@@ -268,7 +268,7 @@ public sealed class Vector2Unit
     [Test]
     public void Normalize_ZeroVector()
     {
-        Vector2 zeroVector = new Vector2(0f, 0f);
+        Vector2 zeroVector = Vector2.Zero;
         float length = zeroVector.Normalize();
 
         Assert.Multiple(() =>
@@ -300,12 +300,12 @@ public sealed class Vector2Unit
     [Test]
     public void Lerp_Clamping()
     {
-        Vector2 start = new Vector2(0f, 0f);
+        Vector2 start = Vector2.Zero;
         Vector2 end = new Vector2(10f, 10f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Vector2.Lerp(start, end, -10f), Is.EqualTo(new Vector2(0f, 0f))); // Clamped to 0
+            Assert.That(Vector2.Lerp(start, end, -10f), Is.EqualTo(Vector2.Zero)); // Clamped to 0
             Assert.That(Vector2.Lerp(start, end, 10f), Is.EqualTo(new Vector2(10f, 10f))); // Clamped to 1
         });
     }
@@ -363,7 +363,7 @@ public sealed class Vector2Unit
     [Test]
     public void Skew_ZeroVector()
     {
-        Vector2 zeroVector = new Vector2(0f, 0f);
+        Vector2 zeroVector = Vector2.Zero;
         Vector2 skew = zeroVector.Skew();
 
         Assert.That(skew, Is.EqualTo(Vector2.Zero));

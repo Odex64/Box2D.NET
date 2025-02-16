@@ -39,14 +39,14 @@ public sealed class TransformUnit
         Transform transform = new Transform(new Rotation(MathF.PI / 4f), new Vector2(1f, 2f));
         transform.SetIdentity();
 
-        Assert.That(transform, Is.EqualTo(new Transform(new Rotation(0f, 1f), new Vector2(0f, 0f))));
+        Assert.That(transform, Is.EqualTo(new Transform(new Rotation(0f, 1f), Vector2.Zero)));
     }
 
     [Test]
     public void MultiplyByVector()
     {
         Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(1f, 2f)); // 90 degrees rotation
-        Vector2 vector = new Vector2(1f, 0f);
+        Vector2 vector = Vector2.UnitX;
 
         Vector2 result = Transform.Multiply(transform, vector);
 
@@ -63,7 +63,7 @@ public sealed class TransformUnit
         Vector2 result = Transform.MultiplyTranspose(transform, vector);
 
         // Translating (1, 3) by (-1, -2) gives (0, 1), then rotating by -90 degrees gives (1, 0)
-        Assert.That(result, Is.EqualTo(new Vector2(1f, 0f)));
+        Assert.That(result, Is.EqualTo(Vector2.UnitX));
     }
 
     [Test]
@@ -148,13 +148,13 @@ public sealed class TransformUnit
         Transform transform = new Transform(new Rotation(MathF.PI / 4f), new Vector2(2f, 3f));
         Transform inverse = Transform.MultiplyTranspose(transform, transform);
 
-        Assert.That(inverse, Is.EqualTo(new Transform(new Rotation(0f, 1f), new Vector2(0f, 0f))));
+        Assert.That(inverse, Is.EqualTo(new Transform(new Rotation(0f, 1f), Vector2.Zero)));
     }
 
     [Test]
     public void Multiply_ByZeroTranslation()
     {
-        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(0f, 0f));
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), Vector2.Zero);
         Vector2 vector = new Vector2(1f, 2f);
 
         Vector2 result = Transform.Multiply(transform, vector);
@@ -166,7 +166,7 @@ public sealed class TransformUnit
     [Test]
     public void MultiplyTranspose_ByZeroTranslation()
     {
-        Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(0f, 0f));
+        Transform transform = new Transform(new Rotation(MathF.PI / 2f), Vector2.Zero);
         Vector2 vector = new Vector2(1f, 2f);
 
         Vector2 result = Transform.MultiplyTranspose(transform, vector);
@@ -191,7 +191,7 @@ public sealed class TransformUnit
     public void Multiply_TranslationThenRotation()
     {
         Transform transform = new Transform(new Rotation(MathF.PI / 2f), new Vector2(3f, 4f));
-        Vector2 vector = new Vector2(1f, 0f);
+        Vector2 vector = Vector2.UnitX;
 
         Vector2 result = Transform.Multiply(transform, vector);
 
@@ -208,6 +208,6 @@ public sealed class TransformUnit
         Vector2 result = Transform.MultiplyTranspose(transform, vector);
 
         // Undo translation (-3,-4) then undo rotation (-90 degrees) to get back original (1,0)
-        Assert.That(result, Is.EqualTo(new Vector2(1f, 0f)));
+        Assert.That(result, Is.EqualTo(Vector2.UnitX));
     }
 }

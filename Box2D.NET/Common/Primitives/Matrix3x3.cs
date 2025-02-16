@@ -134,7 +134,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         matrix = new Matrix3x3(
             new Vector3(det * d, -det * c, 0f),
             new Vector3(-det * b, det * a, 0f),
-            new Vector3(0f, 0f, 0f)
+            Vector3.Zero
         );
     }
 
@@ -201,7 +201,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     public static Matrix3x3 MultiplyMatrix(in Matrix3x3 left, in Matrix3x3 right) => new Matrix3x3(
         Multiply(left, right.Ex), // First column
         Multiply(left, right.Ey), // Second column
-        Multiply(left, right.Ez)  // Third column
+        Multiply(left, right.Ez) // Third column
     );
 
     /// <summary>

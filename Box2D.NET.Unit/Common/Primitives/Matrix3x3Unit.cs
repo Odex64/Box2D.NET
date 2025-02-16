@@ -41,6 +41,19 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
+    public void DefaultConstructor()
+    {
+        Matrix3x3 matrix = new Matrix3x3();
+
+        Assert.Multiple(() =>
+        {
+            Assert.That(matrix.Ex, Is.EqualTo(Vector3.Zero));
+            Assert.That(matrix.Ey, Is.EqualTo(Vector3.Zero));
+            Assert.That(matrix.Ez, Is.EqualTo(Vector3.Zero));
+        });
+    }
+
+    [Test]
     public void SetZero()
     {
         Matrix3x3 matrix = new Matrix3x3(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f);
@@ -103,7 +116,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void GetSymInverse33()
+    public void GetSymmetricInverse33()
     {
         Matrix3x3 matrix = new Matrix3x3(
             2f, 0f, 0f,
@@ -118,6 +131,7 @@ public sealed class Matrix3x3Unit
             0f, 0.5f, 0f,
             0f, 0f, 0.5f
         );
+
         Assert.That(inverse, Is.EqualTo(expected));
     }
 
@@ -151,26 +165,14 @@ public sealed class Matrix3x3Unit
         Assert.That(result, Is.EqualTo(new Vector2(1f, 2f)));
     }
 
-    [Test]
-    public void DefaultConstructor_IsZero()
-    {
-        Matrix3x3 matrix = new Matrix3x3();
-
-        Assert.Multiple(() =>
-        {
-            Assert.That(matrix.Ex, Is.EqualTo(Vector3.Zero));
-            Assert.That(matrix.Ey, Is.EqualTo(Vector3.Zero));
-            Assert.That(matrix.Ez, Is.EqualTo(Vector3.Zero));
-        });
-    }
 
     [Test]
-    public void Solve33_SingularMatrix()
+    public void SolveSingular33()
     {
         Matrix3x3 singularMatrix = new Matrix3x3(
             1f, 2f, 3f,
-            2f, 4f, 6f,  // Row 2 is twice Row 1 → det = 0
-            3f, 6f, 9f   // Row 3 is three times Row 1
+            2f, 4f, 6f, // Row 2 is twice Row 1 → det = 0
+            3f, 6f, 9f // Row 3 is three times Row 1
         );
 
         Vector3 vector = new Vector3(1f, 2f, 3f);
@@ -180,7 +182,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Solve22_NearSingularMatrix()
+    public void SolveNearSingular22()
     {
         Matrix3x3 nearSingular = new Matrix3x3(
             1.00001f, 2f, 0f,
@@ -196,24 +198,11 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void SetZero_AfterModification()
-    {
-        Matrix3x3 matrix = new Matrix3x3(3f, 5f, 7f, 9f, 11f, 13f, 15f, 17f, 19f);
-        matrix.SetZero();
-
-        Assert.That(matrix, Is.EqualTo(new Matrix3x3(
-            0f, 0f, 0f,
-            0f, 0f, 0f,
-            0f, 0f, 0f
-        )));
-    }
-
-    [Test]
-    public void GetInverse22_SingularMatrix()
+    public void GetInverseSingular22()
     {
         Matrix3x3 singularMatrix = new Matrix3x3(
             1f, 2f, 0f,
-            2f, 4f, 0f,  // det = 1*4 - 2*2 = 0
+            2f, 4f, 0f, // det = 1*4 - 2*2 = 0
             0f, 0f, 0f
         );
 
@@ -223,11 +212,11 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void GetSymmetricInverse33_SingularMatrix()
+    public void GetSymmetricInverseSingular33()
     {
         Matrix3x3 singularMatrix = new Matrix3x3(
             1f, 2f, 3f,
-            2f, 4f, 6f,  // Linearly dependent rows (det = 0)
+            2f, 4f, 6f, // Linearly dependent rows (det = 0)
             3f, 6f, 9f
         );
 
@@ -237,7 +226,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Multiply_MatrixByMatrix()
+    public void Multiply()
     {
         Matrix3x3 m1 = new Matrix3x3(
             1f, 2f, 3f,
@@ -261,7 +250,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Multiply_IdentityMatrixByMatrix()
+    public void MultiplyIdentity()
     {
         Matrix3x3 identity = new Matrix3x3(
             1f, 0f, 0f,
@@ -276,7 +265,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Multiply_ZeroMatrixByMatrix()
+    public void MultiplyZero()
     {
         Matrix3x3 zeroMatrix = new Matrix3x3(
             0f, 0f, 0f,
@@ -291,7 +280,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Multiply22_IdentityMatrix()
+    public void MultiplyIdentity22()
     {
         Matrix3x3 identity = new Matrix3x3(
             1f, 0f, 0f,
@@ -306,7 +295,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void Multiply22_ZeroMatrix()
+    public void MultiplyZero22()
     {
         Matrix3x3 zeroMatrix = new Matrix3x3(
             0f, 0f, 0f,
@@ -321,7 +310,7 @@ public sealed class Matrix3x3Unit
     }
 
     [Test]
-    public void GetHashCode_Consistency()
+    public void GetHashCodeConsistency()
     {
         Matrix3x3 matrix = new Matrix3x3(1f, 2f, 3f, 4f, 5f, 6f, 7f, 8f, 9f);
         int hash1 = matrix.GetHashCode();

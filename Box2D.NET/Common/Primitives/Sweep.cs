@@ -46,9 +46,9 @@ public struct Sweep : IEquatable<Sweep>
     /// </summary>
     public Sweep()
     {
-        LocalCenter = new Vector2();
-        C0 = new Vector2();
-        C = new Vector2();
+        LocalCenter = Vector2.Zero;
+        C0 = Vector2.Zero;
+        C = Vector2.Zero;
         A0 = 0f;
         A = 0f;
         Alpha0 = 0f;

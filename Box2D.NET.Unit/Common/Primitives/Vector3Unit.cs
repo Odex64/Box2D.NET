@@ -69,7 +69,7 @@ public sealed class Vector3Unit
     public void Distance()
     {
         Vector3 point1 = new Vector3(3f, 4f, 5f);
-        Vector3 point2 = new Vector3(0f, 0f, 0f);
+        Vector3 point2 = Vector3.Zero;
         float distance = Vector3.Distance(point1, point2);
 
         Assert.That(distance, Is.EqualTo(MathF.Sqrt(50f)));
@@ -79,7 +79,7 @@ public sealed class Vector3Unit
     public void DistanceSquared()
     {
         Vector3 point1 = new Vector3(3f, 4f, 5f);
-        Vector3 point2 = new Vector3(0f, 0f, 0f);
+        Vector3 point2 = Vector3.Zero;
         float distanceSquared = Vector3.DistanceSquared(point1, point2);
 
         Assert.That(distanceSquared, Is.EqualTo(50f));
@@ -88,15 +88,15 @@ public sealed class Vector3Unit
     [Test]
     public void Lerp()
     {
-        Vector3 start = new Vector3(0f, 0f, 0f);
+        Vector3 start = Vector3.Zero;
         Vector3 end = new Vector3(10f, 10f, 10f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Vector3.Lerp(start, end, 0f), Is.EqualTo(new Vector3(0f, 0f, 0f))); // Start
+            Assert.That(Vector3.Lerp(start, end, 0f), Is.EqualTo(Vector3.Zero)); // Start
             Assert.That(Vector3.Lerp(start, end, 1f), Is.EqualTo(new Vector3(10f, 10f, 10f))); // End
             Assert.That(Vector3.Lerp(start, end, 0.5f), Is.EqualTo(new Vector3(5f, 5f, 5f))); // Midpoint
-            Assert.That(Vector3.Lerp(start, end, -1f), Is.EqualTo(new Vector3(0f, 0f, 0f))); // Clamped to 0
+            Assert.That(Vector3.Lerp(start, end, -1f), Is.EqualTo(Vector3.Zero)); // Clamped to 0
             Assert.That(Vector3.Lerp(start, end, 2f), Is.EqualTo(new Vector3(10f, 10f, 10f))); // Clamped to 1
         });
     }
@@ -243,7 +243,7 @@ public sealed class Vector3Unit
     [Test]
     public void Normalize_ZeroVector()
     {
-        Vector3 zeroVector = new Vector3(0f, 0f, 0f);
+        Vector3 zeroVector = Vector3.Zero;
         float length = zeroVector.Normalize();
 
         Assert.Multiple(() =>
@@ -275,12 +275,12 @@ public sealed class Vector3Unit
     [Test]
     public void Lerp_Clamping()
     {
-        Vector3 start = new Vector3(0f, 0f, 0f);
+        Vector3 start = Vector3.Zero;
         Vector3 end = new Vector3(10f, 10f, 10f);
 
         Assert.Multiple(() =>
         {
-            Assert.That(Vector3.Lerp(start, end, -10f), Is.EqualTo(new Vector3(0f, 0f, 0f))); // Clamped to 0
+            Assert.That(Vector3.Lerp(start, end, -10f), Is.EqualTo(Vector3.Zero)); // Clamped to 0
             Assert.That(Vector3.Lerp(start, end, 10f), Is.EqualTo(new Vector3(10f, 10f, 10f))); // Clamped to 1
         });
     }
@@ -341,11 +341,11 @@ public sealed class Vector3Unit
     [Test]
     public void Cross_Product_OrthogonalVectors()
     {
-        Vector3 v1 = new Vector3(1f, 0f, 0f);
-        Vector3 v2 = new Vector3(0f, 1f, 0f);
+        Vector3 v1 = Vector3.UnitX;
+        Vector3 v2 = Vector3.UnitY;
         Vector3 result = Vector3.Cross(v1, v2);
 
-        Assert.That(result, Is.EqualTo(new Vector3(0f, 0f, 1f))); // Should be perpendicular
+        Assert.That(result, Is.EqualTo(Vector3.UnitZ)); // Should be perpendicular
     }
 
     [Test]

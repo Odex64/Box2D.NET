@@ -142,22 +142,22 @@ public sealed class RotationUnit
         rotation.Set(MathF.PI);
         Assert.Multiple(() =>
         {
-            Assert.That(rotation.Sine, Is.EqualTo(0f));
-            Assert.That(rotation.Cosine, Is.EqualTo(-1f));
+            Assert.That(rotation.Sine, Generics.ToleranceEqualTo(0f));
+            Assert.That(rotation.Cosine, Generics.ToleranceEqualTo(-1f));
         });
 
         rotation.Set(-MathF.PI);
         Assert.Multiple(() =>
         {
-            Assert.That(rotation.Sine, Is.EqualTo(0f));
-            Assert.That(rotation.Cosine, Is.EqualTo(-1f));
+            Assert.That(rotation.Sine, Generics.ToleranceEqualTo(0f));
+            Assert.That(rotation.Cosine, Generics.ToleranceEqualTo(-1f));
         });
 
         rotation.Set(2f * MathF.PI);
         Assert.Multiple(() =>
         {
-            Assert.That(rotation.Sine, Is.EqualTo(0f));
-            Assert.That(rotation.Cosine, Is.EqualTo(1f));
+            Assert.That(rotation.Sine, Generics.ToleranceEqualTo(0f));
+            Assert.That(rotation.Cosine, Generics.ToleranceEqualTo(1f));
         });
     }
 

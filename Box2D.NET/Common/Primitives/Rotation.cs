@@ -87,7 +87,7 @@ public struct Rotation : IEquatable<Rotation>
 
     /// <inheritdoc />
     public readonly override string ToString() => $"(Sine: {Sine}, Cosine: {Cosine})";
-    
+
     /// <summary>
     /// Multiplies two rotations: q * r, which combines two rotations into a single resulting rotation.
     /// </summary>

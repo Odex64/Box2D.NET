@@ -89,7 +89,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         Vector3 crossEyEz = Vector3.Cross(Ey, Ez);
         float det = Vector3.Dot(Ex, crossEyEz);
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         float x = det * Vector3.Dot(vector, crossEyEz);
         float y = det * Vector3.Dot(Ex, Vector3.Cross(vector, Ez));
@@ -111,7 +113,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         float det = a11 * a22 - a12 * a21;
 
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         float x = det * (a22 * vector.X - a12 * vector.Y);
         float y = det * (a11 * vector.Y - a21 * vector.X);
@@ -129,7 +133,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         float a = Ex.X, b = Ey.X, c = Ex.Y, d = Ey.Y;
         float det = a * d - b * c;
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         matrix = new Matrix3x3(
             new Vector3(det * d, -det * c, 0f),
@@ -147,7 +153,9 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     {
         float det = Vector3.Dot(Ex, Vector3.Cross(Ey, Ez));
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         float a11 = Ex.X, a12 = Ey.X, a13 = Ez.X;
         float a22 = Ey.Y, a23 = Ez.Y;
@@ -171,6 +179,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
             )
         );
     }
+
+    /// <summary>
+    /// Returns a matrix where each component is the absolute value of the corresponding component in the input matrix.
+    /// </summary>
+    /// <param name="matrix">The input matrix.</param>
+    /// <returns>A matrix with the absolute values of the input matrix components.</returns>
+    public static Matrix3x3 Abs(Matrix3x3 matrix) => new Matrix3x3(Vector3.Abs(matrix.Ex), Vector3.Abs(matrix.Ey), Vector3.Abs(matrix.Ez));
 
     /// <inheritdoc />
     public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);

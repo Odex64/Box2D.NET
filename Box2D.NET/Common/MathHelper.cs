@@ -26,7 +26,9 @@ public static class MathHelper
     {
         // Handle the special case where value is zero (not a power of two)
         if (value == T.Zero)
+        {
             return false;
+        }
 
         // Convert the value to an integer for bitwise operations
         int num = Convert.ToInt32(value);
@@ -50,7 +52,9 @@ public static class MathHelper
     {
         // Handle the special case where value is zero (next power of two is 1)
         if (value == T.Zero)
+        {
             return T.One;
+        }
 
         // Convert to int for bitwise manipulation
         int num = Convert.ToInt32(value);

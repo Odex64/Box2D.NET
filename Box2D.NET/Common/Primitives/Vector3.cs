@@ -79,6 +79,39 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     }
 
     /// <summary>
+    /// Gets or sets the component of the vector at the specified index.
+    /// Index 0 corresponds to X, index 1 corresponds to Y, and index 2 corresponds to Z.
+    /// </summary>
+    /// <param name="index">The index of the component to access (0, 1, or 2).</param>
+    /// <returns>The value of the component at the specified index.</returns>
+    /// <exception cref="IndexOutOfRangeException">Thrown if the index is not 0, 1, or 2.</exception>
+    public float this[int index]
+    {
+        get
+        {
+            switch (index)
+            {
+                case 0: return X;
+                case 1: return Y;
+                case 2: return Z;
+                default:
+                    throw new IndexOutOfRangeException("Index for Vector2 must be 0 (X) or 1 (Y).");
+            }
+        }
+        set
+        {
+            switch (index)
+            {
+                case 0: X = value; break;
+                case 1: Y = value; break;
+                case 2: Z = value; break;
+                default:
+                    throw new IndexOutOfRangeException("Index for Vector2 must be 0 (X) or 1 (Y).");
+            }
+        }
+    }
+
+    /// <summary>
     /// Gets the length (magnitude) of the vector.
     /// </summary>
     public float Length() => MathF.Sqrt(LengthSquared());
@@ -97,7 +130,9 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     {
         float length = Length();
         if (length < float.Epsilon)
+        {
             return 0f;
+        }
 
         float invLength = 1f / length;
         X *= invLength;
@@ -190,6 +225,29 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     );
 
     /// <summary>
+    /// Returns a new <see cref="Vector3" /> containing the maximum values from two vectors.
+    /// </summary>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
+    /// <returns>A new <see cref="Vector3" /> where each component is the maximum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
+    public static Vector3 Max(Vector3 a, Vector3 b) => new Vector3(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y), MathF.Max(a.Z, b.Z));
+
+    /// <summary>
+    /// Returns a new <see cref="Vector3" /> containing the minimum values from two vectors.
+    /// </summary>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
+    /// <returns>A new <see cref="Vector3" /> where each component is the minimum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
+    public static Vector3 Min(Vector3 a, Vector3 b) => new Vector3(MathF.Min(a.X, b.X), MathF.Min(a.Y, b.Y), MathF.Min(a.Z, b.Z));
+
+    /// <summary>
+    /// Returns a vector where each component is the absolute value of the corresponding component in the input vector.
+    /// </summary>
+    /// <param name="vector">The input vector.</param>
+    /// <returns>A vector with the absolute values of the input vector components.</returns>
+    public static Vector3 Abs(Vector3 vector) => new Vector3(MathF.Abs(vector.X), MathF.Abs(vector.Y), MathF.Abs(vector.Z));
+
+    /// <summary>
     /// Checks if two vectors are equal.
     /// </summary>
     public static bool operator ==(in Vector3 left, in Vector3 right) => left.Equals(right);
@@ -255,7 +313,9 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     public static Vector3 operator /(in Vector3 left, in Vector3 right)
     {
         if (right.X == 0 || right.Y == 0 || right.Z == 0)
+        {
             throw new DivideByZeroException("Cannot divide by a vector with zero components.");
+        }
 
         return new Vector3(left.X / right.X, left.Y / right.Y, left.Z / right.Z);
     }
@@ -267,7 +327,9 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     public static Vector3 operator /(in Vector3 vector, float scalar)
     {
         if (scalar == 0)
+        {
             throw new DivideByZeroException("Cannot divide by zero.");
+        }
 
         return new Vector3(vector.X / scalar, vector.Y / scalar, vector.Z / scalar);
     }
@@ -279,7 +341,9 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     public static Vector3 operator /(float scalar, in Vector3 vector)
     {
         if (vector.X == 0 || vector.Y == 0 || vector.Z == 0)
+        {
             throw new DivideByZeroException("Cannot divide by a vector with zero components.");
+        }
 
         return new Vector3(scalar / vector.X, scalar / vector.Y, scalar / vector.Z);
     }

@@ -93,7 +93,9 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         float det = a * d - b * c;
 
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         return new Matrix2x2(
             det * d, // Ex.X
@@ -115,7 +117,9 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
         float det = a11 * a22 - a12 * a21;
 
         if (det != 0f)
+        {
             det = 1f / det;
+        }
 
         return new Vector2(
             det * (a22 * vector.X - a12 * vector.Y),
@@ -134,6 +138,13 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
 
     /// <inheritdoc />
     public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey})";
+
+    /// <summary>
+    /// Returns a matrix where each component is the absolute value of the corresponding component in the input matrix.
+    /// </summary>
+    /// <param name="matrix">The input matrix.</param>
+    /// <returns>A matrix with the absolute values of the input matrix components.</returns>
+    public static Matrix2x2 Abs(Matrix2x2 matrix) => new Matrix2x2(Vector2.Abs(matrix.Ex), Vector2.Abs(matrix.Ey));
 
     /// <summary>
     /// Multiplies a matrix by a vector. If the matrix is a rotation matrix,

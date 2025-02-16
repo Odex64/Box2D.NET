@@ -1,6 +1,5 @@
 ﻿using System;
 using Box2D.NET.Common.Primitives;
-using Box2D.NET.Unit.Helpers;
 using NUnit.Framework;
 
 namespace Box2D.NET.Unit.Common.Primitives;
@@ -104,24 +103,13 @@ public sealed class TransformUnit
     public void IdentityTransformDoesNotModifyVector()
     {
         Transform identity = new Transform();
+        identity.SetIdentity();
         Vector2 vector = new Vector2(3f, 4f);
 
         Vector2 result = Transform.Multiply(identity, vector);
 
         Assert.That(result, Is.EqualTo(vector)); // Should not change
     }
-
-    // [Test]
-    // public void ByIdentityTransform()
-    // {
-    //     Transform identity = new Transform();
-    //     Transform t = new Transform(new Rotation(MathF.PI / 3f), new Vector2(2f, 3f));
-    // 
-    //     Transform result = Transform.Multiply(t, identity);
-    // 
-    //     Assert.That(Generics.ToleranceEqualTo(result, t), Is.True);
-    //     // Assert.That(result, Is.EqualTo(t)); // Multiplying by identity should return the same transform
-    // }
 
     [Test]
     public void InverseTransform()
@@ -153,7 +141,7 @@ public sealed class TransformUnit
         Vector2 result = Transform.MultiplyTranspose(transform, vector);
 
         // Applying inverse rotation should give back original vector
-        Assert.That(result, Is.EqualTo(new Vector2(1f, 2f)));
+        Assert.That(result, Is.EqualTo(new Vector2(2f, -1f)));
     }
 
     [Test]

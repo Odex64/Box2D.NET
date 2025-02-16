@@ -12,6 +12,9 @@ namespace Box2D.NET.Common;
 /// </remarks>
 public static class MathHelper
 {
+    public const float DefaultFloatTolerance = 1e-6f;
+    public const double DefaultDoubleTolerance = 1e-9;
+
     /// <summary>
     /// Determines if a number is a power of two.
     /// </summary>

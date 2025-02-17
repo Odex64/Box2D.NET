@@ -14,7 +14,7 @@
         <Title>Box2D.NET</Title>
         <Authors>Odex64</Authors>
         <Version>1.0.0</Version>
-        <Copyright>Copyright 2025, by Carmine Pietroluongo. All rights reserved.</Copyright>
+        <Copyright>Copyright 2025, by Odex64. All rights reserved.</Copyright>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Description>Modern C# port of the final version of Box2D v2</Description>
@@ -25,16 +25,10 @@
         <PackageIcon>icon.png</PackageIcon>
         <PackageReadmeFile>README.md</PackageReadmeFile>
         <PackageLicenseFile>LICENSE</PackageLicenseFile>
-        <EnforceEditorConfigSettings>true</EnforceEditorConfigSettings>
-        <ParallelizeTestCollections>true</ParallelizeTestCollections>
-        <RunAnalyzersDuringBuild>true</RunAnalyzersDuringBuild>
     </PropertyGroup>
 
     <!-- Files -->
     <ItemGroup>
-        <None Update="..\test.runsettings">
-            <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-        </None>
         <None Include="..\README.md">
             <Pack>true</Pack>
             <PackagePath>\</PackagePath>

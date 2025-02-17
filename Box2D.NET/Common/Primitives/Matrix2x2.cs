@@ -144,7 +144,7 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// </summary>
     /// <param name="matrix">The input matrix.</param>
     /// <returns>A matrix with the absolute values of the input matrix components.</returns>
-    public static Matrix2x2 Abs(Matrix2x2 matrix) => new Matrix2x2(Vector2.Abs(matrix.Ex), Vector2.Abs(matrix.Ey));
+    public static Matrix2x2 Abs(in Matrix2x2 matrix) => new Matrix2x2(Vector2.Abs(matrix.Ex), Vector2.Abs(matrix.Ey));
 
     /// <summary>
     /// Multiplies a matrix by a vector. If the matrix is a rotation matrix,

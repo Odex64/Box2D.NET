@@ -185,7 +185,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// </summary>
     /// <param name="matrix">The input matrix.</param>
     /// <returns>A matrix with the absolute values of the input matrix components.</returns>
-    public static Matrix3x3 Abs(Matrix3x3 matrix) => new Matrix3x3(Vector3.Abs(matrix.Ex), Vector3.Abs(matrix.Ey), Vector3.Abs(matrix.Ez));
+    public static Matrix3x3 Abs(in Matrix3x3 matrix) => new Matrix3x3(Vector3.Abs(matrix.Ex), Vector3.Abs(matrix.Ey), Vector3.Abs(matrix.Ez));
 
     /// <inheritdoc />
     public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);

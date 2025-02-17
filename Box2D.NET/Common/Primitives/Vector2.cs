@@ -225,25 +225,25 @@ public struct Vector2(float x, float y) : IEquatable<Vector2>
     /// <summary>
     /// Returns a new <see cref="Vector2" /> containing the maximum values from two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
-    /// <returns>A new <see cref="Vector2" /> where each component is the maximum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector2 Max(Vector2 a, Vector2 b) => new Vector2(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y));
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new <see cref="Vector2" /> where each component is the maximum of the corresponding components in <paramref name="left" /> and <paramref name="right" />.</returns>
+    public static Vector2 Max(in Vector2 left, in Vector2 right) => new Vector2(MathF.Max(left.X, right.X), MathF.Max(left.Y, right.Y));
 
     /// <summary>
     /// Returns a new <see cref="Vector2" /> containing the minimum values from two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
-    /// <returns>A new <see cref="Vector2" /> where each component is the minimum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector2 Min(Vector2 a, Vector2 b) => new Vector2(MathF.Min(a.X, b.X), MathF.Min(a.Y, b.Y));
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new <see cref="Vector2" /> where each component is the minimum of the corresponding components in <paramref name="left" /> and <paramref name="right" />.</returns>
+    public static Vector2 Min(in Vector2 left, in Vector2 right) => new Vector2(MathF.Min(left.X, right.X), MathF.Min(left.Y, right.Y));
 
     /// <summary>
     /// Returns a vector where each component is the absolute value of the corresponding component in the input vector.
     /// </summary>
     /// <param name="vector">The input vector.</param>
     /// <returns>A vector with the absolute values of the input vector components.</returns>
-    public static Vector2 Abs(Vector2 vector) => new Vector2(MathF.Abs(vector.X), MathF.Abs(vector.Y));
+    public static Vector2 Abs(in Vector2 vector) => new Vector2(MathF.Abs(vector.X), MathF.Abs(vector.Y));
 
     /// <summary>
     /// Checks if two vectors are equal.

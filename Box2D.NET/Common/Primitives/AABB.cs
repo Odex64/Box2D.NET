@@ -23,7 +23,7 @@ public struct AABB : IEquatable<AABB>
     /// </summary>
     /// <param name="lowerBound">The lower bound of the bounding box.</param>
     /// <param name="upperBound">The upper bound of the bounding box.</param>
-    public AABB(Vector2 lowerBound, Vector2 upperBound)
+    public AABB(in Vector2 lowerBound, in Vector2 upperBound)
     {
         LowerBound = lowerBound;
         UpperBound = upperBound;
@@ -38,7 +38,7 @@ public struct AABB : IEquatable<AABB>
         get
         {
             Vector2 vector = UpperBound - LowerBound;
-            bool valid = vector.X >= 0f && vector.Y >= 0f;
+            bool valid = vector is { X: >= 0f, Y: >= 0f };
             return valid && LowerBound.IsValid && UpperBound.IsValid;
         }
     }
@@ -57,18 +57,21 @@ public struct AABB : IEquatable<AABB>
     /// Gets the perimeter length of the AABB.
     /// </summary>
     /// <returns>The perimeter length.</returns>
-    public float GetPerimeter()
+    public float Perimeter
     {
-        float width = UpperBound.X - LowerBound.X;
-        float height = UpperBound.Y - LowerBound.Y;
-        return 2f * (width + height);
+        get
+        {
+            float width = UpperBound.X - LowerBound.X;
+            float height = UpperBound.Y - LowerBound.Y;
+            return 2f * (width + height);
+        }
     }
 
     /// <summary>
     /// Expands this AABB to include another AABB.
     /// </summary>
     /// <param name="aabb">The AABB to combine with this one.</param>
-    public void Combine(AABB aabb)
+    public void Combine(in AABB aabb)
     {
         LowerBound = Vector2.Min(LowerBound, aabb.LowerBound);
         UpperBound = Vector2.Max(UpperBound, aabb.UpperBound);
@@ -79,7 +82,7 @@ public struct AABB : IEquatable<AABB>
     /// </summary>
     /// <param name="aabb1">The first AABB.</param>
     /// <param name="aabb2">The second AABB.</param>
-    public void Combine(AABB aabb1, AABB aabb2)
+    public void Combine(in AABB aabb1, in AABB aabb2)
     {
         LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound);
         UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound);
@@ -90,7 +93,7 @@ public struct AABB : IEquatable<AABB>
     /// </summary>
     /// <param name="aabb">The AABB to check containment for.</param>
     /// <returns>True if this AABB contains the provided AABB; otherwise, false.</returns>
-    public bool Contains(AABB aabb) =>
+    public bool Contains(in AABB aabb) =>
         LowerBound.X <= aabb.LowerBound.X &&
         LowerBound.Y <= aabb.LowerBound.Y &&
         aabb.UpperBound.X <= UpperBound.X &&
@@ -188,10 +191,10 @@ public struct AABB : IEquatable<AABB>
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are equal.
     /// </summary>
-    public static bool operator ==(AABB left, AABB right) => left.Equals(right);
+    public static bool operator ==(in AABB left, in AABB right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(AABB left, AABB right) => !(left == right);
+    public static bool operator !=(in AABB left, in AABB right) => !(left == right);
 }

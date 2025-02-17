@@ -227,25 +227,25 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <summary>
     /// Returns a new <see cref="Vector3" /> containing the maximum values from two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
-    /// <returns>A new <see cref="Vector3" /> where each component is the maximum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector3 Max(Vector3 a, Vector3 b) => new Vector3(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y), MathF.Max(a.Z, b.Z));
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new <see cref="Vector3" /> where each component is the maximum of the corresponding components in <paramref name="left" /> and <paramref name="right" />.</returns>
+    public static Vector3 Max(in Vector3 left, in Vector3 right) => new Vector3(MathF.Max(left.X, right.X), MathF.Max(left.Y, right.Y), MathF.Max(left.Z, right.Z));
 
     /// <summary>
     /// Returns a new <see cref="Vector3" /> containing the minimum values from two vectors.
     /// </summary>
-    /// <param name="a">The first vector.</param>
-    /// <param name="b">The second vector.</param>
-    /// <returns>A new <see cref="Vector3" /> where each component is the minimum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector3 Min(Vector3 a, Vector3 b) => new Vector3(MathF.Min(a.X, b.X), MathF.Min(a.Y, b.Y), MathF.Min(a.Z, b.Z));
+    /// <param name="left">The first vector.</param>
+    /// <param name="right">The second vector.</param>
+    /// <returns>A new <see cref="Vector3" /> where each component is the minimum of the corresponding components in <paramref name="left" /> and <paramref name="right" />.</returns>
+    public static Vector3 Min(in Vector3 left, in Vector3 right) => new Vector3(MathF.Min(left.X, right.X), MathF.Min(left.Y, right.Y), MathF.Min(left.Z, right.Z));
 
     /// <summary>
     /// Returns a vector where each component is the absolute value of the corresponding component in the input vector.
     /// </summary>
     /// <param name="vector">The input vector.</param>
     /// <returns>A vector with the absolute values of the input vector components.</returns>
-    public static Vector3 Abs(Vector3 vector) => new Vector3(MathF.Abs(vector.X), MathF.Abs(vector.Y), MathF.Abs(vector.Z));
+    public static Vector3 Abs(in Vector3 vector) => new Vector3(MathF.Abs(vector.X), MathF.Abs(vector.Y), MathF.Abs(vector.Z));
 
     /// <summary>
     /// Checks if two vectors are equal.

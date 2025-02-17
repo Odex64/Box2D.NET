@@ -117,4 +117,4 @@ There will be no breaking changes in future, as the framework once completed wil
 **Box2D.NET** is licensed under the **MIT License**.  
 See the [LICENSE](https://github.com/Odex64/Box2D.NET/blob/master/LICENSE) file for more information.
 
-Also big thanks to [Erin Catto](https://box2d.org), the original author of [Box2D](https://github.com/erincatto/box2d)!
+Special thanks to [Erin Catto](https://box2d.org), the original author of [Box2D](https://github.com/erincatto/box2d)!

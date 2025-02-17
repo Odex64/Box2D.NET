@@ -197,4 +197,31 @@ public struct AABB : IEquatable<AABB>
     /// Checks if two <see cref="AABB" /> instances are not equal.
     /// </summary>
     public static bool operator !=(in AABB left, in AABB right) => !(left == right);
+
+    /// <summary>
+    /// Tests if two axis-aligned bounding boxes (AABBs) overlap.
+    /// </summary>
+    /// <param name="left">The first AABB.</param>
+    /// <param name="right">The second AABB.</param>
+    /// <returns><c>true</c> if the AABBs overlap; otherwise, <c>false</c>.</returns>
+    public static bool TestOverlap(in AABB left, in AABB right)
+    {
+        Vector2 d1 = right.LowerBound - left.UpperBound;
+        Vector2 d2 = left.LowerBound - right.UpperBound;
+
+        // If either d1.x or d1.y is positive, the AABBs do not overlap.
+        if (d1.X > 0.0f || d1.Y > 0.0f)
+        {
+            return false;
+        }
+
+        // If either d2.x or d2.y is positive, the AABBs do not overlap.
+        if (d2.X > 0.0f || d2.Y > 0.0f)
+        {
+            return false;
+        }
+
+        // Otherwise, the AABBs overlap.
+        return true;
+    }
 }

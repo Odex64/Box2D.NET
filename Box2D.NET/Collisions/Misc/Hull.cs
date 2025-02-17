@@ -22,7 +22,7 @@ public struct Hull : IEquatable<Hull>
     /// </summary>
     /// <param name="points">The vertices of the hull.</param>
     /// <exception cref="ArgumentException">Thrown if the number of vertices exceeds <see cref="Constants.MaxPolygonVertices" />.</exception>
-    public Hull(in Vector2[] points)
+    public Hull(Vector2[] points)
     {
         Debug.Assert(points.Length <= Constants.MaxPolygonVertices);
         Points = points;
@@ -72,7 +72,7 @@ public struct Hull : IEquatable<Hull>
     /// <param name="ps">The array of points to be considered for the hull.</param>
     /// <param name="count">The number of points in the array to consider for the hull.</param>
     /// <returns>The computed convex hull.</returns>
-    public static Hull RecurseHull(in Vector2 p1, in Vector2 p2, in Vector2[] ps)
+    public static Hull RecurseHull(in Vector2 p1, in Vector2 p2, Vector2[] ps)
     {
         Hull hull = new Hull();
 

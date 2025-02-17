@@ -53,7 +53,7 @@ public struct Manifold : IEquatable<Manifold>
     /// <param name="localNormal">The local normal.</param>
     /// <param name="localPoint">The local point.</param>
     /// <param name="type">The manifold type.</param>
-    public Manifold(in ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, in ManifoldType type)
+    public Manifold(ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, in ManifoldType type)
     {
         Debug.Assert(points.Length <= Constants.MaxManifoldPoints);
         Points = points;

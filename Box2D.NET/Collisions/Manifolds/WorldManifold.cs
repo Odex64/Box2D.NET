@@ -33,7 +33,7 @@ public struct WorldManifold : IEquatable<WorldManifold>
     /// <param name="normal">World vector pointing from A to B.</param>
     /// <param name="points">World contact points.</param>
     /// <param name="separations">Separation values.</param>
-    public WorldManifold(in Vector2 normal, in Vector2[] points, float[] separations)
+    public WorldManifold(in Vector2 normal, Vector2[] points, float[] separations)
     {
         Debug.Assert(points.Length <= Constants.MaxManifoldPoints && separations.Length <= Constants.MaxManifoldPoints);
         Normal = normal;

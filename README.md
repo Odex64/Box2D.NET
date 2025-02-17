@@ -1,7 +1,7 @@
 # 🚀 Box2D.NET
 <img align="left" src="https://github.com/Odex64/Box2D.NET/blob/master/docs/icon.png">
 
-Welcome to **Box2D.NET**, a fast and modern C# port of the latest **Box2D v2**!  
+Welcome to **Box2D.NET**, a fast and modern C# port of the final **Box2D v2**!  
 
 This port brings Box2D's powerful physics simulation to the C# ecosystem, offering high performance and precision for game development, simulations, and other physics driven applications. Fully compatible with .NET, it provides a seamless way to integrate realistic motion and collision handling into your projects.
 

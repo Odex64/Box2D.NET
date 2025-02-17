@@ -12,9 +12,9 @@
     <!-- Nuget -->
     <PropertyGroup>
         <Title>Box2D.NET</Title>
-        <Authors>Odex64</Authors>
+        <Authors>Carmine Pietroluongo</Authors>
         <Version>1.0.0</Version>
-        <Copyright>Copyright 2025, by Odex64. All rights reserved.</Copyright>
+        <Copyright>Copyright (c) 2025 by Carmine Pietroluongo. All rights reserved.</Copyright>
         <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <Description>Modern C# port of the final version of Box2D v2</Description>

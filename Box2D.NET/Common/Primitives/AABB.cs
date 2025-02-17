@@ -61,7 +61,7 @@ public struct AABB : IEquatable<AABB>
     {
         float width = UpperBound.X - LowerBound.X;
         float height = UpperBound.Y - LowerBound.Y;
-        return 2.0f * (width + height);
+        return 2f * (width + height);
     }
 
     /// <summary>
@@ -126,17 +126,17 @@ public struct AABB : IEquatable<AABB>
             }
             else
             {
-                float invD = 1.0f / d[i];
+                float invD = 1f / d[i];
                 float t1 = (LowerBound[i] - p[i]) * invD;
                 float t2 = (UpperBound[i] - p[i]) * invD;
 
                 // Sign of the normal vector.
-                float s = -1.0f;
+                float s = -1f;
 
                 if (t1 > t2)
                 {
                     (t1, t2) = (t2, t1); // Swap t1 and t2
-                    s = 1.0f;
+                    s = 1f;
                 }
 
                 // Push the min up
@@ -160,7 +160,7 @@ public struct AABB : IEquatable<AABB>
 
         // Does the ray start inside the box?
         // Does the ray intersect beyond the max fraction?
-        if (tMin < 0.0f || input.MaxFraction < tMin)
+        if (tMin < 0f || input.MaxFraction < tMin)
         {
             output = default;
             return false;

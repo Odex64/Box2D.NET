@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
 
@@ -28,7 +29,7 @@ public struct Manifold : IEquatable<Manifold>
     /// <summary>
     /// The points of contact.
     /// </summary>
-    public readonly ManifoldPoint[] Points;
+    public ManifoldPoint[] Points;
 
     /// <summary>
     /// Not used for <see cref="ManifoldType.Circles" />.
@@ -65,7 +66,7 @@ public struct Manifold : IEquatable<Manifold>
 
     /// <inheritdoc />
     public bool Equals(Manifold other) =>
-        Points.AsSpan().SequenceEqual(other.Points) &&
+        Points.SequenceEqual(other.Points) &&
         LocalNormal.Equals(other.LocalNormal) &&
         LocalPoint.Equals(other.LocalPoint) &&
         Type == other.Type;
@@ -74,7 +75,20 @@ public struct Manifold : IEquatable<Manifold>
     public override bool Equals(object? obj) => obj is Manifold other && Equals(other);
 
     /// <inheritdoc />
-    public override int GetHashCode() => HashCode.Combine(LocalNormal, LocalPoint, Type, Points);
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        hash.Add(LocalNormal);
+        hash.Add(LocalPoint);
+        hash.Add(Type);
+
+        foreach (ManifoldPoint point in Points)
+        {
+            hash.Add(point);
+        }
+
+        return hash.ToHashCode();
+    }
 
     /// <inheritdoc />
     public override string ToString() =>

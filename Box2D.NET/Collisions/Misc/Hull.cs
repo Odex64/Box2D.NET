@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
 
@@ -30,13 +31,22 @@ public struct Hull : IEquatable<Hull>
     public Hull() => Points = new Vector2[Constants.MaxPolygonVertices];
 
     /// <inheritdoc />
-    public bool Equals(Hull other) => Points.Equals(other.Points);
+    public bool Equals(Hull other) => Points.SequenceEqual(other.Points);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is Hull other && Equals(other);
 
     /// <inheritdoc />
-    public override int GetHashCode() => HashCode.Combine(Points);
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        foreach (Vector2 point in Points)
+        {
+            hash.Add(point);
+        }
+
+        return hash.ToHashCode();
+    }
 
     /// <summary>
     /// Checks if two <see cref="Hull" /> instances are equal.
@@ -62,10 +72,11 @@ public struct Hull : IEquatable<Hull>
     /// <param name="ps">The array of points to be considered for the hull.</param>
     /// <param name="count">The number of points in the array to consider for the hull.</param>
     /// <returns>The computed convex hull.</returns>
-    public static Hull RecurseHull(in Vector2 p1, in Vector2 p2, in Vector2[] ps, int count)
+    public static Hull RecurseHull(in Vector2 p1, in Vector2 p2, in Vector2[] ps)
     {
         Hull hull = new Hull();
 
+        int count = ps.Length;
         if (count == 0)
         {
             return hull;
@@ -77,14 +88,12 @@ public struct Hull : IEquatable<Hull>
 
         // Discard points to the left of e and find the point furthest to the right of e
         List<Vector2> rightPoints = new List<Vector2>();
-        int rightCount = 0;
 
         int bestIndex = 0;
         float bestDistance = Vector2.Cross(ps[bestIndex] - p1, e);
-        if (bestDistance > 0.0f)
+        if (bestDistance > 0f)
         {
             rightPoints.Add(ps[bestIndex]);
-            rightCount++;
         }
 
         for (int i = 1; i < count; ++i)
@@ -96,14 +105,13 @@ public struct Hull : IEquatable<Hull>
                 bestDistance = distance;
             }
 
-            if (distance > 0.0f)
+            if (distance > 0f)
             {
                 rightPoints.Add(ps[i]);
-                rightCount++;
             }
         }
 
-        if (bestDistance < 2.0f * Constants.LinearSlop)
+        if (bestDistance < 2f * Constants.LinearSlop)
         {
             return hull;
         }
@@ -111,10 +119,10 @@ public struct Hull : IEquatable<Hull>
         Vector2 bestPoint = ps[bestIndex];
 
         // Compute hull to the right of p1-bestPoint
-        Hull hull1 = RecurseHull(p1, bestPoint, rightPoints.ToArray(), rightCount);
+        Hull hull1 = RecurseHull(p1, bestPoint, rightPoints.ToArray());
 
         // Compute hull to the right of bestPoint-p2
-        Hull hull2 = RecurseHull(bestPoint, p2, rightPoints.ToArray(), rightCount);
+        Hull hull2 = RecurseHull(bestPoint, p2, rightPoints.ToArray());
 
         int currentCount = hull.Points.Length;
 
@@ -168,7 +176,7 @@ public struct Hull : IEquatable<Hull>
                 }
 
                 float distance = Vector2.Cross(hull.Points[j] - p, e);
-                if (distance >= 0.0f)
+                if (distance >= 0f)
                 {
                     return false;
                 }

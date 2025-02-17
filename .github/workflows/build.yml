@@ -6,9 +6,9 @@ on:
   push:
     branches: [master]
     paths-ignore:
-      - README.md
-      - CONTRIBUTING.md
-      - CODE_OF_CONDUCT.md
+      - *.md
+      - .gitignore
+      - .editorconfig
   pull_request:
     branches: [master]
 

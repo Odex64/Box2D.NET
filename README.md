@@ -71,7 +71,7 @@ This port brings Box2D's powerful physics simulation to the C# ecosystem, offeri
 - [ ] Rope
 
 ## Misc
-- [ ] Math
+- [X] Math
 
 </details>
 

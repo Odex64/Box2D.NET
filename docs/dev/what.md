@@ -1,4 +1,4 @@
-#### Dictionary:
+### Dictionary:
 
 - The word "package" refers to the entire Box2D framework.
 - The word "Box2D" refers to the Box2D framework/API, version **2.4.2**, found [here](https://github.com/erincatto/box2d/tree/v2.4.2).
@@ -8,7 +8,7 @@
 
 ---
 
-#### Notes:
+### Notes:
 
 - It is strongly recommended to consult the Box2D documentation and source code for further information.
 - Any standard C/C++ library definitions are not included in this document.
@@ -18,7 +18,7 @@
 
 ---
 
-#### Binary tree (v1):
+### Binary tree (v1):
 
 - `include/box2d/*` (regex: `b2_*.h`):
   - `box2d` (**Can be ignored**): Includes everything, in order.

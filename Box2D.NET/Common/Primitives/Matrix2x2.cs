@@ -173,25 +173,25 @@ public struct Matrix2x2 : IEquatable<Matrix2x2>
     /// <summary>
     /// Multiplies two 2x2 matrices.
     /// </summary>
-    /// <param name="left">The first matrix.</param>
-    /// <param name="right">The second matrix.</param>
+    /// <param name="a">The first matrix.</param>
+    /// <param name="b">The second matrix.</param>
     /// <returns>The product of the two matrices.</returns>
-    public static Matrix2x2 Multiply(in Matrix2x2 left, in Matrix2x2 right) => new Matrix2x2(
-        Multiply(left, right.Ex),
-        Multiply(left, right.Ey)
+    public static Matrix2x2 Multiply(in Matrix2x2 a, in Matrix2x2 b) => new Matrix2x2(
+        Multiply(a, b.Ex),
+        Multiply(a, b.Ey)
     );
 
     /// <summary>
     /// Multiplies the transpose of matrix A by matrix B (A^T * B).
     /// </summary>
-    /// <param name="left">The first matrix.</param>
-    /// <param name="right">The second matrix.</param>
+    /// <param name="a">The first matrix.</param>
+    /// <param name="b">The second matrix.</param>
     /// <returns>The resulting matrix after multiplying A^T by B.</returns>
-    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 left, in Matrix2x2 right) => new Matrix2x2(
-        Vector2.Dot(left.Ex, right.Ex),
-        Vector2.Dot(left.Ex, right.Ey),
-        Vector2.Dot(left.Ey, right.Ex),
-        Vector2.Dot(left.Ey, right.Ey)
+    public static Matrix2x2 MultiplyTranspose(in Matrix2x2 a, in Matrix2x2 b) => new Matrix2x2(
+        Vector2.Dot(a.Ex, b.Ex),
+        Vector2.Dot(a.Ex, b.Ey),
+        Vector2.Dot(a.Ey, b.Ex),
+        Vector2.Dot(a.Ey, b.Ey)
     );
 
     /// <summary>

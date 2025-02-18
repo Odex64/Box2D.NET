@@ -31,8 +31,7 @@ public struct RayCastOutput : IEquatable<RayCastOutput>
     }
 
     /// <inheritdoc />
-    public bool Equals(RayCastOutput other) =>
-        Normal.Equals(other.Normal) && Fraction.Equals(other.Fraction);
+    public bool Equals(RayCastOutput other) => Normal.Equals(other.Normal) && Fraction.Equals(other.Fraction);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is RayCastOutput other && Equals(other);

@@ -66,8 +66,7 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     public override int GetHashCode() => HashCode.Combine(LocalPoint, NormalImpulse, TangentImpulse, Id);
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(LocalPoint: {LocalPoint}, NormalImpulse: {NormalImpulse}, TangentImpulse: {TangentImpulse}, Id: {Id})";
+    public override string ToString() => $"(LocalPoint: {LocalPoint}, NormalImpulse: {NormalImpulse}, TangentImpulse: {TangentImpulse}, Id: {Id})";
 
     /// <summary>
     /// Checks if two ManifoldPoint are equal.

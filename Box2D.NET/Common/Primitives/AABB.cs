@@ -80,12 +80,12 @@ public struct AABB : IEquatable<AABB>
     /// <summary>
     /// Combines two AABBs into this AABB.
     /// </summary>
-    /// <param name="aabb1">The first AABB.</param>
-    /// <param name="aabb2">The second AABB.</param>
-    public void Combine(in AABB aabb1, in AABB aabb2)
+    /// <param name="a">The first AABB.</param>
+    /// <param name="b">The second AABB.</param>
+    public void Combine(in AABB a, in AABB b)
     {
-        LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound);
-        UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound);
+        LowerBound = Vector2.Min(a.LowerBound, b.LowerBound);
+        UpperBound = Vector2.Max(a.UpperBound, b.UpperBound);
     }
 
     /// <summary>
@@ -110,7 +110,6 @@ public struct AABB : IEquatable<AABB>
         float tMin = -float.MaxValue;
         float tMax = float.MaxValue;
 
-        Vector2 p = input.Start;
         Vector2 d = input.End - input.Start;
         Vector2 absD = Vector2.Abs(d);
 
@@ -121,7 +120,7 @@ public struct AABB : IEquatable<AABB>
             if (absD[i] < float.Epsilon)
             {
                 // Parallel.
-                if (p[i] < LowerBound[i] || UpperBound[i] < p[i])
+                if (input.Start[i] < LowerBound[i] || UpperBound[i] < input.Start[i])
                 {
                     output = default;
                     return false;
@@ -130,8 +129,8 @@ public struct AABB : IEquatable<AABB>
             else
             {
                 float invD = 1f / d[i];
-                float t1 = (LowerBound[i] - p[i]) * invD;
-                float t2 = (UpperBound[i] - p[i]) * invD;
+                float t1 = (LowerBound[i] - input.Start[i]) * invD;
+                float t2 = (UpperBound[i] - input.Start[i]) * invD;
 
                 // Sign of the normal vector.
                 float s = -1f;
@@ -145,7 +144,7 @@ public struct AABB : IEquatable<AABB>
                 // Push the min up
                 if (t1 > tMin)
                 {
-                    normal = Vector2.Zero;
+                    normal.SetZero();
                     normal[i] = s;
                     tMin = t1;
                 }
@@ -175,8 +174,7 @@ public struct AABB : IEquatable<AABB>
     }
 
     /// <inheritdoc />
-    public bool Equals(AABB other) =>
-        LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
+    public bool Equals(AABB other) => LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is AABB other && Equals(other);
@@ -185,8 +183,7 @@ public struct AABB : IEquatable<AABB>
     public override int GetHashCode() => HashCode.Combine(LowerBound, UpperBound);
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(LowerBound: {LowerBound}, UpperBound: {UpperBound})";
+    public override string ToString() => $"(LowerBound: {LowerBound}, UpperBound: {UpperBound})";
 
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are equal.
@@ -196,27 +193,27 @@ public struct AABB : IEquatable<AABB>
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in AABB left, in AABB right) => !(left == right);
+    public static bool operator !=(in AABB left, in AABB right) => !left.Equals(right);
 
     /// <summary>
     /// Tests if two axis-aligned bounding boxes (AABBs) overlap.
     /// </summary>
-    /// <param name="left">The first AABB.</param>
-    /// <param name="right">The second AABB.</param>
+    /// <param name="a">The first AABB.</param>
+    /// <param name="b">The second AABB.</param>
     /// <returns><c>true</c> if the AABBs overlap; otherwise, <c>false</c>.</returns>
-    public static bool TestOverlap(in AABB left, in AABB right)
+    public static bool TestOverlap(in AABB a, in AABB b)
     {
-        Vector2 d1 = right.LowerBound - left.UpperBound;
-        Vector2 d2 = left.LowerBound - right.UpperBound;
+        Vector2 d1 = b.LowerBound - a.UpperBound;
+        Vector2 d2 = a.LowerBound - b.UpperBound;
 
         // If either d1.x or d1.y is positive, the AABBs do not overlap.
-        if (d1.X > 0.0f || d1.Y > 0.0f)
+        if (d1.X > 0f || d1.Y > 0f)
         {
             return false;
         }
 
         // If either d2.x or d2.y is positive, the AABBs do not overlap.
-        if (d2.X > 0.0f || d2.Y > 0.0f)
+        if (d2.X > 0f || d2.Y > 0f)
         {
             return false;
         }

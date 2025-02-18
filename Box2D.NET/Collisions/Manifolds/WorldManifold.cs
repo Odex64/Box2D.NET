@@ -132,10 +132,7 @@ public struct WorldManifold : IEquatable<WorldManifold>
     }
 
     /// <inheritdoc />
-    public bool Equals(WorldManifold other) =>
-        Normal.Equals(other.Normal) &&
-        Points.SequenceEqual(other.Points) &&
-        Separations.SequenceEqual(other.Separations);
+    public bool Equals(WorldManifold other) => Normal.Equals(other.Normal) && Points.SequenceEqual(other.Points) && Separations.SequenceEqual(other.Separations);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is WorldManifold other && Equals(other);
@@ -159,8 +156,7 @@ public struct WorldManifold : IEquatable<WorldManifold>
     }
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(Normal: {Normal}, Points: [{string.Join(", ", Points)}], Separations: [{string.Join(", ", Separations)}])";
+    public override string ToString() => $"(Normal: {Normal}, Points: [{string.Join(", ", Points)}], Separations: [{string.Join(", ", Separations)}])";
 
     /// <summary>
     /// Checks if two <see cref="WorldManifold" /> instances are equal.

@@ -55,7 +55,7 @@ public struct Manifold : IEquatable<Manifold>
     /// <param name="localNormal">The local normal.</param>
     /// <param name="localPoint">The local point.</param>
     /// <param name="type">The manifold type.</param>
-    public Manifold(ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, in ManifoldType type)
+    public Manifold(ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, ManifoldType type)
     {
         Debug.Assert(points.Length <= Constants.MaxManifoldPoints);
         Points = points;
@@ -150,8 +150,7 @@ public struct Manifold : IEquatable<Manifold>
     }
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(Points: [{string.Join(", ", Points)}], LocalNormal: {LocalNormal}, LocalPoint: {LocalPoint}, Type: {Type})";
+    public override string ToString() => $"(Points: [{string.Join(", ", Points)}], LocalNormal: {LocalNormal}, LocalPoint: {LocalPoint}, Type: {Type})";
 
     /// <summary>
     /// Checks if two <see cref="Manifold" /> instances are equal.

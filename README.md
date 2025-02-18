@@ -10,9 +10,10 @@ This port brings Box2D's powerful physics simulation to the C# ecosystem, offeri
 [![Activity](https://img.shields.io/github/commit-activity/w/Odex64/Box2D.NET?style=flat-square&logo=github&label=Activity)](https://github.com/Odex64/Box2D.NET/activity)
 [![Stars](https://img.shields.io/github/stars/Odex64/Box2D.NET?style=flat-square&logo=github&label=Stars)](https://github.com/Odex64/Box2D.NET/stargazers)
 [![Build](https://img.shields.io/github/actions/workflow/status/Odex64/Box2D.NET/build.yml?style=flat-square&logo=github&label=Build)](https://github.com/Odex64/Box2D.NET/actions/workflows/build.yml)
+[![Discord](https://img.shields.io/discord/1199798541980283051?style=flat-square&logo=discord&label=Discord)](https://discord.gg/bdFbrvwTnJ)
 
 > [!IMPORTANT]
-> This framework is still in early stages.
+> This framework is still in very early stages.
 
 <details>
 <summary>⚙️ STATUS</summary>

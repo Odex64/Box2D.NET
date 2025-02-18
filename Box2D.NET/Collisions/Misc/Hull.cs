@@ -70,7 +70,6 @@ public struct Hull : IEquatable<Hull>
     /// <param name="p1">The first point defining the edge of the hull.</param>
     /// <param name="p2">The second point defining the edge of the hull.</param>
     /// <param name="ps">The array of points to be considered for the hull.</param>
-    /// <param name="count">The number of points in the array to consider for the hull.</param>
     /// <returns>The computed convex hull.</returns>
     public static Hull RecurseHull(in Vector2 p1, in Vector2 p2, Vector2[] ps)
     {

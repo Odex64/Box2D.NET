@@ -10,3 +10,7 @@
 # Build results
 bin
 obj
+
+# BenchmarkDotNet
+**/BenchmarkDotNet.Artifacts
+*[.]log

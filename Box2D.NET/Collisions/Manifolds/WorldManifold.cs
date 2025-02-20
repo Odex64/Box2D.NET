@@ -20,12 +20,12 @@ public struct WorldManifold : IEquatable<WorldManifold>
     /// <summary>
     /// World contact points (points of intersection).
     /// </summary>
-    public Vector2[] Points;
+    public readonly Vector2[] Points;
 
     /// <summary>
     /// A negative value indicates overlap, in meters.
     /// </summary>
-    public float[] Separations;
+    public readonly float[] Separations;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorldManifold" /> struct.

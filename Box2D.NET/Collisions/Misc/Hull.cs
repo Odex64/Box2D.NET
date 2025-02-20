@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
@@ -10,7 +8,7 @@ namespace Box2D.NET.Collisions.Misc;
 /// <summary>
 /// Represents a convex hull defined by a set of vertices.
 /// </summary>
-public struct Hull : IEquatable<Hull>
+public readonly struct Hull : IEquatable<Hull>
 {
     /// <summary>
     /// The vertices of the hull.
@@ -90,13 +88,14 @@ public struct Hull : IEquatable<Hull>
         e.Normalize();
 
         // Discard points to the left of e and find the point furthest to the right of e
-        List<Vector2> rightPoints = new List<Vector2>();
+        Vector2[] rightPoints = new Vector2[Constants.MaxPolygonVertices];
+        int rightCount = 0;
 
         int bestIndex = 0;
         float bestDistance = Vector2.Cross(ps[bestIndex] - p1, e);
         if (bestDistance > 0f)
         {
-            rightPoints.Add(ps[bestIndex]);
+            rightPoints[rightCount++] = ps[bestIndex];
         }
 
         for (int i = 1; i < count; ++i)
@@ -110,7 +109,7 @@ public struct Hull : IEquatable<Hull>
 
             if (distance > 0f)
             {
-                rightPoints.Add(ps[i]);
+                rightPoints[rightCount++] = ps[i];
             }
         }
 

@@ -31,7 +31,7 @@ public struct Manifold : IEquatable<Manifold>
     /// <summary>
     /// The points of contact.
     /// </summary>
-    public ManifoldPoint[] Points;
+    public readonly ManifoldPoint[] Points;
 
     /// <summary>
     /// Not used for <see cref="ManifoldType.Circles" />.
@@ -57,7 +57,11 @@ public struct Manifold : IEquatable<Manifold>
     /// <param name="type">The manifold type.</param>
     public Manifold(ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, ManifoldType type)
     {
-        Debug.Assert(points.Length <= Constants.MaxManifoldPoints);
+        if (points.Length != Constants.MaxManifoldPoints)
+        {
+            throw new ArgumentException($"The {nameof(points)} array has not {Constants.MaxManifoldPoints} elements.");
+        }
+
         Points = points;
         LocalNormal = localNormal;
         LocalPoint = localPoint;
@@ -78,9 +82,9 @@ public struct Manifold : IEquatable<Manifold>
     /// <param name="manifold2">The second manifold.</param>
     public static void GetPointStates(PointState[] state1, PointState[] state2, in Manifold manifold1, in Manifold manifold2)
     {
-        if (state1.Length < Constants.MaxManifoldPoints || state2.Length < Constants.MaxManifoldPoints)
+        if (state1.Length != Constants.MaxManifoldPoints || state2.Length != Constants.MaxManifoldPoints)
         {
-            throw new ArgumentException($"The state arrays must have at least {Constants.MaxManifoldPoints} elements.");
+            throw new ArgumentException($"The state arrays must equal the {Constants.MaxManifoldPoints} elements.");
         }
 
         // Initialize all states to NullState.
@@ -124,11 +128,7 @@ public struct Manifold : IEquatable<Manifold>
     }
 
     /// <inheritdoc />
-    public bool Equals(Manifold other) =>
-        Points.SequenceEqual(other.Points) &&
-        LocalNormal.Equals(other.LocalNormal) &&
-        LocalPoint.Equals(other.LocalPoint) &&
-        Type == other.Type;
+    public bool Equals(Manifold other) => Points.SequenceEqual(other.Points) && LocalNormal.Equals(other.LocalNormal) && LocalPoint.Equals(other.LocalPoint) && Type == other.Type;
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is Manifold other && Equals(other);

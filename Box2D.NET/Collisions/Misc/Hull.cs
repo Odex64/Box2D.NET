@@ -24,7 +24,11 @@ public struct Hull : IEquatable<Hull>
     /// <exception cref="ArgumentException">Thrown if the number of vertices exceeds <see cref="Constants.MaxPolygonVertices" />.</exception>
     public Hull(Vector2[] points)
     {
-        Debug.Assert(points.Length <= Constants.MaxPolygonVertices);
+        if (points.Length != Constants.MaxPolygonVertices)
+        {
+            throw new ArgumentException($"The {nameof(points)} array has not {Constants.MaxManifoldPoints} elements.");
+        }
+
         Points = points;
     }
 
@@ -115,13 +119,12 @@ public struct Hull : IEquatable<Hull>
             return hull;
         }
 
-        Vector2 bestPoint = ps[bestIndex];
 
         // Compute hull to the right of p1-bestPoint
-        Hull hull1 = RecurseHull(p1, bestPoint, rightPoints.ToArray());
+        Hull hull1 = RecurseHull(p1, ps[bestIndex], rightPoints.ToArray());
 
         // Compute hull to the right of bestPoint-p2
-        Hull hull2 = RecurseHull(bestPoint, p2, rightPoints.ToArray());
+        Hull hull2 = RecurseHull(ps[bestIndex], p2, rightPoints.ToArray());
 
         int currentCount = hull.Points.Length;
 
@@ -131,14 +134,17 @@ public struct Hull : IEquatable<Hull>
             hull.Points[currentCount] = point;
         }
 
-        hull.Points[currentCount] = bestPoint;
+        hull.Points[currentCount] = ps[bestIndex];
 
         foreach (Vector2 point in hull2.Points)
         {
             hull.Points[currentCount] = point;
         }
 
-        Debug.Assert(currentCount < Constants.MaxPolygonVertices);
+        if (currentCount > Constants.MaxPolygonVertices)
+        {
+            throw new ArgumentException($"{nameof(currentCount)} is greater than {Constants.MaxManifoldPoints}.");
+        }
 
         return hull;
     }
@@ -162,8 +168,7 @@ public struct Hull : IEquatable<Hull>
         {
             // Create an edge vector
             int i2 = i < count - 1 ? i + 1 : 0;
-            Vector2 p = hull.Points[i];
-            Vector2 e = hull.Points[i2] - p;
+            Vector2 e = hull.Points[i2] - hull.Points[i];
             _ = e.Normalize();
 
             for (int j = 0; j < count; ++j)
@@ -174,7 +179,7 @@ public struct Hull : IEquatable<Hull>
                     continue;
                 }
 
-                float distance = Vector2.Cross(hull.Points[j] - p, e);
+                float distance = Vector2.Cross(hull.Points[j] - hull.Points[i], e);
                 if (distance >= 0f)
                 {
                     return false;
@@ -188,14 +193,10 @@ public struct Hull : IEquatable<Hull>
             int i2 = (i + 1) % count;
             int i3 = (i + 2) % count;
 
-            Vector2 p1 = hull.Points[i];
-            Vector2 p2 = hull.Points[i2];
-            Vector2 p3 = hull.Points[i3];
-
-            Vector2 e = p3 - p1;
+            Vector2 e = hull.Points[i3] - hull.Points[i];
             _ = e.Normalize();
 
-            float distance = Vector2.Cross(p2 - p1, e);
+            float distance = Vector2.Cross(hull.Points[i2] - hull.Points[i], e);
             if (distance <= Constants.LinearSlop)
             {
                 // p1-p2-p3 are collinear
@@ -205,4 +206,156 @@ public struct Hull : IEquatable<Hull>
 
         return true;
     }
+
+    // /// <summary>
+    // /// Computes the convex hull using the QuickHull algorithm.
+    // /// </summary>
+    // /// <param name="points">The input points.</param>
+    // /// <returns>The computed convex hull.</returns>
+    // public static Hull ComputeHull(Vector2[] points)
+    // {
+    //     Hull hull = new Hull();
+    //
+    //     int count = points.Length;
+    //
+    //     if (count is < 3 or > Constants.MaxPolygonVertices)
+    //     {
+    //         return hull;
+    //     }
+    //
+    //     count = Math.Min(count, Constants.MaxPolygonVertices);
+    //
+    //     AABB aabb = new AABB(new Vector2(float.MaxValue, float.MaxValue), new Vector2(-float.MaxValue, -float.MaxValue));
+    //
+    //     // Perform aggressive point welding and compute the bounding box
+    //     List<Vector2> ps = new List<Vector2>();
+    //     float tolSqr = 16.0f * Constants.LinearSlop * Constants.LinearSlop;
+    //
+    //     for(int i = 0; i < count; ++i)
+    //     {
+    //         aabb.LowerBound = Vector2.Min(aabb.LowerBound, points[i]);
+    //         aabb.UpperBound = Vector2.Max(aabb.UpperBound, points[i]);
+    //
+    //         bool unique = true;
+    //         for(int j = 0; j < i; ++j)
+    //         {
+    //             if (Vector2.DistanceSquared(points[i], points[j]) < tolSqr)
+    //             {
+    //                 unique = false;
+    //                 break;
+    //             }
+    //         }
+    //
+    //         if (unique)
+    //         {
+    //             ps.Add(points[i]);
+    //         }
+    //     }
+    //
+    //     if (ps.Count < 3)
+    //     {
+    //         return hull;
+    //     }
+    //
+    //     // Find an extreme point
+    //     Vector2 center = aabb.Center;
+    //     int i1 = 0;
+    //     float maxDistSq = Vector2.DistanceSquared(center, ps[i1]);
+    //
+    //     for (int i = 1; i < ps.Count; i++)
+    //     {
+    //         float distSq = Vector2.DistanceSquared(center, ps[i]);
+    //         if (distSq > maxDistSq)
+    //         {
+    //             i1 = i;
+    //             maxDistSq = distSq;
+    //         }
+    //     }
+    //
+    //     ps.RemoveAt(i1);
+    //
+    //     int i2 = 0;
+    //     maxDistSq = Vector2.DistanceSquared(ps[i1], ps[i2]);
+    //
+    //     for (int i = 1; i < ps.Count; i++)
+    //     {
+    //         float distSq = Vector2.DistanceSquared(ps[i1], ps[i]);
+    //         if (distSq > maxDistSq)
+    //         {
+    //             i2 = i;
+    //             maxDistSq = distSq;
+    //         }
+    //     }
+    //
+    //     ps.RemoveAt(i2);
+    //
+    //     List<Vector2> rightPoints = new List<Vector2>();
+    //     List<Vector2> leftPoints = new List<Vector2>();
+    //
+    //     Vector2 edge = Vector2.Normalize(ps[i2] - ps[i1]);
+    //
+    //     foreach (Vector2 point in ps)
+    //     {
+    //         float d = Vector2.Cross(point - ps[i1], edge);
+    //
+    //         if (d >= 2.0f * LinearSlop)
+    //         {
+    //             rightPoints.Add(point);
+    //         }
+    //         else if (d <= -2.0f * LinearSlop)
+    //         {
+    //             leftPoints.Add(point);
+    //         }
+    //     }
+    //
+    //     // Compute hulls on right and left
+    //     Hull hull1 = RecurseHull(ps[i1], ps[i2], rightPoints);
+    //     Hull hull2 = RecurseHull(ps[i2], ps[i1], leftPoints);
+    //
+    //     if (hull1.Count == 0 && hull2.Count == 0)
+    //     {
+    //         return hull;
+    //     }
+    //
+    //     // Stitch hulls together
+    //     hull.Points.Add(ps[i1]);
+    //     hull.Points.AddRange(hull1.Points);
+    //     hull.Points.Add(ps[i2]);
+    //     hull.Points.AddRange(hull2.Points);
+    //
+    //     // Merge collinear points
+    //     bool searching = true;
+    //     while (searching && hull.Count > 2)
+    //     {
+    //         searching = false;
+    //
+    //         for (int i = 0; i < hull.Count; i++)
+    //         {
+    //             int i1Idx = i;
+    //             int i2Idx = (i + 1) % hull.Count;
+    //             int i3Idx = (i + 2) % hull.Count;
+    //
+    //             Vector2 p1Hull = hull.Points[i1Idx];
+    //             Vector2 p2Hull = hull.Points[i2Idx];
+    //             Vector2 p3Hull = hull.Points[i3Idx];
+    //
+    //             Vector2 e = Vector2.Normalize(p3Hull - p1Hull);
+    //             float distance = Vector2.Cross(p2Hull - p1Hull, e);
+    //
+    //             if (distance <= 2.0f * LinearSlop)
+    //             {
+    //                 hull.Points.RemoveAt(i2Idx);
+    //                 searching = true;
+    //                 break;
+    //             }
+    //         }
+    //     }
+    //
+    //     if (hull.Count < 3)
+    //     {
+    //         hull.Points.Clear();
+    //     }
+    //
+    //     return hull;
+    // }
 }

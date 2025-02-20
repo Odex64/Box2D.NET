@@ -53,11 +53,7 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     }
 
     /// <inheritdoc />
-    public bool Equals(ManifoldPoint other) =>
-        LocalPoint.Equals(other.LocalPoint) &&
-        NormalImpulse.Equals(other.NormalImpulse) &&
-        TangentImpulse.Equals(other.TangentImpulse) &&
-        Id.Equals(other.Id);
+    public bool Equals(ManifoldPoint other) => LocalPoint.Equals(other.LocalPoint) && NormalImpulse.Equals(other.NormalImpulse) && TangentImpulse.Equals(other.TangentImpulse) && Id.Equals(other.Id);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is ManifoldPoint other && Equals(other);

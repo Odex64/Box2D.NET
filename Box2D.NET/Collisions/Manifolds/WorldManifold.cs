@@ -35,7 +35,11 @@ public struct WorldManifold : IEquatable<WorldManifold>
     /// <param name="separations">Separation values.</param>
     public WorldManifold(in Vector2 normal, Vector2[] points, float[] separations)
     {
-        Debug.Assert(points.Length <= Constants.MaxManifoldPoints && separations.Length <= Constants.MaxManifoldPoints);
+        if (points.Length != Constants.MaxManifoldPoints || separations.Length != Constants.MaxManifoldPoints)
+        {
+            throw new ArgumentException($"The {nameof(points)} or {nameof(separations)} array has not {Constants.MaxManifoldPoints} elements.");
+        }
+
         Normal = normal;
         Points = points;
         Separations = separations;
@@ -74,7 +78,7 @@ public struct WorldManifold : IEquatable<WorldManifold>
         {
             case ManifoldType.Circles:
                 {
-                    Normal = new Vector2(1f, 0f);
+                    Normal = Vector2.UnitX;
                     Vector2 pointA = Transform.Multiply(xfA, manifold.LocalPoint);
                     Vector2 pointB = Transform.Multiply(xfB, manifold.Points[0].LocalPoint);
 

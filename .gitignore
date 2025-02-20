@@ -11,6 +11,5 @@
 bin
 obj
 
-# BenchmarkDotNet
-**/BenchmarkDotNet.Artifacts
-*[.]log
+# Benchmarks
+BenchmarkDotNet.Artifacts

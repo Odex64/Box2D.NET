@@ -3,6 +3,7 @@
         <File Path=".editorconfig" />
     </Folder>
     <Project Path="Box2D.NET/Box2D.NET.csproj" />
+    <Project Path="Box2D.NET.Demo/Box2D.NET.Demo.csproj" />
     <Project Path="Box2D.NET.Unit/Box2D.NET.Unit.csproj" />
     <Project Path="Box2D.NET.Benchmark/Box2D.NET.Benchmark.csproj" />
 </Solution>

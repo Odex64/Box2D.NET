@@ -87,17 +87,13 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <exception cref="IndexOutOfRangeException">Thrown if the index is not 0, 1, or 2.</exception>
     public float this[int index]
     {
-        get
+        get => index switch
         {
-            switch (index)
-            {
-                case 0: return X;
-                case 1: return Y;
-                case 2: return Z;
-                default:
-                    throw new IndexOutOfRangeException("Index for Vector2 must be 0 (X) or 1 (Y).");
-            }
-        }
+            0 => X,
+            1 => Y,
+            2 => Z,
+            _ => throw new IndexOutOfRangeException("Index for Vector2 must be 0 (X) or 1 (Y).")
+        };
         set
         {
             switch (index)
@@ -157,14 +153,14 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <summary>
     /// Computes the distance between two vectors.
     /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
     /// <returns>The distance between the vectors.</returns>
-    public static float Distance(in Vector3 left, in Vector3 right)
+    public static float Distance(in Vector3 a, in Vector3 b)
     {
-        float dx = left.X - right.X;
-        float dy = left.Y - right.Y;
-        float dz = left.Z - right.Z;
+        float dx = a.X - b.X;
+        float dy = a.Y - b.Y;
+        float dz = a.Z - b.Z;
         return MathF.Sqrt(dx * dx + dy * dy + dz * dz);
     }
 
@@ -172,14 +168,14 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// Computes the squared distance between two vectors.
     /// More efficient than Distance() since it avoids a square root calculation.
     /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
     /// <returns>The squared distance between the vectors.</returns>
-    public static float DistanceSquared(in Vector3 left, in Vector3 right)
+    public static float DistanceSquared(in Vector3 a, in Vector3 b)
     {
-        float dx = left.X - right.X;
-        float dy = left.Y - right.Y;
-        float dz = left.Z - right.Z;
+        float dx = a.X - b.X;
+        float dy = a.Y - b.Y;
+        float dz = a.Z - b.Z;
         return dx * dx + dy * dy + dz * dz;
     }
 
@@ -206,22 +202,21 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <summary>
     /// Calculates the dot product of two vectors.
     /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
     /// <returns>The dot product of the two vectors.</returns>
-    public static float Dot(in Vector3 left, in Vector3 right) =>
-        left.X * right.X + left.Y * right.Y + left.Z * right.Z;
+    public static float Dot(in Vector3 a, in Vector3 b) => a.X * b.X + a.Y * b.Y + a.Z * b.Z;
 
     /// <summary>
     /// Calculates the cross product of two vectors.
     /// </summary>
-    /// <param name="left">The first vector.</param>
-    /// <param name="right">The second vector.</param>
+    /// <param name="a">The first vector.</param>
+    /// <param name="b">The second vector.</param>
     /// <returns>A new vector that is the cross product of the two input vectors.</returns>
-    public static Vector3 Cross(in Vector3 left, in Vector3 right) => new Vector3(
-        left.Y * right.Z - left.Z * right.Y,
-        left.Z * right.X - left.X * right.Z,
-        left.X * right.Y - left.Y * right.X
+    public static Vector3 Cross(in Vector3 a, in Vector3 b) => new Vector3(
+        a.Y * b.Z - a.Z * b.Y,
+        a.Z * b.X - a.X * b.Z,
+        a.X * b.Y - a.Y * b.X
     );
 
     /// <summary>
@@ -230,7 +225,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="a">The first vector.</param>
     /// <param name="b">The second vector.</param>
     /// <returns>A new <see cref="Vector3" /> where each component is the maximum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector3 Max(Vector3 a, Vector3 b) => new Vector3(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y), MathF.Max(a.Z, b.Z));
+    public static Vector3 Max(in Vector3 a, in Vector3 b) => new Vector3(MathF.Max(a.X, b.X), MathF.Max(a.Y, b.Y), MathF.Max(a.Z, b.Z));
 
     /// <summary>
     /// Returns a new <see cref="Vector3" /> containing the minimum values from two vectors.
@@ -238,14 +233,14 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="a">The first vector.</param>
     /// <param name="b">The second vector.</param>
     /// <returns>A new <see cref="Vector3" /> where each component is the minimum of the corresponding components in <paramref name="a" /> and <paramref name="b" />.</returns>
-    public static Vector3 Min(Vector3 a, Vector3 b) => new Vector3(MathF.Min(a.X, b.X), MathF.Min(a.Y, b.Y), MathF.Min(a.Z, b.Z));
+    public static Vector3 Min(in Vector3 a, in Vector3 b) => new Vector3(MathF.Min(a.X, b.X), MathF.Min(a.Y, b.Y), MathF.Min(a.Z, b.Z));
 
     /// <summary>
     /// Returns a vector where each component is the absolute value of the corresponding component in the input vector.
     /// </summary>
     /// <param name="vector">The input vector.</param>
     /// <returns>A vector with the absolute values of the input vector components.</returns>
-    public static Vector3 Abs(Vector3 vector) => new Vector3(MathF.Abs(vector.X), MathF.Abs(vector.Y), MathF.Abs(vector.Z));
+    public static Vector3 Abs(in Vector3 vector) => new Vector3(MathF.Abs(vector.X), MathF.Abs(vector.Y), MathF.Abs(vector.Z));
 
     /// <summary>
     /// Checks if two vectors are equal.
@@ -285,8 +280,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="left">The first vector.</param>
     /// <param name="right">The second vector.</param>
     /// <returns>A new vector where each component is the product of the corresponding components of the input vectors.</returns>
-    public static Vector3 operator *(in Vector3 left, in Vector3 right) =>
-        new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
+    public static Vector3 operator *(in Vector3 left, in Vector3 right) => new Vector3(left.X * right.X, left.Y * right.Y, left.Z * right.Z);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -294,8 +288,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="v">The vector.</param>
     /// <param name="scalar">The scalar value.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3 operator *(in Vector3 v, float scalar) =>
-        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(in Vector3 v, float scalar) => new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Multiplies a vector by a scalar.
@@ -303,8 +296,7 @@ public struct Vector3(float x, float y, float z) : IEquatable<Vector3>
     /// <param name="scalar">The scalar value.</param>
     /// <param name="v">The vector.</param>
     /// <returns>The resulting vector after multiplication.</returns>
-    public static Vector3 operator *(float scalar, in Vector3 v) =>
-        new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
+    public static Vector3 operator *(float scalar, in Vector3 v) => new Vector3(v.X * scalar, v.Y * scalar, v.Z * scalar);
 
     /// <summary>
     /// Divides a vector by another vector component-wise.

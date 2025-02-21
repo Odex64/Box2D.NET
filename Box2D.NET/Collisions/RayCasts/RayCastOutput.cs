@@ -24,15 +24,14 @@ public struct RayCastOutput : IEquatable<RayCastOutput>
     /// </summary>
     /// <param name="normal">The normal of the surface at the contact point.</param>
     /// <param name="fraction">The fraction of the ray length at which the contact occurred.</param>
-    public RayCastOutput(Vector2 normal, float fraction)
+    public RayCastOutput(in Vector2 normal, float fraction)
     {
         Normal = normal;
         Fraction = fraction;
     }
 
     /// <inheritdoc />
-    public bool Equals(RayCastOutput other) =>
-        Normal.Equals(other.Normal) && Fraction.Equals(other.Fraction);
+    public bool Equals(RayCastOutput other) => Normal.Equals(other.Normal) && Fraction.Equals(other.Fraction);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is RayCastOutput other && Equals(other);
@@ -46,10 +45,10 @@ public struct RayCastOutput : IEquatable<RayCastOutput>
     /// <summary>
     /// Checks if two <see cref="RayCastOutput" /> instances are equal.
     /// </summary>
-    public static bool operator ==(RayCastOutput left, RayCastOutput right) => left.Equals(right);
+    public static bool operator ==(in RayCastOutput left, in RayCastOutput right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="RayCastOutput" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(RayCastOutput left, RayCastOutput right) => !(left == right);
+    public static bool operator !=(in RayCastOutput left, in RayCastOutput right) => !(left == right);
 }

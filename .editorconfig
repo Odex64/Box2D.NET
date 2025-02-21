@@ -57,6 +57,7 @@ tab_width = 1
 indent_size = 4
 end_of_line = crlf
 insert_final_newline = false
+max_line_length = 300
 dotnet_style_coalesce_expression = true:suggestion
 dotnet_style_null_propagation = true:suggestion
 dotnet_style_prefer_is_null_check_over_reference_equality_method = true:suggestion
@@ -182,3 +183,4 @@ dotnet_diagnostic.cs1591.severity = none
 
 # Rider
 resharper_object_creation_when_type_evident = explicitly_typed
+resharper_for_can_be_converted_to_foreach_highlighting = none

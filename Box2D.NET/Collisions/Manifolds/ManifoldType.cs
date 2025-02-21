@@ -3,7 +3,7 @@
 /// <summary>
 /// The types of manifolds.
 /// </summary>
-public enum ManifoldType
+public enum ManifoldType : byte
 {
     Circles,
     FaceA,

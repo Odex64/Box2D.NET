@@ -24,7 +24,7 @@ public struct ClipVertex : IEquatable<ClipVertex>
     /// </summary>
     /// <param name="position">The vertex position.</param>
     /// <param name="id">The contact ID associated with the vertex.</param>
-    public ClipVertex(Vector2 position, ContactId id)
+    public ClipVertex(in Vector2 position, in ContactId id)
     {
         Position = position;
         Id = id;
@@ -45,10 +45,10 @@ public struct ClipVertex : IEquatable<ClipVertex>
     /// <summary>
     /// Checks if two <see cref="ClipVertex" /> instances are equal.
     /// </summary>
-    public static bool operator ==(ClipVertex left, ClipVertex right) => left.Equals(right);
+    public static bool operator ==(in ClipVertex left, in ClipVertex right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="ClipVertex" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(ClipVertex left, ClipVertex right) => !(left == right);
+    public static bool operator !=(in ClipVertex left, in ClipVertex right) => !(left == right);
 }

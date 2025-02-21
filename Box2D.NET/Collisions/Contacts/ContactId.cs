@@ -20,7 +20,7 @@ public struct ContactId : IEquatable<ContactId>
     /// <summary>
     /// Initializes a new instance of the <see cref="ContactId" /> struct.
     /// </summary>
-    public ContactId(ContactFeature feature, uint key)
+    public ContactId(in ContactFeature feature, uint key)
     {
         Feature = feature;
         Key = key;
@@ -41,10 +41,10 @@ public struct ContactId : IEquatable<ContactId>
     /// <summary>
     /// Checks if two ContactId are equal.
     /// </summary>
-    public static bool operator ==(ContactId left, ContactId right) => left.Equals(right);
+    public static bool operator ==(in ContactId left, in ContactId right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two ContactId are not equal.
     /// </summary>
-    public static bool operator !=(ContactId left, ContactId right) => !(left == right);
+    public static bool operator !=(in ContactId left, in ContactId right) => !(left == right);
 }

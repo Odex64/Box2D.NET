@@ -84,7 +84,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// </summary>
     /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector3 Solve33(Vector3 vector)
+    public readonly Vector3 Solve33(in Vector3 vector)
     {
         Vector3 crossEyEz = Vector3.Cross(Ey, Ez);
         float det = Vector3.Dot(Ex, crossEyEz);
@@ -107,7 +107,7 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// </summary>
     /// <param name="vector">The column vector b.</param>
     /// <returns>The solution vector x.</returns>
-    public readonly Vector2 Solve22(Vector2 vector)
+    public readonly Vector2 Solve22(in Vector2 vector)
     {
         float a11 = Ex.X, a12 = Ey.X, a21 = Ex.Y, a22 = Ey.Y;
         float det = a11 * a22 - a12 * a21;
@@ -180,13 +180,6 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
         );
     }
 
-    /// <summary>
-    /// Returns a matrix where each component is the absolute value of the corresponding component in the input matrix.
-    /// </summary>
-    /// <param name="matrix">The input matrix.</param>
-    /// <returns>A matrix with the absolute values of the input matrix components.</returns>
-    public static Matrix3x3 Abs(Matrix3x3 matrix) => new Matrix3x3(Vector3.Abs(matrix.Ex), Vector3.Abs(matrix.Ey), Vector3.Abs(matrix.Ez));
-
     /// <inheritdoc />
     public readonly bool Equals(Matrix3x3 other) => Ex.Equals(other.Ex) && Ey.Equals(other.Ey) && Ez.Equals(other.Ez);
 
@@ -200,6 +193,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     public readonly override string ToString() => $"(Ex: {Ex}, Ey: {Ey}, Ez: {Ez})";
 
     /// <summary>
+    /// Returns a matrix where each component is the absolute value of the corresponding component in the input matrix.
+    /// </summary>
+    /// <param name="matrix">The input matrix.</param>
+    /// <returns>A matrix with the absolute values of the input matrix components.</returns>
+    public static Matrix3x3 Abs(in Matrix3x3 matrix) => new Matrix3x3(Vector3.Abs(matrix.Ex), Vector3.Abs(matrix.Ey), Vector3.Abs(matrix.Ez));
+
+    /// <summary>
     /// Multiplies a 3x3 matrix by a 3D vector.
     /// </summary>
     /// <param name="matrix">The matrix.</param>
@@ -210,13 +210,13 @@ public struct Matrix3x3 : IEquatable<Matrix3x3>
     /// <summary>
     /// Multiplies two 3x3 matrices.
     /// </summary>
-    /// <param name="left">The first matrix.</param>
-    /// <param name="right">The second matrix.</param>
+    /// <param name="a">The first matrix.</param>
+    /// <param name="b">The second matrix.</param>
     /// <returns>The resulting matrix after multiplication.</returns>
-    public static Matrix3x3 MultiplyMatrix(in Matrix3x3 left, in Matrix3x3 right) => new Matrix3x3(
-        Multiply(left, right.Ex), // First column
-        Multiply(left, right.Ey), // Second column
-        Multiply(left, right.Ez) // Third column
+    public static Matrix3x3 MultiplyMatrix(in Matrix3x3 a, in Matrix3x3 b) => new Matrix3x3(
+        Multiply(a, b.Ex), // First column
+        Multiply(a, b.Ey), // Second column
+        Multiply(a, b.Ez) // Third column
     );
 
     /// <summary>

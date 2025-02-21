@@ -3,7 +3,7 @@ using System;
 namespace Box2D.NET.Dynamics.Bodies;
 
 [Flags]
-public enum BodyFlag
+public enum BodyFlag : byte
 {
     Island = 0x0001,
     Awake = 0x0002,

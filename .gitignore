@@ -10,3 +10,6 @@
 # Build results
 bin
 obj
+
+# Benchmarks
+BenchmarkDotNet.Artifacts

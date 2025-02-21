@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Box2D.NET.Collisions.Contacts;
 using Box2D.NET.Collisions.Misc;
 using Box2D.NET.Common;

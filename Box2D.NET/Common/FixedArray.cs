@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Box2D.NET.Common;
 
-public sealed class FixedArray<T> : IEnumerable
+public struct FixedArray<T> : IEnumerable
 {
     private readonly T[] _array; // Internal array to store elements
     private int _length; // Tracks the number of valid elements

@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+    <!-- Project -->
+    <PropertyGroup>
+        <OutputType>exe</OutputType>
+        <TargetFramework>net9.0</TargetFramework>
+        <ImplicitUsings>disable</ImplicitUsings>
+        <Nullable>enable</Nullable>
+        <RootNamespace>Box2D.NET.Benchmark</RootNamespace>
+        <InvariantGlobalization>true</InvariantGlobalization>
+    </PropertyGroup>
+
+    <!-- Box2D.NET -->
+    <ItemGroup>
+        <ProjectReference Include="..\Box2D.NET\Box2D.NET.csproj"/>
+    </ItemGroup>
+
+    <!-- Benchmark framework -->
+    <ItemGroup>
+        <PackageReference Include="BenchmarkDotNet" Version="0.14.0"/>
+    </ItemGroup>
+</Project>

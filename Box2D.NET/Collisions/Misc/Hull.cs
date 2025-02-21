@@ -7,12 +7,12 @@ namespace Box2D.NET.Collisions.Misc;
 /// <summary>
 /// Represents a convex hull defined by a set of vertices.
 /// </summary>
-public readonly struct Hull : IEquatable<Hull>
+public struct Hull : IEquatable<Hull>
 {
     /// <summary>
     /// The vertices of the hull.
     /// </summary>
-    public readonly FixedArray<Vector2> Points;
+    public FixedArray<Vector2> Points;
 
     /// <summary>
     /// Initialize empty Hull
@@ -178,7 +178,7 @@ public readonly struct Hull : IEquatable<Hull>
 
         return true;
     }
-    
+
     /// <summary>
     /// Quick hull algorithm.
     /// Merges vertices based on LinearSlop.

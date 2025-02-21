@@ -1,6 +1,5 @@
 ﻿using System;
 using System.ComponentModel;
-using System.Diagnostics;
 using System.Linq;
 using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
@@ -146,14 +145,14 @@ public struct WorldManifold : IEquatable<WorldManifold>
     {
         HashCode hash = new HashCode();
         hash.Add(Normal);
-        foreach (Vector2 point in Points)
+        for (int i = 0; i < Points.Length; i++)
         {
-            hash.Add(point);
+            hash.Add(Points[i]);
         }
 
-        foreach (float separation in Separations)
+        for (int i = 0; i < Separations.Length; i++)
         {
-            hash.Add(separation);
+            hash.Add(Separations[i]);
         }
 
         return hash.ToHashCode();

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Linq;
 using Box2D.NET.Collisions.Contacts;
 using Box2D.NET.Collisions.Misc;
@@ -141,9 +140,9 @@ public struct Manifold : IEquatable<Manifold>
         hash.Add(LocalPoint);
         hash.Add(Type);
 
-        foreach (ManifoldPoint point in Points)
+        for (int i = 0; i < Points.Length; i++)
         {
-            hash.Add(point);
+            hash.Add(Points[i]);
         }
 
         return hash.ToHashCode();

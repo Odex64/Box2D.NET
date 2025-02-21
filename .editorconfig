@@ -183,3 +183,4 @@ dotnet_diagnostic.cs1591.severity = none
 
 # Rider
 resharper_object_creation_when_type_evident = explicitly_typed
+resharper_for_can_be_converted_to_foreach_highlighting = none

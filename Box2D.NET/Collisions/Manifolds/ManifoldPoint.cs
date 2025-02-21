@@ -72,5 +72,5 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     /// <summary>
     /// Checks if two ManifoldPoint are not equal.
     /// </summary>
-    public static bool operator !=(in ManifoldPoint left, in ManifoldPoint right) => !(left == right);
+    public static bool operator !=(in ManifoldPoint left, in ManifoldPoint right) => !left.Equals(right);
 }

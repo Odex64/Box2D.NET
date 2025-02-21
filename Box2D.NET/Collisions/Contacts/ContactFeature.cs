@@ -63,5 +63,5 @@ public struct ContactFeature : IEquatable<ContactFeature>
     /// <summary>
     /// Checks if two ContactFeature are not equal.
     /// </summary>
-    public static bool operator !=(in ContactFeature left, in ContactFeature right) => !(left == right);
+    public static bool operator !=(in ContactFeature left, in ContactFeature right) => !left.Equals(right);
 }

@@ -57,5 +57,5 @@ public struct RayCastInput : IEquatable<RayCastInput>
     /// <summary>
     /// Checks if two <see cref="RayCastInput" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in RayCastInput left, in RayCastInput right) => !(left == right);
+    public static bool operator !=(in RayCastInput left, in RayCastInput right) => !left.Equals(right);
 }

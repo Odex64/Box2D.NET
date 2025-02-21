@@ -50,5 +50,5 @@ public struct ClipVertex : IEquatable<ClipVertex>
     /// <summary>
     /// Checks if two <see cref="ClipVertex" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in ClipVertex left, in ClipVertex right) => !(left == right);
+    public static bool operator !=(in ClipVertex left, in ClipVertex right) => !left.Equals(right);
 }

@@ -138,5 +138,5 @@ public struct Manifold : IEquatable<Manifold>
     /// <summary>
     /// Checks if two <see cref="Manifold" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in Manifold left, in Manifold right) => !(left == right);
+    public static bool operator !=(in Manifold left, in Manifold right) => !left.Equals(right);
 }

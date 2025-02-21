@@ -46,5 +46,5 @@ public struct ContactId : IEquatable<ContactId>
     /// <summary>
     /// Checks if two ContactId are not equal.
     /// </summary>
-    public static bool operator !=(in ContactId left, in ContactId right) => !(left == right);
+    public static bool operator !=(in ContactId left, in ContactId right) => !left.Equals(right);
 }

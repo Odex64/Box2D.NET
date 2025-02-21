@@ -45,7 +45,7 @@ public struct Hull : IEquatable<Hull>
     /// <summary>
     /// Checks if two <see cref="Hull" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in Hull left, in Hull right) => !(left == right);
+    public static bool operator !=(in Hull left, in Hull right) => !left.Equals(right);
 
     /// <summary>
     /// Returns a string representation of the hull.

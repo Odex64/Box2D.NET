@@ -169,5 +169,5 @@ public struct WorldManifold : IEquatable<WorldManifold>
     /// <summary>
     /// Checks if two <see cref="WorldManifold" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(in WorldManifold left, in WorldManifold right) => !(left == right);
+    public static bool operator !=(in WorldManifold left, in WorldManifold right) => !left.Equals(right);
 }

@@ -11,6 +11,7 @@ Delete options that are not applicable.
 - [ ] Breaking change (fix or feature that would cause existing functionality to not work as expected)
 - [ ] Refactoring (improving code structure, renaming, or adjusting style)
 - [ ] Documentation (fixing a typo, updating or adding comments, README, and so on)
+- [ ] Optimization (improved some code for better performance)
 - [ ] Other (please describe)
 
 ## Checklist

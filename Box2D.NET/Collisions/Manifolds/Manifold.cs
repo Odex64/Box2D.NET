@@ -30,7 +30,7 @@ public struct Manifold : IEquatable<Manifold>
     /// <summary>
     /// The points of contact.
     /// </summary>
-    public readonly ManifoldPoint[] Points;
+    public readonly FixedArray<ManifoldPoint> Points;
 
     /// <summary>
     /// Not used for <see cref="ManifoldType.Circles" />.
@@ -48,29 +48,9 @@ public struct Manifold : IEquatable<Manifold>
     public ManifoldType Type;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Manifold" /> struct.
-    /// </summary>
-    /// <param name="points">The points of contact.</param>
-    /// <param name="localNormal">The local normal.</param>
-    /// <param name="localPoint">The local point.</param>
-    /// <param name="type">The manifold type.</param>
-    public Manifold(ManifoldPoint[] points, in Vector2 localNormal, in Vector2 localPoint, ManifoldType type)
-    {
-        if (points.Length != Constants.MaxManifoldPoints)
-        {
-            throw new ArgumentException($"The {nameof(points)} array has not {Constants.MaxManifoldPoints} elements.");
-        }
-
-        Points = points;
-        LocalNormal = localNormal;
-        LocalPoint = localPoint;
-        Type = type;
-    }
-
-    /// <summary>
     /// Initializes a new instance of the <see cref="Manifold" /> struct with default values.
     /// </summary>
-    public Manifold() => Points = new ManifoldPoint[Constants.MaxManifoldPoints];
+    public Manifold() => Points = new FixedArray<ManifoldPoint>(Constants.MaxManifoldPoints);
 
     /// <summary>
     /// Determines the state of contact points between two manifolds.

@@ -91,23 +91,23 @@ public struct Rotation : IEquatable<Rotation>
     /// <summary>
     /// Multiplies two rotations: q * r, which combines two rotations into a single resulting rotation.
     /// </summary>
-    /// <param name="left">The first rotation (q).</param>
-    /// <param name="right">The second rotation (r).</param>
+    /// <param name="a">The first rotation (q).</param>
+    /// <param name="b">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q * r.</returns>
-    public static Rotation Multiply(in Rotation left, in Rotation right) => new Rotation(
-        left.Sine * right.Cosine + left.Cosine * right.Sine, // sine
-        left.Cosine * right.Cosine - left.Sine * right.Sine // cosine
+    public static Rotation Multiply(in Rotation a, in Rotation b) => new Rotation(
+        a.Sine * b.Cosine + a.Cosine * b.Sine, // sine
+        a.Cosine * b.Cosine - a.Sine * b.Sine // cosine
     );
 
     /// <summary>
     /// Multiplies two rotations in a transposed order: q^T * r, which combines the rotations in reverse order.
     /// </summary>
-    /// <param name="left">The first rotation (q).</param>
-    /// <param name="right">The second rotation (r).</param>
+    /// <param name="a">The first rotation (q).</param>
+    /// <param name="b">The second rotation (r).</param>
     /// <returns>The resulting rotation after applying q^T * r.</returns>
-    public static Rotation MultiplyTranspose(in Rotation left, in Rotation right) => new Rotation(
-        left.Cosine * right.Sine - left.Sine * right.Cosine, // sine
-        left.Cosine * right.Cosine + left.Sine * right.Sine // cosine
+    public static Rotation MultiplyTranspose(in Rotation a, in Rotation b) => new Rotation(
+        a.Cosine * b.Sine - a.Sine * b.Cosine, // sine
+        a.Cosine * b.Cosine + a.Sine * b.Sine // cosine
     );
 
     /// <summary>

@@ -44,11 +44,7 @@ public struct ContactFeature : IEquatable<ContactFeature>
     }
 
     /// <inheritdoc />
-    public bool Equals(ContactFeature other) =>
-        IndexA == other.IndexA &&
-        IndexB == other.IndexB &&
-        TypeA == other.TypeA &&
-        TypeB == other.TypeB;
+    public bool Equals(ContactFeature other) => IndexA == other.IndexA && IndexB == other.IndexB && TypeA == other.TypeA && TypeB == other.TypeB;
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is ContactFeature other && Equals(other);
@@ -62,10 +58,10 @@ public struct ContactFeature : IEquatable<ContactFeature>
     /// <summary>
     /// Check if two ContactFeature are equal.
     /// </summary>
-    public static bool operator ==(ContactFeature left, ContactFeature right) => left.Equals(right);
+    public static bool operator ==(in ContactFeature left, in ContactFeature right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two ContactFeature are not equal.
     /// </summary>
-    public static bool operator !=(ContactFeature left, ContactFeature right) => !(left == right);
+    public static bool operator !=(in ContactFeature left, in ContactFeature right) => !(left == right);
 }

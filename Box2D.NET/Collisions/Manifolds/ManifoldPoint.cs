@@ -44,7 +44,7 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     /// <param name="normalImpulse">The non-penetration impulse.</param>
     /// <param name="tangentImpulse">The friction impulse.</param>
     /// <param name="id">Uniquely identifies a contact point between two shapes.</param>
-    public ManifoldPoint(Vector2 localPoint, float normalImpulse, float tangentImpulse, ContactId id)
+    public ManifoldPoint(in Vector2 localPoint, float normalImpulse, float tangentImpulse, in ContactId id)
     {
         LocalPoint = localPoint;
         NormalImpulse = normalImpulse;
@@ -53,11 +53,7 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     }
 
     /// <inheritdoc />
-    public bool Equals(ManifoldPoint other) =>
-        LocalPoint.Equals(other.LocalPoint) &&
-        NormalImpulse.Equals(other.NormalImpulse) &&
-        TangentImpulse.Equals(other.TangentImpulse) &&
-        Id.Equals(other.Id);
+    public bool Equals(ManifoldPoint other) => LocalPoint.Equals(other.LocalPoint) && NormalImpulse.Equals(other.NormalImpulse) && TangentImpulse.Equals(other.TangentImpulse) && Id.Equals(other.Id);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is ManifoldPoint other && Equals(other);
@@ -66,16 +62,15 @@ public struct ManifoldPoint : IEquatable<ManifoldPoint>
     public override int GetHashCode() => HashCode.Combine(LocalPoint, NormalImpulse, TangentImpulse, Id);
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(LocalPoint: {LocalPoint}, NormalImpulse: {NormalImpulse}, TangentImpulse: {TangentImpulse}, Id: {Id})";
+    public override string ToString() => $"(LocalPoint: {LocalPoint}, NormalImpulse: {NormalImpulse}, TangentImpulse: {TangentImpulse}, Id: {Id})";
 
     /// <summary>
     /// Checks if two ManifoldPoint are equal.
     /// </summary>
-    public static bool operator ==(ManifoldPoint left, ManifoldPoint right) => left.Equals(right);
+    public static bool operator ==(in ManifoldPoint left, in ManifoldPoint right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two ManifoldPoint are not equal.
     /// </summary>
-    public static bool operator !=(ManifoldPoint left, ManifoldPoint right) => !(left == right);
+    public static bool operator !=(in ManifoldPoint left, in ManifoldPoint right) => !(left == right);
 }

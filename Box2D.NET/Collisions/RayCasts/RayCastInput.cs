@@ -30,7 +30,7 @@ public struct RayCastInput : IEquatable<RayCastInput>
     /// <param name="start">The starting point of the ray.</param>
     /// <param name="end">The ending point of the ray.</param>
     /// <param name="maxFraction">The maximum fraction of the ray length.</param>
-    public RayCastInput(Vector2 start, Vector2 end, float maxFraction)
+    public RayCastInput(in Vector2 start, in Vector2 end, float maxFraction)
     {
         Start = start;
         End = end;
@@ -52,10 +52,10 @@ public struct RayCastInput : IEquatable<RayCastInput>
     /// <summary>
     /// Checks if two <see cref="RayCastInput" /> instances are equal.
     /// </summary>
-    public static bool operator ==(RayCastInput left, RayCastInput right) => left.Equals(right);
+    public static bool operator ==(in RayCastInput left, in RayCastInput right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="RayCastInput" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(RayCastInput left, RayCastInput right) => !(left == right);
+    public static bool operator !=(in RayCastInput left, in RayCastInput right) => !(left == right);
 }

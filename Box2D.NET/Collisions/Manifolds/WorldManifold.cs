@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
-using System.Diagnostics;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
+using Box2D.NET.Common;
 using Box2D.NET.Common.Primitives;
 
 namespace Box2D.NET.Collisions.Manifolds;
@@ -7,7 +9,7 @@ namespace Box2D.NET.Collisions.Manifolds;
 /// <summary>
 /// This is used to compute the current state of a contact manifold.
 /// </summary>
-public struct WorldManifold
+public struct WorldManifold : IEquatable<WorldManifold>
 {
     /// <summary>
     /// World vector pointing from A to B.
@@ -17,12 +19,12 @@ public struct WorldManifold
     /// <summary>
     /// World contact points (points of intersection).
     /// </summary>
-    public Vector2[] Points;
+    public readonly Vector2[] Points;
 
     /// <summary>
     /// A negative value indicates overlap, in meters.
     /// </summary>
-    public float[] Separations;
+    public readonly float[] Separations;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="WorldManifold" /> struct.
@@ -30,18 +32,25 @@ public struct WorldManifold
     /// <param name="normal">World vector pointing from A to B.</param>
     /// <param name="points">World contact points.</param>
     /// <param name="separations">Separation values.</param>
-    public WorldManifold(Vector2 normal, Vector2[] points, float[] separations)
+    public WorldManifold(in Vector2 normal, Vector2[] points, float[] separations)
     {
-        Debug.Assert(points.Length <= Manifold.MaxManifoldPoints && separations.Length <= Manifold.MaxManifoldPoints);
+        if (points.Length != Constants.MaxManifoldPoints || separations.Length != Constants.MaxManifoldPoints)
+        {
+            throw new ArgumentException($"The {nameof(points)} or {nameof(separations)} array has not {Constants.MaxManifoldPoints} elements.");
+        }
+
         Normal = normal;
         Points = points;
         Separations = separations;
     }
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="WorldManifold" /> struct with default values.
+    /// </summary>
     public WorldManifold()
     {
-        Points = new Vector2[Manifold.MaxManifoldPoints];
-        Separations = new float[Manifold.MaxManifoldPoints];
+        Points = new Vector2[Constants.MaxManifoldPoints];
+        Separations = new float[Constants.MaxManifoldPoints];
     }
 
     /// <summary>
@@ -50,10 +59,16 @@ public struct WorldManifold
     /// This does not change the point count, impulses, etc.
     /// The radii must come from the shapes that generated the manifold.
     /// </summary>
-    /// <exception cref="InvalidEnumArgumentException"></exception>
+    /// <param name="manifold">The manifold to evaluate.</param>
+    /// <param name="xfA">The transform of shape A.</param>
+    /// <param name="radiusA">The radius of shape A.</param>
+    /// <param name="xfB">The transform of shape B.</param>
+    /// <param name="radiusB">The radius of shape B.</param>
+    /// <exception cref="InvalidEnumArgumentException">Thrown when the manifold type is invalid.</exception>
     public void Initialize(in Manifold manifold, in Transform xfA, float radiusA, in Transform xfB, float radiusB)
     {
-        if (manifold.PointCount == 0)
+        int pointsCount = manifold.Points.Length;
+        if (pointsCount == 0)
         {
             return;
         }
@@ -62,7 +77,7 @@ public struct WorldManifold
         {
             case ManifoldType.Circles:
                 {
-                    Normal = new Vector2(1.0f, 0.0f);
+                    Normal = Vector2.UnitX;
                     Vector2 pointA = Transform.Multiply(xfA, manifold.LocalPoint);
                     Vector2 pointB = Transform.Multiply(xfB, manifold.Points[0].LocalPoint);
 
@@ -84,7 +99,7 @@ public struct WorldManifold
                     Normal = Rotation.Multiply(xfA.Rotation, manifold.LocalNormal);
                     Vector2 planePoint = Transform.Multiply(xfA, manifold.LocalPoint);
 
-                    for (int i = 0; i < manifold.PointCount; ++i)
+                    for (int i = 0; i < pointsCount; ++i)
                     {
                         Vector2 clipPoint = Transform.Multiply(xfB, manifold.Points[i].LocalPoint);
                         Vector2 cA = clipPoint + (radiusA - Vector2.Dot(clipPoint - planePoint, Normal)) * Normal;
@@ -100,7 +115,7 @@ public struct WorldManifold
                     Normal = Rotation.Multiply(xfB.Rotation, manifold.LocalNormal);
                     Vector2 planePoint = Transform.Multiply(xfB, manifold.LocalPoint);
 
-                    for (int i = 0; i < manifold.PointCount; ++i)
+                    for (int i = 0; i < pointsCount; ++i)
                     {
                         Vector2 clipPoint = Transform.Multiply(xfA, manifold.Points[i].LocalPoint);
                         Vector2 cB = clipPoint + (radiusB - Vector2.Dot(clipPoint - planePoint, Normal)) * Normal;
@@ -113,13 +128,46 @@ public struct WorldManifold
                     Normal = -Normal;
                 }
                 break;
+
             default:
-                throw new InvalidEnumArgumentException($"{nameof(manifold)} has incorrect type!");
+                throw new InvalidEnumArgumentException($"{nameof(manifold.Type)} has an incorrect value.");
         }
     }
 
+    /// <inheritdoc />
+    public bool Equals(WorldManifold other) => Normal.Equals(other.Normal) && Points.SequenceEqual(other.Points) && Separations.SequenceEqual(other.Separations);
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(Normal: {Normal}, Points: [{string.Join(", ", Points)}], Separations: [{string.Join(", ", Separations)}])";
+    public override bool Equals(object? obj) => obj is WorldManifold other && Equals(other);
+
+    /// <inheritdoc />
+    public override int GetHashCode()
+    {
+        HashCode hash = new HashCode();
+        hash.Add(Normal);
+        for (int i = 0; i < Points.Length; i++)
+        {
+            hash.Add(Points[i]);
+        }
+
+        for (int i = 0; i < Separations.Length; i++)
+        {
+            hash.Add(Separations[i]);
+        }
+
+        return hash.ToHashCode();
+    }
+
+    /// <inheritdoc />
+    public override string ToString() => $"(Normal: {Normal}, Points: [{string.Join(", ", Points)}], Separations: [{string.Join(", ", Separations)}])";
+
+    /// <summary>
+    /// Checks if two <see cref="WorldManifold" /> instances are equal.
+    /// </summary>
+    public static bool operator ==(in WorldManifold left, in WorldManifold right) => left.Equals(right);
+
+    /// <summary>
+    /// Checks if two <see cref="WorldManifold" /> instances are not equal.
+    /// </summary>
+    public static bool operator !=(in WorldManifold left, in WorldManifold right) => !(left == right);
 }

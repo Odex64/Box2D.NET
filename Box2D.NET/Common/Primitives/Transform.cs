@@ -112,23 +112,23 @@ public struct Transform : IEquatable<Transform>
     /// <summary>
     /// Combines two transformations A and B into a single transformation.
     /// </summary>
-    /// <param name="left">The first transformation.</param>
-    /// <param name="right">The second transformation.</param>
+    /// <param name="a">The first transformation.</param>
+    /// <param name="b">The second transformation.</param>
     /// <returns>The resulting transformation after combining A and B.</returns>
-    public static Transform Multiply(in Transform left, in Transform right) => new Transform(
-        Rotation.Multiply(left.Rotation, right.Rotation),
-        Rotation.Multiply(left.Rotation, right.Position) + left.Position
+    public static Transform Multiply(in Transform a, in Transform b) => new Transform(
+        Rotation.Multiply(a.Rotation, b.Rotation),
+        Rotation.Multiply(a.Rotation, b.Position) + a.Position
     );
 
     /// <summary>
     /// Combines the inverse of two transformations A and B into a single transformation.
     /// </summary>
-    /// <param name="left">The first transformation.</param>
-    /// <param name="right">The second transformation.</param>
+    /// <param name="a">The first transformation.</param>
+    /// <param name="b">The second transformation.</param>
     /// <returns>The resulting inverse transformation after combining A and B.</returns>
-    public static Transform MultiplyTranspose(in Transform left, in Transform right) => new Transform(
-        Rotation.MultiplyTranspose(left.Rotation, right.Rotation),
-        Rotation.MultiplyTranspose(left.Rotation, right.Position - left.Position)
+    public static Transform MultiplyTranspose(in Transform a, in Transform b) => new Transform(
+        Rotation.MultiplyTranspose(a.Rotation, b.Rotation),
+        Rotation.MultiplyTranspose(a.Rotation, b.Position - a.Position)
     );
 
     /// <summary>

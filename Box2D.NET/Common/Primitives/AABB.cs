@@ -23,7 +23,7 @@ public struct AABB : IEquatable<AABB>
     /// </summary>
     /// <param name="lowerBound">The lower bound of the bounding box.</param>
     /// <param name="upperBound">The upper bound of the bounding box.</param>
-    public AABB(Vector2 lowerBound, Vector2 upperBound)
+    public AABB(in Vector2 lowerBound, in Vector2 upperBound)
     {
         LowerBound = lowerBound;
         UpperBound = upperBound;
@@ -38,7 +38,7 @@ public struct AABB : IEquatable<AABB>
         get
         {
             Vector2 vector = UpperBound - LowerBound;
-            bool valid = vector.X >= 0f && vector.Y >= 0f;
+            bool valid = vector is { X: >= 0f, Y: >= 0f };
             return valid && LowerBound.IsValid && UpperBound.IsValid;
         }
     }
@@ -57,18 +57,21 @@ public struct AABB : IEquatable<AABB>
     /// Gets the perimeter length of the AABB.
     /// </summary>
     /// <returns>The perimeter length.</returns>
-    public float GetPerimeter()
+    public float Perimeter
     {
-        float width = UpperBound.X - LowerBound.X;
-        float height = UpperBound.Y - LowerBound.Y;
-        return 2.0f * (width + height);
+        get
+        {
+            float width = UpperBound.X - LowerBound.X;
+            float height = UpperBound.Y - LowerBound.Y;
+            return 2f * (width + height);
+        }
     }
 
     /// <summary>
     /// Expands this AABB to include another AABB.
     /// </summary>
     /// <param name="aabb">The AABB to combine with this one.</param>
-    public void Combine(AABB aabb)
+    public void Combine(in AABB aabb)
     {
         LowerBound = Vector2.Min(LowerBound, aabb.LowerBound);
         UpperBound = Vector2.Max(UpperBound, aabb.UpperBound);
@@ -77,12 +80,12 @@ public struct AABB : IEquatable<AABB>
     /// <summary>
     /// Combines two AABBs into this AABB.
     /// </summary>
-    /// <param name="aabb1">The first AABB.</param>
-    /// <param name="aabb2">The second AABB.</param>
-    public void Combine(AABB aabb1, AABB aabb2)
+    /// <param name="a">The first AABB.</param>
+    /// <param name="b">The second AABB.</param>
+    public void Combine(in AABB a, in AABB b)
     {
-        LowerBound = Vector2.Min(aabb1.LowerBound, aabb2.LowerBound);
-        UpperBound = Vector2.Max(aabb1.UpperBound, aabb2.UpperBound);
+        LowerBound = Vector2.Min(a.LowerBound, b.LowerBound);
+        UpperBound = Vector2.Max(a.UpperBound, b.UpperBound);
     }
 
     /// <summary>
@@ -90,7 +93,7 @@ public struct AABB : IEquatable<AABB>
     /// </summary>
     /// <param name="aabb">The AABB to check containment for.</param>
     /// <returns>True if this AABB contains the provided AABB; otherwise, false.</returns>
-    public bool Contains(AABB aabb) =>
+    public bool Contains(in AABB aabb) =>
         LowerBound.X <= aabb.LowerBound.X &&
         LowerBound.Y <= aabb.LowerBound.Y &&
         aabb.UpperBound.X <= UpperBound.X &&
@@ -107,7 +110,6 @@ public struct AABB : IEquatable<AABB>
         float tMin = -float.MaxValue;
         float tMax = float.MaxValue;
 
-        Vector2 p = input.Start;
         Vector2 d = input.End - input.Start;
         Vector2 absD = Vector2.Abs(d);
 
@@ -118,7 +120,7 @@ public struct AABB : IEquatable<AABB>
             if (absD[i] < float.Epsilon)
             {
                 // Parallel.
-                if (p[i] < LowerBound[i] || UpperBound[i] < p[i])
+                if (input.Start[i] < LowerBound[i] || UpperBound[i] < input.Start[i])
                 {
                     output = default;
                     return false;
@@ -126,23 +128,23 @@ public struct AABB : IEquatable<AABB>
             }
             else
             {
-                float invD = 1.0f / d[i];
-                float t1 = (LowerBound[i] - p[i]) * invD;
-                float t2 = (UpperBound[i] - p[i]) * invD;
+                float invD = 1f / d[i];
+                float t1 = (LowerBound[i] - input.Start[i]) * invD;
+                float t2 = (UpperBound[i] - input.Start[i]) * invD;
 
                 // Sign of the normal vector.
-                float s = -1.0f;
+                float s = -1f;
 
                 if (t1 > t2)
                 {
                     (t1, t2) = (t2, t1); // Swap t1 and t2
-                    s = 1.0f;
+                    s = 1f;
                 }
 
                 // Push the min up
                 if (t1 > tMin)
                 {
-                    normal = Vector2.Zero;
+                    normal.SetZero();
                     normal[i] = s;
                     tMin = t1;
                 }
@@ -160,7 +162,7 @@ public struct AABB : IEquatable<AABB>
 
         // Does the ray start inside the box?
         // Does the ray intersect beyond the max fraction?
-        if (tMin < 0.0f || input.MaxFraction < tMin)
+        if (tMin < 0f || input.MaxFraction < tMin)
         {
             output = default;
             return false;
@@ -172,8 +174,7 @@ public struct AABB : IEquatable<AABB>
     }
 
     /// <inheritdoc />
-    public bool Equals(AABB other) =>
-        LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
+    public bool Equals(AABB other) => LowerBound.Equals(other.LowerBound) && UpperBound.Equals(other.UpperBound);
 
     /// <inheritdoc />
     public override bool Equals(object? obj) => obj is AABB other && Equals(other);
@@ -182,16 +183,42 @@ public struct AABB : IEquatable<AABB>
     public override int GetHashCode() => HashCode.Combine(LowerBound, UpperBound);
 
     /// <inheritdoc />
-    public override string ToString() =>
-        $"(LowerBound: {LowerBound}, UpperBound: {UpperBound})";
+    public override string ToString() => $"(LowerBound: {LowerBound}, UpperBound: {UpperBound})";
 
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are equal.
     /// </summary>
-    public static bool operator ==(AABB left, AABB right) => left.Equals(right);
+    public static bool operator ==(in AABB left, in AABB right) => left.Equals(right);
 
     /// <summary>
     /// Checks if two <see cref="AABB" /> instances are not equal.
     /// </summary>
-    public static bool operator !=(AABB left, AABB right) => !(left == right);
+    public static bool operator !=(in AABB left, in AABB right) => !left.Equals(right);
+
+    /// <summary>
+    /// Tests if two axis-aligned bounding boxes (AABBs) overlap.
+    /// </summary>
+    /// <param name="a">The first AABB.</param>
+    /// <param name="b">The second AABB.</param>
+    /// <returns><c>true</c> if the AABBs overlap; otherwise, <c>false</c>.</returns>
+    public static bool TestOverlap(in AABB a, in AABB b)
+    {
+        Vector2 d1 = b.LowerBound - a.UpperBound;
+        Vector2 d2 = a.LowerBound - b.UpperBound;
+
+        // If either d1.x or d1.y is positive, the AABBs do not overlap.
+        if (d1.X > 0f || d1.Y > 0f)
+        {
+            return false;
+        }
+
+        // If either d2.x or d2.y is positive, the AABBs do not overlap.
+        if (d2.X > 0f || d2.Y > 0f)
+        {
+            return false;
+        }
+
+        // Otherwise, the AABBs overlap.
+        return true;
+    }
 }

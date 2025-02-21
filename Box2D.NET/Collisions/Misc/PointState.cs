@@ -3,7 +3,7 @@
 /// <summary>
 /// This is used for determining the state of contact points.
 /// </summary>
-public enum PointState
+public enum PointState : byte
 {
     /// <summary>
     /// Point does not exist.

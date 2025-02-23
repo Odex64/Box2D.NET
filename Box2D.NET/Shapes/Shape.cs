@@ -12,18 +12,18 @@ namespace Box2D.NET.Shapes;
 public abstract class Shape : IEquatable<Shape>, IDisposable
 {
     /// <summary>
-    /// Gets or sets the type of this shape. You can use this to downcast to the concrete shape.
-    /// </summary>
-    public readonly ShapeType ShapeType;
-
-    /// <summary>
     /// Gets or sets the radius of the shape. For polygonal shapes, this must be a constant value.
     /// There is no support for making rounded polygons.
     /// </summary>
     public readonly float Radius;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="Shape"/> class.
+    /// Gets or sets the type of this shape. You can use this to downcast to the concrete shape.
+    /// </summary>
+    public readonly ShapeType ShapeType;
+
+    /// <summary>
+    /// Initializes a new instance of the <see cref="Shape" /> class.
     /// </summary>
     protected Shape(ShapeType type, float radius)
     {
@@ -35,6 +35,17 @@ public abstract class Shape : IEquatable<Shape>, IDisposable
     /// Disposes the shape and releases any resources.
     /// </summary>
     public virtual void Dispose() => GC.SuppressFinalize(this);
+
+    /// <inheritdoc />
+    public bool Equals(Shape? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        return ShapeType == other.ShapeType && Radius.Equals(other.Radius);
+    }
 
     /// <summary>
     /// Clones the concrete shape.
@@ -83,9 +94,6 @@ public abstract class Shape : IEquatable<Shape>, IDisposable
     public abstract void ComputeMass(out MassData massData, float density);
 
     /// <inheritdoc />
-    public bool Equals(Shape? other) => other is not null && ShapeType == other.ShapeType && Radius.Equals(other.Radius);
-
-    /// <inheritdoc />
     public override bool Equals(object? obj) => obj is Shape shape && Equals(shape);
 
     /// <inheritdoc />
@@ -94,10 +102,26 @@ public abstract class Shape : IEquatable<Shape>, IDisposable
     /// <summary>
     /// Checks if two shapes are equal.
     /// </summary>
-    public static bool operator ==(Shape? left, Shape? right) => left?.Equals(right) ?? false;
+    public static bool operator ==(Shape? left, Shape? right)
+    {
+        if (left is null)
+        {
+            return right is null;
+        }
+
+        return left.Equals(right);
+    }
 
     /// <summary>
     /// Checks if two shapes are not equal.
     /// </summary>
-    public static bool operator !=(Shape? left, Shape? right) => !left?.Equals(right) ?? false;
+    public static bool operator !=(Shape? left, Shape? right)
+    {
+        if (left is null)
+        {
+            return right is not null;
+        }
+
+        return !left.Equals(right);
+    }
 }

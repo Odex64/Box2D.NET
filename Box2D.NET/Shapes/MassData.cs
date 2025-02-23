@@ -24,7 +24,7 @@ public struct MassData : IEquatable<MassData>
     public float Inertia;
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="MassData"/> struct.
+    /// Initializes a new instance of the <see cref="MassData" /> struct.
     /// </summary>
     /// <param name="mass">The mass of the shape, usually in kilograms.</param>
     /// <param name="center">The position of the shape's centroid relative to the shape's origin.</param>

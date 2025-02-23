@@ -13,22 +13,6 @@ public class EdgeShape() : Shape(ShapeType.Edge, Constants.PolygonRadius), IEqua
     public Vector2 Vertex2;
     public Vector2 Vertex3;
 
-    public bool Equals(EdgeShape? other)
-    {
-        if (other is null)
-        {
-            return false;
-        }
-
-        return Vertex1 == other.Vertex1 &&
-               Vertex2 == other.Vertex2 &&
-               Vertex0 == other.Vertex0 &&
-               Vertex3 == other.Vertex3 &&
-               IsOneSided == other.IsOneSided &&
-               Radius.ToleranceEquals(other.Radius) &&
-               ShapeType == other.ShapeType;
-    }
-
     public void SetOneSided(in Vector2 v0, in Vector2 v1, in Vector2 v2, in Vector2 v3)
     {
         Vertex0 = v0;
@@ -133,21 +117,7 @@ public class EdgeShape() : Shape(ShapeType.Edge, Constants.PolygonRadius), IEqua
 
     public override void ComputeMass(out MassData massData, float density) => massData = new MassData(0f, 0.5f * (Vertex1 + Vertex2), 0f);
 
-    public override bool Equals(object? obj) => obj is EdgeShape edgeShape && Equals(edgeShape);
-
-    public override int GetHashCode()
-    {
-        unchecked
-        {
-            int hash = 17;
-            hash = hash * 23 + Vertex1.GetHashCode();
-            hash = hash * 23 + Vertex2.GetHashCode();
-            hash = hash * 23 + Vertex0.GetHashCode();
-            hash = hash * 23 + Vertex3.GetHashCode();
-            hash = hash * 23 + IsOneSided.GetHashCode();
-            return hash;
-        }
-    }
+    public override int GetHashCode() => HashCode.Combine(base.GetHashCode(), IsOneSided, Vertex0, Vertex1, Vertex2, Vertex3);
 
     public static bool operator ==(EdgeShape? left, EdgeShape? right)
     {
@@ -159,15 +129,27 @@ public class EdgeShape() : Shape(ShapeType.Edge, Constants.PolygonRadius), IEqua
         return left.Equals(right);
     }
 
-    public static bool operator !=(EdgeShape? left, EdgeShape? right)
-    {
-        if (left is null)
-        {
-            return right is not null;
-        }
-
-        return !left.Equals(right);
-    }
+    public static bool operator !=(EdgeShape? left, EdgeShape? right) => !(left == right);
 
     public override string ToString() => $"EdgeShape(V1: {Vertex1}, V2: {Vertex2}, V0: {Vertex0}, V3: {Vertex3}, OneSided: {IsOneSided})";
+
+    public bool Equals(EdgeShape? other)
+    {
+        if (other is null)
+        {
+            return false;
+        }
+
+        return ReferenceEquals(this, other) || base.Equals(other) && IsOneSided == other.IsOneSided && Vertex0.Equals(other.Vertex0) && Vertex1.Equals(other.Vertex1) && Vertex2.Equals(other.Vertex2) && Vertex3.Equals(other.Vertex3);
+    }
+
+    public override bool Equals(object? obj)
+    {
+        if (obj is null)
+        {
+            return false;
+        }
+
+        return ReferenceEquals(this, obj) || obj is EdgeShape edgeShape && Equals(edgeShape);
+    }
 }

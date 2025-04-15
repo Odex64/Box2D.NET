@@ -1,0 +1,63 @@
+name: Build
+
+on:
+  release:
+    types: [published]
+  push:
+    branches: [master]
+    paths-ignore:
+      - "**/*.md"
+      - ".gitignore"
+      - ".editorconfig"
+  pull_request:
+    branches: [master]
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Build project
+        run: dotnet build --configuration Release --no-restore
+
+      - name: Upload library
+        uses: actions/upload-artifact@v4
+        with:
+          name: Box2D.NET
+          path: Box2D.NET/bin/Release/net9.0/Box2D.NET.dll
+          if-no-files-found: error
+          compression-level: 9
+
+  publish:
+    needs: build
+    runs-on: ubuntu-24.04
+    if: github.event_name == 'release'
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: "9.0.x"
+
+      - name: Restore dependencies
+        run: dotnet restore
+
+      - name: Pack NuGet package
+        run: dotnet pack -p:PackageVersion=${{ github.event.release.tag_name }} --configuration Release --no-build --output ./artifacts
+
+      - name: Publish to NuGet
+        run: dotnet nuget push ./artifacts/*.nupkg --source https://api.nuget.org/v3/index.json --api-key ${{ secrets.NUGET_API_KEY }} --skip-duplicate

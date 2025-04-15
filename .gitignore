@@ -1,0 +1,12 @@
+# Project files
+.idea
+.vscode
+.vs
+
+# Settings
+*.DotSettings.user
+*.csproj.user
+
+# Build results
+bin
+obj
